@@ -252,163 +252,149 @@ export function Header() {
 
           {/* Bottom Sheet */}
           <div
-            className="absolute bottom-0 left-0 right-0 bg-white border-t-4 border-black rounded-t-3xl transform transition-transform duration-300 ease-out animate-slide-up"
-            style={{ maxHeight: '85vh' }}
+            className="absolute bottom-0 left-0 right-0 bg-white border-t-3 border-black rounded-t-2xl transform transition-transform duration-300 ease-out animate-slide-up"
+            style={{ maxHeight: '80vh' }}
           >
-            {/* Handle bar */}
-            <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
-            </div>
-
-            {/* Header du menu */}
-            <div className="px-5 pb-4 border-b-2 border-black/10">
-              <div className="flex items-center justify-between">
-                <h3 className="font-display font-bold text-lg">Menu</h3>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
-                  style={{ backgroundColor: '#9ED8DB' }}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+            {/* Handle bar + Close */}
+            <div className="flex items-center justify-between px-4 pt-2 pb-1">
+              <div className="w-10 h-1 bg-gray-300 rounded-full" />
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+                style={{ backgroundColor: '#1D3354' }}
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
             </div>
 
             {/* Menu Content */}
-            <div className="px-5 py-4 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 120px)' }}>
+            <div className="px-4 py-3 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 50px)' }}>
               {/* CTA Principal - Générer */}
               <button
                 onClick={() => scrollToSection('hero')}
-                className="w-full flex items-center gap-4 p-4 mb-4 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="w-full flex items-center gap-3 p-3 mb-3 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                 style={{ backgroundColor: '#D64045' }}
               >
-                <div className="w-12 h-12 bg-white border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                  <Video className="w-6 h-6 text-black" />
+                <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center">
+                  <Video className="w-5 h-5 text-black" />
                 </div>
                 <div className="text-left">
-                  <span className="font-display font-bold text-base text-white block">GÉNÉRER UNE VIDÉO</span>
-                  <span className="text-xs text-white/80 font-body">Crée ta vidéo en 30 secondes</span>
+                  <span className="font-display font-bold text-sm text-white block">GÉNÉRER UNE VIDÉO</span>
+                  <span className="text-[10px] text-white/80 font-body">Crée ta vidéo en 30 secondes</span>
                 </div>
               </button>
 
-              {/* Grid de navigation */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              {/* Grid de navigation - Plus compact */}
+              <div className="grid grid-cols-4 gap-2 mb-3">
                 <button
                   onClick={() => scrollToSection('before-after')}
-                  className="flex flex-col items-center gap-2 p-4 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-10 h-10 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <Eye className="w-5 h-5" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
+                    <Eye className="w-4 h-4" />
                   </div>
-                  <span className="font-display font-bold text-xs">AVANT/APRÈS</span>
+                  <span className="font-display font-bold text-[9px]">ÉTAPES</span>
                 </button>
 
                 <button
                   onClick={() => scrollToSection('pricing')}
-                  className="flex flex-col items-center gap-2 p-4 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-10 h-10 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <CreditCard className="w-5 h-5" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
+                    <CreditCard className="w-4 h-4" />
                   </div>
-                  <span className="font-display font-bold text-xs">TARIFS</span>
+                  <span className="font-display font-bold text-[9px]">TARIFS</span>
                 </button>
 
                 <button
                   onClick={() => scrollToSection('testimonials')}
-                  className="flex flex-col items-center gap-2 p-4 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-10 h-10 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <MessageCircle className="w-5 h-5" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
+                    <MessageCircle className="w-4 h-4" />
                   </div>
-                  <span className="font-display font-bold text-xs">AVIS</span>
+                  <span className="font-display font-bold text-[9px]">AVIS</span>
                 </button>
 
                 <button
                   onClick={() => scrollToSection('blog')}
-                  className="flex flex-col items-center gap-2 p-4 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-10 h-10 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <BookOpen className="w-5 h-5" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
+                    <BookOpen className="w-4 h-4" />
                   </div>
-                  <span className="font-display font-bold text-xs">BLOG</span>
+                  <span className="font-display font-bold text-[9px]">BLOG</span>
                 </button>
               </div>
 
-              {/* FAQ Link */}
-              <Link
-                to="/faq"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center gap-3 p-3 mb-3 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                style={{ backgroundColor: '#FFFFFF' }}
-              >
-                <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
-                  <HelpCircle className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-display font-bold text-sm">QUESTIONS FRÉQUENTES</span>
-              </Link>
+              {/* FAQ + VintDress - Ligne compacte */}
+              <div className="flex gap-2 mb-3">
+                <Link
+                  to="/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 flex items-center gap-2 p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  style={{ backgroundColor: '#FFFFFF' }}
+                >
+                  <div className="w-7 h-7 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+                    <HelpCircle className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="font-display font-bold text-xs">FAQ</span>
+                </Link>
 
-              {/* VintDress Link */}
-              <a
-                href="https://vintdress.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center gap-3 p-3 mb-4 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                style={{ backgroundColor: '#D64045' }}
-              >
-                <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
-                  <Sparkles className="w-4 h-4 text-black" />
-                </div>
-                <div className="text-left">
-                  <span className="font-display font-bold text-sm text-white block">VINTDRESS</span>
-                  <span className="text-[10px] text-white/80 font-body">Besoin de photos portées ?</span>
-                </div>
-              </a>
+                <a
+                  href="https://vintdress.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 flex items-center gap-2 p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  style={{ backgroundColor: '#D64045' }}
+                >
+                  <div className="w-7 h-7 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
+                    <Sparkles className="w-3.5 h-3.5 text-black" />
+                  </div>
+                  <span className="font-display font-bold text-xs text-white">VINTDRESS</span>
+                </a>
+              </div>
 
               {/* Divider */}
-              <div className="border-t-2 border-black/20 my-4" />
+              <div className="border-t-2 border-black/10 my-3" />
 
               {/* Auth Section */}
               {user ? (
-                <div className="space-y-3">
-                  {/* Credits badge */}
-                  <div
-                    className="flex items-center justify-between w-full p-3 border-2 border-black"
-                    style={{ backgroundColor: '#9ED8DB' }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Zap className="w-4 h-4" />
-                      <span className="font-display font-bold text-sm">{remainingVideos} vidéo{remainingVideos !== 1 ? 's' : ''} restante{remainingVideos !== 1 ? 's' : ''}</span>
+                <div className="space-y-2">
+                  {/* User info + Credits in one row */}
+                  <div className="flex gap-2">
+                    <div
+                      className="flex items-center gap-2 flex-1 p-2 border-2 border-black"
+                      style={{ backgroundColor: '#FFFFFF' }}
+                    >
+                      {user.avatarUrl ? (
+                        <img src={user.avatarUrl} alt="" className="w-8 h-8 rounded-full border border-black" />
+                      ) : (
+                        <div className="w-8 h-8 bg-white border-2 border-black flex items-center justify-center">
+                          <User className="w-4 h-4" />
+                        </div>
+                      )}
+                      <span className="font-display font-bold text-xs truncate">{user.fullName || user.email.split('@')[0]}</span>
                     </div>
-                    <span className="font-body text-xs uppercase">{subscription?.plan || 'free'}</span>
-                  </div>
-                  {/* User info */}
-                  <div
-                    className="flex items-center gap-3 w-full p-3 border-2 border-black"
-                    style={{ backgroundColor: '#FFFFFF' }}
-                  >
-                    {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt="" className="w-10 h-10 rounded-full border-2 border-black" />
-                    ) : (
-                      <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center">
-                        <User className="w-5 h-5" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <span className="font-display font-bold text-sm block truncate">{user.fullName || 'Utilisateur'}</span>
-                      <span className="font-body text-xs text-black/60 truncate block">{user.email}</span>
+                    <div
+                      className="flex items-center gap-1.5 px-3 border-2 border-black"
+                      style={{ backgroundColor: '#9ED8DB' }}
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span className="font-display font-bold text-xs">{remainingVideos}</span>
                     </div>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center justify-center gap-2 w-full p-3 font-display font-bold text-sm text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    className="flex items-center justify-center gap-2 w-full p-2.5 font-display font-bold text-xs text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                     style={{ backgroundColor: '#D64045' }}
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5" />
                     DÉCONNEXION
                   </button>
                 </div>
@@ -418,11 +404,11 @@ export function Header() {
                     setMobileMenuOpen(false)
                     setAuthModalOpen(true)
                   }}
-                  className="flex items-center justify-center gap-2 w-full p-4 font-display font-bold text-sm text-white border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="flex items-center justify-center gap-2 w-full p-3 font-display font-bold text-sm text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#1D3354' }}
                 >
-                  <User className="w-5 h-5" />
-                  CONNEXION / INSCRIPTION
+                  <User className="w-4 h-4" />
+                  CONNEXION
                 </button>
               )}
             </div>

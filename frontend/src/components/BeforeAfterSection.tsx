@@ -17,7 +17,7 @@ const steps: Step[] = [
     description: 'Va sur Vinted et copie le lien de ton vestiaire',
     image: '/Etape1.png',
     icon: <Copy className="w-4 h-4" />,
-    color: '#9ED8DB',
+    color: '#1D3354',
   },
   {
     number: 2,
@@ -41,7 +41,7 @@ const steps: Step[] = [
     description: 'Règle durée, musique et template',
     image: '/Etape4.png',
     icon: <Settings className="w-4 h-4" />,
-    color: '#9ED8DB',
+    color: '#D64045',
   },
   {
     number: 5,
@@ -49,7 +49,7 @@ const steps: Step[] = [
     description: 'Ta vidéo est prête en 30 secondes !',
     image: '/Etape5.png',
     icon: <Download className="w-4 h-4" />,
-    color: '#D64045',
+    color: '#1D3354',
   },
 ]
 
@@ -291,11 +291,11 @@ export function BeforeAfterSection() {
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                   <div
                     className="flex items-center gap-2 px-4 py-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-bounce"
-                    style={{ backgroundColor: '#9ED8DB' }}
+                    style={{ backgroundColor: '#1D3354' }}
                   >
-                    <Hand className="w-4 h-4 animate-swipe" />
-                    <span className="font-display font-bold text-xs">SWIPE</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <Hand className="w-4 h-4 text-white animate-swipe" />
+                    <span className="font-display font-bold text-xs text-white">SWIPE</span>
+                    <ChevronRight className="w-4 h-4 text-white" />
                   </div>
                 </div>
               )}
@@ -325,11 +325,11 @@ export function BeforeAfterSection() {
         <div className="mt-8 sm:mt-10 text-center">
           <div
             className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-            style={{ backgroundColor: '#9ED8DB' }}
+            style={{ backgroundColor: '#1D3354' }}
           >
-            <span className="font-display font-bold text-xs sm:text-sm">RÉSULTAT :</span>
+            <span className="font-display font-bold text-xs sm:text-sm text-white">RÉSULTAT :</span>
             <span className="font-display font-bold text-base sm:text-lg" style={{ color: '#D64045' }}>+300% DE VUES</span>
-            <span className="font-display font-bold text-xs sm:text-sm">EN MOYENNE</span>
+            <span className="font-display font-bold text-xs sm:text-sm text-white">EN MOYENNE</span>
           </div>
         </div>
       </div>
