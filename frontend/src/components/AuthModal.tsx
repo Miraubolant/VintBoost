@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { X, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { X, Mail, Lock, Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 interface AuthModalProps {
@@ -19,6 +19,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [fullName, setFullName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
 
@@ -27,6 +28,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
 
     if (!email || !password) {
       setError('Veuillez remplir tous les champs')
@@ -53,19 +55,30 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           setLoading(false)
           return
         }
+        // Success - close modal
+        onClose()
+        resetForm()
       } else {
-        const { error } = await signUpWithEmail(email, password, fullName || undefined)
-        if (error) {
-          setError(translateError(error))
+        const result = await signUpWithEmail(email, password, fullName || undefined)
+
+        if (result.error) {
+          setError(translateError(result.error))
           setLoading(false)
           return
         }
-      }
 
-      // Success - close modal
-      onClose()
-      resetForm()
-    } catch (err) {
+        if (result.needsEmailConfirmation) {
+          // Email confirmation required - show message
+          setSuccess('Compte cree ! Verifie ton email pour confirmer ton inscription.')
+          setLoading(false)
+          return
+        }
+
+        // Success without email confirmation - close modal
+        onClose()
+        resetForm()
+      }
+    } catch {
       setError('Une erreur est survenue')
     }
 
@@ -88,12 +101,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const translateError = (error: string): string => {
     const errorMap: Record<string, string> = {
       'Invalid login credentials': 'Email ou mot de passe incorrect',
-      'User already registered': 'Cet email est déjà utilisé',
+      'User already registered': 'Cet email est deja utilise',
       'Email not confirmed': 'Veuillez confirmer votre email',
-      'Password should be at least 6 characters': 'Le mot de passe doit contenir au moins 6 caractères',
+      'Password should be at least 6 characters': 'Le mot de passe doit contenir au moins 6 caracteres',
       'Unable to validate email address: invalid format': 'Format d\'email invalide',
+      'Signup requires a valid password': 'Mot de passe invalide',
+      'To signup, please provide your email': 'Veuillez fournir une adresse email',
+      'A user with this email address has already been registered': 'Cet email est deja utilise',
+      'Email rate limit exceeded': 'Trop de tentatives, reessayez plus tard',
+      'For security purposes, you can only request this once every 60 seconds': 'Attendez 60 secondes avant de reessayer',
     }
-    return errorMap[error] || error
+    // Check for partial matches
+    for (const [key, value] of Object.entries(errorMap)) {
+      if (error.toLowerCase().includes(key.toLowerCase())) {
+        return value
+      }
+    }
+    return error
   }
 
   const resetForm = () => {
@@ -102,6 +126,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setConfirmPassword('')
     setFullName('')
     setError('')
+    setSuccess('')
   }
 
   const switchMode = (newMode: AuthMode) => {
@@ -291,6 +316,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               style={{ backgroundColor: '#D64045', color: '#FFFFFF' }}
             >
               {error}
+            </div>
+          )}
+
+          {/* Success */}
+          {success && (
+            <div
+              className="px-3 py-2 border-2 border-black text-xs font-bold flex items-center gap-2"
+              style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
+            >
+              <CheckCircle className="w-4 h-4" />
+              {success}
             </div>
           )}
 
