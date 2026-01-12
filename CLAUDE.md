@@ -57,22 +57,29 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 - `src/services/video.service.js` - Video generation
 - `src/remotion/` - Remotion compositions
 
+## Production URLs
+- **Frontend**: https://vintboost.com
+- **API**: https://api.vintboost.com
+- **Supabase**: https://mkzhgzvtvsezqlpesdgc.supabase.co
+
 ## Deployment (Coolify)
 
 ### Frontend Service
+- **Domain**: vintboost.com
 - **Dockerfile**: `frontend/Dockerfile`
 - **Port**: 4173
 - **Build Args**:
-  - `VITE_SUPABASE_URL`
-  - `VITE_SUPABASE_ANON_KEY`
-  - `VITE_SCRAPER_API_URL`
+  - `VITE_SUPABASE_URL=https://mkzhgzvtvsezqlpesdgc.supabase.co`
+  - `VITE_SUPABASE_ANON_KEY=<supabase_anon_key>`
+  - `VITE_SCRAPER_API_URL=https://api.vintboost.com`
 
 ### API Service
+- **Domain**: api.vintboost.com
 - **Dockerfile**: `api-server/Dockerfile`
 - **Port**: 3000
 - **Environment**:
-  - `API_KEY`
-  - `CORS_ORIGIN`
+  - `API_KEY=<your_api_key>`
+  - `CORS_ORIGIN=https://vintboost.com`
 
 ## Commands
 
