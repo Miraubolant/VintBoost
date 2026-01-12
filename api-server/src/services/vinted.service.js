@@ -18,8 +18,8 @@ class VintedService {
       const page = await puppeteerService.createPage(browser)
 
       // Aller sur la page d'accueil pour obtenir les cookies
-      await page.goto(domain, { waitUntil: 'networkidle2', timeout: 30000 })
-      await new Promise(r => setTimeout(r, 2000))
+      await page.goto(domain, { waitUntil: 'domcontentloaded', timeout: 30000 })
+      await new Promise(r => setTimeout(r, 3000))
 
       // Récupérer les cookies
       const cookies = await page.cookies()

@@ -11,7 +11,7 @@ export function VintDressSection() {
             <span className="font-display font-bold text-xs text-white">PHOTOS IA</span>
           </div>
 
-          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl mb-3">
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
             <div className="mb-1.5">
               <span
                 className="inline-block bg-white text-black border-2 border-black px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"

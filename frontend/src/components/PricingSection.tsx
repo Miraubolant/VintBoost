@@ -77,7 +77,7 @@ export function PricingSection() {
             <span className="font-display font-bold text-xs">PRIX IMBATTABLES</span>
           </div>
 
-          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl mb-3">
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
             <span
               className="inline-block text-white border-2 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
               style={{ backgroundColor: '#1D3354' }}

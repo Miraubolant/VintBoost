@@ -128,26 +128,9 @@ export function ResultatPage() {
     navigate('/')
   }
 
-  // Loading state
+  // Loading state with animated messages
   if (scraping || (!wardrobeData && pendingUrl)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#E8DFD5' }}>
-        <div className="text-center">
-          <div className="relative inline-block mb-6">
-            <div
-              className="w-20 h-20 border-4 border-black animate-spin"
-              style={{ borderTopColor: '#1D3354' }}
-            />
-            <div
-              className="absolute inset-3 border-4 border-black animate-spin"
-              style={{ borderTopColor: '#9ED8DB', animationDirection: 'reverse', animationDuration: '0.8s' }}
-            />
-          </div>
-          <p className="font-display font-bold text-black text-lg mb-2">Scraping en cours...</p>
-          <p className="text-sm text-black/60 font-body">Récupération de ton vestiaire</p>
-        </div>
-      </div>
-    )
+    return <ScrapingLoader />
   }
 
   // Error state
@@ -622,6 +605,113 @@ function ItemCard({
           <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>{item.brand}</p>
         )}
       </div>
+    </div>
+  )
+}
+
+// Scraping Loader Component with animated messages
+function ScrapingLoader() {
+  const [messageIndex, setMessageIndex] = useState(0)
+  const [dots, setDots] = useState('')
+
+  const messages = [
+    { text: 'Connexion à Vinted', emoji: '🔗' },
+    { text: 'Récupération du vestiaire', emoji: '👗' },
+    { text: 'Analyse des articles', emoji: '🔍' },
+    { text: 'Chargement des images', emoji: '📸' },
+    { text: 'Préparation des données', emoji: '✨' },
+    { text: 'Presque terminé', emoji: '🚀' },
+  ]
+
+  useEffect(() => {
+    // Rotate messages every 2.5 seconds
+    const messageInterval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % messages.length)
+    }, 2500)
+
+    // Animate dots
+    const dotsInterval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'))
+    }, 400)
+
+    return () => {
+      clearInterval(messageInterval)
+      clearInterval(dotsInterval)
+    }
+  }, [])
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#E8DFD5' }}>
+      <div className="text-center max-w-sm w-full">
+        {/* Main loader card */}
+        <div
+          className="border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 sm:p-8 mb-6"
+          style={{ backgroundColor: '#FFFFFF' }}
+        >
+          {/* Animated icon */}
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            {/* Outer spinning ring */}
+            <div
+              className="absolute inset-0 border-4 border-black rounded-sm animate-spin"
+              style={{ borderTopColor: '#1D3354', borderRightColor: '#9ED8DB', animationDuration: '1.5s' }}
+            />
+            {/* Inner pulsing square */}
+            <div
+              className="absolute inset-3 border-3 border-black flex items-center justify-center animate-pulse"
+              style={{ backgroundColor: '#9ED8DB' }}
+            >
+              <Sparkles className="w-6 h-6 text-black" />
+            </div>
+          </div>
+
+          {/* Current message with animation */}
+          <div className="h-16 flex flex-col items-center justify-center">
+            <div
+              key={messageIndex}
+              className="animate-fade-in"
+            >
+              <span className="text-2xl mb-2 block">{messages[messageIndex].emoji}</span>
+              <p className="font-display font-bold text-lg text-black">
+                {messages[messageIndex].text}
+                <span className="inline-block w-8 text-left">{dots}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="border-2 border-black overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+          <div
+            className="h-3 animate-progress"
+            style={{ backgroundColor: '#1D3354' }}
+          />
+        </div>
+
+        {/* Tips carousel */}
+        <div className="mt-6 px-4">
+          <p className="text-xs text-black/50 font-body">
+            💡 Astuce : Les vidéos augmentent tes ventes jusqu'à +300% !
+          </p>
+        </div>
+      </div>
+
+      {/* CSS for animations */}
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.4s ease-out;
+        }
+        @keyframes progress {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+        .animate-progress {
+          animation: progress 15s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   )
 }

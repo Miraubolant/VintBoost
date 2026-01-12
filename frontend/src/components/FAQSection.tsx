@@ -46,7 +46,7 @@ export function FAQSection() {
       <div className="max-w-3xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-10">
-          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl mb-3">
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
             <span
               className="inline-block text-white border-2 border-black px-3 py-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
               style={{ backgroundColor: '#1D3354' }}

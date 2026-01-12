@@ -3,6 +3,8 @@
 ## Project Overview
 VintBoost is a video generator for Vinted sellers. Users paste their wardrobe URL, select articles, and generate promotional videos automatically.
 
+**Repository**: https://github.com/Miraubolant/VintBoost
+
 ## Architecture
 
 ### Frontend (`/frontend`)
@@ -72,6 +74,7 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
   - `VITE_SUPABASE_URL=https://mkzhgzvtvsezqlpesdgc.supabase.co`
   - `VITE_SUPABASE_ANON_KEY=<supabase_anon_key>`
   - `VITE_SCRAPER_API_URL=https://api.vintboost.com`
+  - `VITE_SCRAPER_API_KEY=<your_api_key>` (must match API_KEY on backend)
 
 ### API Service
 - **Domain**: api.vintboost.com
@@ -79,7 +82,7 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 - **Port**: 3000
 - **Environment**:
   - `API_KEY=<your_api_key>`
-  - `CORS_ORIGIN=https://vintboost.com`
+  - `ALLOWED_ORIGINS=https://vintboost.com`
 
 ## Commands
 
