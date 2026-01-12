@@ -1,0 +1,94 @@
+export interface VintedItem {
+  id: string
+  title: string
+  price: string
+  currency: string
+  imageUrl: string
+  images: string[]
+  itemUrl: string
+  brand: string
+  size: string
+  color: string
+  condition: string
+  status: 'active' | 'sold' | 'reserved' | 'hidden'
+  isSold: boolean
+  isReserved: boolean
+}
+
+export interface UserVerifications {
+  email: boolean
+  phone: boolean
+  facebook: boolean
+  google: boolean
+}
+
+export interface UserInfo {
+  profilePicture: string
+  followersCount: number
+  followingCount: number
+  itemsCount: number
+  soldItemsCount: number
+  feedbackCount: number
+  positiveFeedbackCount: number
+  feedbackReputation: number
+  verifications: UserVerifications
+  city: string
+  countryCode: string
+  lastLogged: string | null
+  createdAt: string | null
+}
+
+export interface WardrobeData {
+  success: boolean
+  username: string
+  userId: string
+  userInfo?: UserInfo
+  totalItems: number
+  scrapedAt: string
+  items: VintedItem[]
+  error?: string
+}
+
+// Types pour la génération vidéo
+export interface VideoConfig {
+  articles: VideoArticle[]
+  duration: 15 | 30 | 45 | 60
+  musicTrack: string
+  title?: string
+  template?: string
+  hasWatermark: boolean
+}
+
+export interface VideoArticle {
+  id: string
+  title: string
+  price: string
+  imageUrl: string
+  brand?: string
+}
+
+export interface MusicTrack {
+  id: string
+  name: string
+  filename: string
+}
+
+export interface VideoGenerationResult {
+  success: boolean
+  videoId: string
+  videoUrl: string
+  thumbnailUrl: string
+  duration: number
+  fileSize: string
+  error?: string
+}
+
+export interface VideoInfo {
+  id: string
+  videoUrl: string
+  thumbnailUrl: string
+  downloadUrl: string
+  duration: number
+  fileSize: string
+  createdAt: string
+}

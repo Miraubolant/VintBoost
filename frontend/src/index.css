@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Custom Scrollbar - Neo-Brutalism Style */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #E8DFD5;
+    border-left: 2px solid #1a1a1a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1D3354;
+    border: 2px solid #1a1a1a;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2a4a6d;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #E8DFD5;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1D3354 #E8DFD5;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #E8DFD5;
+    color: #1a1a1a;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  /* Neo-Brutalism Button Primary */
+  .btn-brutal {
+    @apply px-6 py-3 font-bold
+           border-4 shadow-brutal
+           transition-all duration-150 ease-out
+           hover:-translate-x-1 hover:-translate-y-1
+           hover:shadow-brutal-lg
+           active:translate-x-0 active:translate-y-0
+           active:shadow-brutal-sm
+           disabled:opacity-50 disabled:cursor-not-allowed
+           disabled:hover:translate-x-0 disabled:hover:translate-y-0
+           disabled:hover:shadow-brutal;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+  }
+
+  .btn-vinted {
+    @apply btn-brutal;
+    background-color: #1D3354;
+    color: #FFFFFF;
+  }
+
+  .btn-pink {
+    @apply btn-brutal;
+    background-color: #D64045;
+  }
+
+  .btn-mint {
+    @apply btn-brutal;
+    background-color: #9ED8DB;
+  }
+
+  .btn-white {
+    @apply btn-brutal;
+    background-color: #FFFFFF;
+  }
+
+  /* Neo-Brutalism Card */
+  .card-brutal {
+    @apply border-4 shadow-brutal;
+    background-color: #FFFFFF;
+    border-color: #1a1a1a;
+  }
+
+  /* Neo-Brutalism Input */
+  .input-brutal {
+    @apply w-full px-4 py-3
+           border-4
+           placeholder:text-gray-400
+           focus:shadow-brutal-sm focus:-translate-x-0.5 focus:-translate-y-0.5
+           transition-all duration-150;
+    font-family: 'Inter', sans-serif;
+    background-color: #FFFFFF;
+    border-color: #1a1a1a;
+    color: #1a1a1a;
+  }
+
+  /* Neo-Brutalism Badge */
+  .badge-brutal {
+    @apply inline-block px-3 py-1 font-bold text-sm;
+    border-width: 3px;
+    border-color: #1a1a1a;
+  }
+
+  /* Border-3 utility */
+  .border-3 {
+    border-width: 3px;
+  }
+
+  /* Bounce subtle animation for CTA */
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce-subtle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Pulse slow animation for generate button */
+  .animate-pulse-slow {
+    animation: pulse-slow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  /* Perspective for 3D card effect */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  /* Force white background for cards */
+  .card-white {
+    background-color: #FFFFFF !important;
+  }
+
+  /* Mobile menu slide-up animation */
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out forwards;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

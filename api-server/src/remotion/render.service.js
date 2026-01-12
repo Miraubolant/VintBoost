@@ -1,0 +1,233 @@
+/**
+ * Service de rendu Remotion
+ * Génère des vidéos en utilisant Remotion au lieu de FFmpeg
+ */
+
+const { bundle } = require('@remotion/bundler');
+const { renderMedia, selectComposition } = require('@remotion/renderer');
+const path = require('path');
+const fs = require('fs');
+
+// Cache du bundle pour éviter de rebuilder à chaque rendu
+let bundleLocation = null;
+let bundlePromise = null;
+
+/**
+ * Initialiser le bundle Remotion (une seule fois)
+ */
+async function ensureBundle() {
+  if (bundleLocation) {
+    return bundleLocation;
+  }
+
+  if (bundlePromise) {
+    return bundlePromise;
+  }
+
+  console.log('[REMOTION] Building bundle...');
+
+  bundlePromise = bundle({
+    entryPoint: path.join(__dirname, 'index.js'),
+    webpackOverride: (config) => {
+      return {
+        ...config,
+        resolve: {
+          ...config.resolve,
+          alias: {
+            ...config.resolve?.alias,
+          },
+        },
+      };
+    },
+  });
+
+  bundleLocation = await bundlePromise;
+  console.log('[REMOTION] Bundle ready at:', bundleLocation);
+
+  return bundleLocation;
+}
+
+/**
+ * Calculer la durée totale en frames
+ */
+function calculateTotalFrames(articlesCount, clipDuration, fps = 30) {
+  const introDuration = 2.5;
+  const outroDuration = 2;
+  const totalSeconds = introDuration + outroDuration + articlesCount * clipDuration;
+  return Math.round(totalSeconds * fps);
+}
+
+/**
+ * Rendre une vidéo avec Remotion
+ */
+async function renderVideo(config) {
+  const {
+    articles,
+    username = '',
+    clipDuration = 3.5,
+    outputPath,
+    onProgress,
+  } = config;
+
+  const fps = 30;
+  const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps);
+
+  console.log(`[REMOTION] Starting render: ${articles.length} articles, ${clipDuration}s each`);
+  console.log(`[REMOTION] Total duration: ${totalFrames / fps}s (${totalFrames} frames)`);
+
+  try {
+    // S'assurer que le bundle est prêt
+    const bundled = await ensureBundle();
+
+    // Préparer les props pour la composition
+    const inputProps = {
+      username,
+      clipDuration,
+      articles: articles.map((article) => {
+        const imgUrl = article.localImagePath || article.imageUrl;
+        console.log(`[REMOTION] Article ${article.id} image: ${imgUrl}`);
+        return {
+          id: article.id,
+          title: article.title || '',
+          brand: article.brand || '',
+          price: article.price,
+          imageUrl: article.imageUrl,
+          localImagePath: imgUrl,
+        };
+      }),
+    };
+
+    console.log('[REMOTION] Selecting composition...');
+
+    // Sélectionner la composition
+    const composition = await selectComposition({
+      serveUrl: bundled,
+      id: 'VintedVideo',
+      inputProps,
+    });
+
+    // Override la durée avec notre calcul
+    const compositionWithDuration = {
+      ...composition,
+      durationInFrames: totalFrames,
+    };
+
+    console.log('[REMOTION] Rendering video...');
+
+    // Rendre la vidéo
+    await renderMedia({
+      composition: compositionWithDuration,
+      serveUrl: bundled,
+      codec: 'h264',
+      outputLocation: outputPath,
+      inputProps,
+      timeoutInMilliseconds: 120000, // 2 minutes timeout
+      delayRenderTimeoutInMilliseconds: 60000, // 1 minute pour charger les images
+      chromiumOptions: {
+        enableMultiProcessOnLinux: true,
+      },
+      onProgress: ({ progress }) => {
+        const percent = Math.round(progress * 100);
+        if (percent % 10 === 0) {
+          console.log(`[REMOTION] Progress: ${percent}%`);
+        }
+        if (onProgress) {
+          onProgress(percent);
+        }
+      },
+    });
+
+    console.log(`[REMOTION] Video rendered: ${outputPath}`);
+
+    // Obtenir les infos du fichier
+    const stats = fs.statSync(outputPath);
+    const fileSizeMB = (stats.size / (1024 * 1024)).toFixed(2);
+
+    return {
+      success: true,
+      outputPath,
+      duration: totalFrames / fps,
+      fileSize: fileSizeMB,
+    };
+  } catch (error) {
+    console.error('[REMOTION] Render error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Générer une thumbnail depuis une frame de la vidéo
+ */
+async function renderThumbnail(config) {
+  const {
+    articles,
+    username = '',
+    clipDuration = 3.5,
+    outputPath,
+    frame = 75, // Frame 2.5s (après l'intro)
+  } = config;
+
+  try {
+    const bundled = await ensureBundle();
+    const fps = 30;
+    const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps);
+
+    const inputProps = {
+      username,
+      clipDuration,
+      articles: articles.map((article) => ({
+        id: article.id,
+        title: article.title || '',
+        brand: article.brand || '',
+        price: article.price,
+        imageUrl: article.imageUrl,
+        localImagePath: article.localImagePath || article.imageUrl,
+      })),
+    };
+
+    const composition = await selectComposition({
+      serveUrl: bundled,
+      id: 'VintedVideo',
+      inputProps,
+    });
+
+    const { renderStill } = require('@remotion/renderer');
+
+    await renderStill({
+      composition: {
+        ...composition,
+        durationInFrames: totalFrames,
+      },
+      serveUrl: bundled,
+      output: outputPath,
+      inputProps,
+      frame: Math.min(frame, totalFrames - 1),
+    });
+
+    console.log(`[REMOTION] Thumbnail created: ${outputPath}`);
+
+    return { success: true, outputPath };
+  } catch (error) {
+    console.error('[REMOTION] Thumbnail error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Précharger le bundle au démarrage
+ */
+async function preloadBundle() {
+  try {
+    await ensureBundle();
+    console.log('[REMOTION] Bundle preloaded successfully');
+  } catch (error) {
+    console.error('[REMOTION] Failed to preload bundle:', error);
+  }
+}
+
+module.exports = {
+  renderVideo,
+  renderThumbnail,
+  preloadBundle,
+  calculateTotalFrames,
+};
