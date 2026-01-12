@@ -5,5 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173
+  },
+  preview: {
+    port: 4173,
+    host: true,
+    allowedHosts: ['vintboost.com', '.vintboost.com']
   }
 })
