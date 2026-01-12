@@ -1,5 +1,4 @@
-# Build stage
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -9,26 +8,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy source
+# Copy source code
 COPY . .
 
-# Build args for environment variables
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_ANON_KEY
-ARG VITE_SCRAPER_API_URL
-
-# Build the app
+# Build the application
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Expose port
+EXPOSE 4173
 
-# Copy built files
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start command
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
