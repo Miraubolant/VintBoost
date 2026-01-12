@@ -10,6 +10,7 @@ import { FAQSection } from './components/FAQSection'
 import { VintDressSection } from './components/VintDressSection'
 import { FAQPage } from './pages/FAQPage'
 import { ResultatPage } from './pages/ResultatPage'
+import { AccountPage } from './pages/AccountPage'
 import { ScrollToTop } from './components/ScrollToTop'
 import { WardrobeProvider } from './context/WardrobeContext'
 import { AuthProvider } from './context/AuthContext'
@@ -19,8 +20,8 @@ function HomePage() {
     <>
       <VintedScraperPage />
       <BeforeAfterSection />
-      <TestimonialsSection />
       <PricingSection />
+      <TestimonialsSection />
       <BlogSection />
       <FAQSection />
       <VintDressSection />
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/resultat" element={<ResultatPage />} />
                 <Route path="/faq" element={<FAQPage />} />
+                <Route path="/account" element={<AccountPage />} />
               </Routes>
             </main>
             <Footer />

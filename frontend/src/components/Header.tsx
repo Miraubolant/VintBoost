@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Sparkles, Menu, X, User, ChevronDown, LogOut, Video, Eye, CreditCard, MessageCircle, BookOpen, HelpCircle, Zap } from 'lucide-react'
+import { Sparkles, Menu, X, User, ChevronDown, LogOut, Video, Eye, CreditCard, MessageCircle, BookOpen, HelpCircle, Zap, Settings } from 'lucide-react'
 import { AuthModal } from './AuthModal'
 import { useAuth } from '../context/AuthContext'
 
@@ -189,18 +189,19 @@ export function Header() {
                     <Zap className="w-3 h-3" />
                     {remainingVideos} vidéo{remainingVideos !== 1 ? 's' : ''}
                   </div>
-                  {/* User avatar/email */}
-                  <div
-                    className="flex items-center gap-1.5 px-2.5 py-1 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                    style={{ backgroundColor: '#FFFFFF' }}
+                  {/* Account button */}
+                  <Link
+                    to="/account"
+                    className="flex items-center gap-1.5 px-2.5 py-1 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                    style={{ backgroundColor: '#1D3354', color: '#FFFFFF' }}
                   >
                     {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt="" className="w-5 h-5 rounded-full border border-black" />
+                      <img src={user.avatarUrl} alt="" className="w-5 h-5 rounded-full border border-white" />
                     ) : (
                       <User className="w-3 h-3" />
                     )}
-                    <span className="max-w-[100px] truncate">{user.fullName || user.email.split('@')[0]}</span>
-                  </div>
+                    MON COMPTE
+                  </Link>
                   {/* Logout button */}
                   <button
                     onClick={handleLogout}
@@ -291,8 +292,8 @@ export function Header() {
                   className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <Eye className="w-4 h-4" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+                    <Eye className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-display font-bold text-[9px]">ÉTAPES</span>
                 </button>
@@ -302,8 +303,8 @@ export function Header() {
                   className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <CreditCard className="w-4 h-4" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+                    <CreditCard className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-display font-bold text-[9px]">TARIFS</span>
                 </button>
@@ -313,8 +314,8 @@ export function Header() {
                   className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <MessageCircle className="w-4 h-4" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+                    <MessageCircle className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-display font-bold text-[9px]">AVIS</span>
                 </button>
@@ -324,8 +325,8 @@ export function Header() {
                   className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#9ED8DB' }}>
-                    <BookOpen className="w-4 h-4" />
+                  <div className="w-8 h-8 border-2 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+                    <BookOpen className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-display font-bold text-[9px]">BLOG</span>
                 </button>
@@ -383,12 +384,22 @@ export function Header() {
                     </div>
                     <div
                       className="flex items-center gap-1.5 px-3 border-2 border-black"
-                      style={{ backgroundColor: '#9ED8DB' }}
+                      style={{ backgroundColor: '#1D3354' }}
                     >
-                      <Zap className="w-3.5 h-3.5" />
-                      <span className="font-display font-bold text-xs">{remainingVideos}</span>
+                      <Zap className="w-3.5 h-3.5 text-white" />
+                      <span className="font-display font-bold text-xs text-white">{remainingVideos}</span>
                     </div>
                   </div>
+                  {/* Account link */}
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full p-2.5 font-display font-bold text-xs text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    style={{ backgroundColor: '#1D3354' }}
+                  >
+                    <Settings className="w-3.5 h-3.5" />
+                    MON COMPTE
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="flex items-center justify-center gap-2 w-full p-2.5 font-display font-bold text-xs text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"

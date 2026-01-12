@@ -211,24 +211,6 @@ export function BeforeAfterSection() {
 
           {/* Mobile Layout - Full Width Swipe Carousel */}
           <div className="md:hidden">
-            {/* Step Progress Bar */}
-            <div className="flex items-center gap-1 mb-4 px-1">
-              {steps.map((step, i) => (
-                <button
-                  key={i}
-                  onClick={() => scrollToStep(i)}
-                  className="flex-1 h-2 border border-black transition-all duration-300 relative overflow-hidden"
-                  style={{
-                    backgroundColor: i <= activeStep ? step.color : '#E8DFD5'
-                  }}
-                >
-                  {i === activeStep && (
-                    <div className="absolute inset-0 bg-white/30 animate-pulse" />
-                  )}
-                </button>
-              ))}
-            </div>
-
             {/* Navigation Row */}
             <div className="flex items-center justify-between mb-3">
               <button

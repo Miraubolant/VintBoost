@@ -56,15 +56,6 @@ const testimonials: Testimonial[] = [
     result: '50K',
     resultLabel: 'vues TikTok',
   },
-  {
-    name: 'Antoine P.',
-    username: '@antoine_mode',
-    initials: 'AP',
-    rating: 5,
-    text: "Parfait pour mettre en valeur mes articles. La qualité des vidéos est vraiment professionnelle.",
-    result: '+300%',
-    resultLabel: 'engagement',
-  },
 ]
 
 export function TestimonialsSection() {
