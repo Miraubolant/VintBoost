@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, TouchSensor } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Music, Layout, Type, GripVertical, X, Play, Pause, Clock, Sparkles } from 'lucide-react'
+import { Music, Layout, Type, GripVertical, X, Play, Pause, Clock, Sparkles, Stamp, Lock } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
 
 interface VideoConfigPanelProps {
@@ -17,6 +17,9 @@ interface VideoConfigPanelProps {
   onTemplateChange: (template: string) => void
   customText: string
   onCustomTextChange: (text: string) => void
+  hasWatermark: boolean
+  onWatermarkChange: (hasWatermark: boolean) => void
+  canRemoveWatermark: boolean
   onGenerate: () => void
   loading: boolean
   isMobile?: boolean
@@ -92,6 +95,9 @@ export function VideoConfigPanel({
   onTemplateChange,
   customText,
   onCustomTextChange,
+  hasWatermark,
+  onWatermarkChange,
+  canRemoveWatermark,
   onGenerate,
   loading,
   isMobile = false,
@@ -299,6 +305,51 @@ export function VideoConfigPanel({
           </div>
         )}
       </div>
+
+      {/* Watermark Option */}
+      <div
+        className={`flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
+        style={{ backgroundColor: '#FFFFFF' }}
+      >
+        <div className="flex items-center gap-2">
+          <Stamp className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
+          <span className={`font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'}`}>WATERMARK</span>
+          {!canRemoveWatermark && (
+            <span
+              className={`flex items-center gap-1 ${isMobile ? 'text-[10px]' : 'text-[9px]'} font-body px-1.5 py-0.5 border border-black`}
+              style={{ backgroundColor: '#9ED8DB' }}
+            >
+              <Lock className="w-2.5 h-2.5" />
+              PRO/BUSINESS
+            </span>
+          )}
+        </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={hasWatermark}
+            onChange={(e) => canRemoveWatermark && onWatermarkChange(e.target.checked)}
+            disabled={!canRemoveWatermark}
+            className="sr-only peer"
+          />
+          <div
+            className={`${isMobile ? 'w-11 h-6' : 'w-9 h-5'} border-2 border-black peer-checked:after:translate-x-full after:content-[''] after:absolute ${isMobile ? 'after:top-[2px] after:left-[2px] after:h-4 after:w-4' : 'after:top-[1px] after:left-[1px] after:h-3.5 after:w-3.5'} after:border-2 after:border-black after:transition-all ${!canRemoveWatermark ? 'opacity-50 cursor-not-allowed' : ''}`}
+            style={{
+              backgroundColor: hasWatermark ? '#1D3354' : '#FFFFFF',
+            }}
+          >
+            <span
+              className={`absolute ${isMobile ? 'top-[2px] left-[2px] w-4 h-4' : 'top-[1px] left-[1px] w-3.5 h-3.5'} border-2 border-black transition-transform ${hasWatermark ? (isMobile ? 'translate-x-5' : 'translate-x-4') : ''}`}
+              style={{ backgroundColor: '#FFFFFF' }}
+            />
+          </div>
+        </label>
+      </div>
+      {!canRemoveWatermark && (
+        <p className={`${isMobile ? 'text-[10px]' : 'text-[9px]'} text-black/50 font-body text-center -mt-1`}>
+          Passe a Pro ou Business pour retirer le watermark
+        </p>
+      )}
 
       {/* Generate Button */}
       <button

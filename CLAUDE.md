@@ -22,7 +22,8 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 
 ### Database (Supabase)
 - **Tables**: profiles, subscriptions, credits, user_videos, user_analytics
-- **RLS**: Enabled on all tables
+- **Storage**: `videos` bucket for user generated videos
+- **RLS**: Enabled on all tables and storage
 - **Migrations**: `/supabase/migrations`
 
 ## Design System
@@ -49,9 +50,22 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 - `src/App.tsx` - Main app with routing
 - `src/context/AuthContext.tsx` - Supabase auth
 - `src/components/Header.tsx` - Navigation
+- `src/components/Footer.tsx` - Footer with legal links
 - `src/components/BeforeAfterSection.tsx` - 5 steps tutorial
 - `src/components/VintDressSection.tsx` - VintDress promo
+- `src/components/VintedScraperPage.tsx` - Hero section with URL input
+- `src/components/VideoConfigPanel.tsx` - Video generation options (watermark, duration, etc.)
+- `src/components/PricingSection.tsx` - Pricing plans
+- `src/components/AuthModal.tsx` - Login/signup modal
+- `src/components/NoCreditModal.tsx` - No credits modal
 - `src/pages/ResultatPage.tsx` - Video generation
+- `src/pages/AccountPage.tsx` - User account and videos history
+- `src/pages/FAQPage.tsx` - Frequently asked questions
+- `src/pages/MentionsLegalesPage.tsx` - Legal mentions
+- `src/pages/CGUPage.tsx` - Terms of service
+- `src/pages/ConfidentialitePage.tsx` - Privacy policy
+- `src/hooks/useVideoGeneration.ts` - Video generation hook with Supabase upload
+- `src/lib/supabase.ts` - Supabase client and storage helpers
 
 ### API Server
 - `server.js` - Express server
@@ -105,8 +119,32 @@ supabase db push  # Push migrations
 ```
 
 ## Subscription Plans
-| Plan | Videos/month | Price |
-|------|--------------|-------|
-| Free | 1 | 0€ |
-| Pro | 15 | 9.99€ |
-| Business | 50 | 24.99€ |
+| Plan | Videos/month | Price | Features |
+|------|--------------|-------|----------|
+| Free | 1 | 0€ | Basic templates, Watermark |
+| Pro | 15 | 3.99€ | All templates, No watermark, 1080p |
+| Business | 50 | 12.99€ | All templates, No watermark, 4K |
+
+## Auth & Credits Protection
+
+### Scraping Protection
+- User must be logged in to scrape wardrobe (shows AuthModal if not)
+- User must have credits to scrape (shows NoCreditModal if no credits)
+- Protection implemented in `VintedScraperPage.tsx`
+
+### Watermark Logic
+- **Free plan**: Watermark forced ON, cannot be disabled
+- **Pro/Business**: Watermark optional (can be toggled off)
+- Checkbox in `VideoConfigPanel.tsx` disabled for free users
+
+## Legal Pages
+- `/mentions-legales` - Legal mentions
+- `/cgu` - Terms of service (CGU)
+- `/confidentialite` - Privacy policy (GDPR compliant)
+
+## Video Storage
+Videos are uploaded to Supabase Storage bucket `videos`:
+- Path: `{user_id}/{video_id}.mp4`
+- Thumbnail: `{user_id}/{video_id}-thumb.jpg`
+- Public read access for sharing
+- User-scoped write/delete access

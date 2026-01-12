@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWardrobe } from '../context/WardrobeContext'
+import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle } from '../types/vinted'
@@ -11,6 +12,7 @@ import { VideoConfigPanel } from '../components/VideoConfigPanel'
 export function ResultatPage() {
   const navigate = useNavigate()
   const { wardrobeData, setWardrobeData, clearWardrobeData, pendingUrl, setPendingUrl } = useWardrobe()
+  const { subscription } = useAuth()
   const { scrapeWardrobe, data: scrapedData, loading: scraping, error: scrapeError } = useVintedScraper()
 
   // Video generation states
@@ -22,6 +24,10 @@ export function ResultatPage() {
   const [musicTrack, setMusicTrack] = useState('')
   const [template, setTemplate] = useState('classic')
   const [customText, setCustomText] = useState('')
+
+  // Watermark is forced for free plan
+  const canRemoveWatermark = subscription?.plan === 'pro' || subscription?.plan === 'business'
+  const [hasWatermark, setHasWatermark] = useState(!canRemoveWatermark)
 
   const {
     generate,
@@ -107,7 +113,7 @@ export function ResultatPage() {
       musicTrack: musicTrack,
       title: customText || (wardrobeData?.username ? `@${wardrobeData.username}` : ''),
       template: template,
-      hasWatermark: false,
+      hasWatermark: hasWatermark,
     })
   }
 
@@ -402,6 +408,9 @@ export function ResultatPage() {
                     onTemplateChange={setTemplate}
                     customText={customText}
                     onCustomTextChange={setCustomText}
+                    hasWatermark={hasWatermark}
+                    onWatermarkChange={setHasWatermark}
+                    canRemoveWatermark={canRemoveWatermark}
                     onGenerate={handleGenerateVideo}
                     loading={videoLoading}
                   />
@@ -528,6 +537,9 @@ export function ResultatPage() {
                   onTemplateChange={setTemplate}
                   customText={customText}
                   onCustomTextChange={setCustomText}
+                  hasWatermark={hasWatermark}
+                  onWatermarkChange={setHasWatermark}
+                  canRemoveWatermark={canRemoveWatermark}
                   onGenerate={handleGenerateVideo}
                   loading={videoLoading}
                   isMobile={true}
@@ -615,12 +627,12 @@ function ScrapingLoader() {
   const [dots, setDots] = useState('')
 
   const messages = [
-    { text: 'Connexion à Vinted', emoji: '🔗' },
-    { text: 'Récupération du vestiaire', emoji: '👗' },
-    { text: 'Analyse des articles', emoji: '🔍' },
-    { text: 'Chargement des images', emoji: '📸' },
-    { text: 'Préparation des données', emoji: '✨' },
-    { text: 'Presque terminé', emoji: '🚀' },
+    'Connexion a Vinted',
+    'Recuperation du vestiaire',
+    'Analyse des articles',
+    'Chargement des images',
+    'Preparation des donnees',
+    'Presque termine',
   ]
 
   useEffect(() => {
@@ -665,17 +677,27 @@ function ScrapingLoader() {
           </div>
 
           {/* Current message with animation */}
-          <div className="h-16 flex flex-col items-center justify-center">
+          <div className="h-12 flex flex-col items-center justify-center">
             <div
               key={messageIndex}
               className="animate-fade-in"
             >
-              <span className="text-2xl mb-2 block">{messages[messageIndex].emoji}</span>
               <p className="font-display font-bold text-lg text-black">
-                {messages[messageIndex].text}
+                {messages[messageIndex]}
                 <span className="inline-block w-8 text-left">{dots}</span>
               </p>
             </div>
+          </div>
+
+          {/* Step indicator */}
+          <div className="flex justify-center gap-1.5 mt-4">
+            {messages.map((_, idx) => (
+              <div
+                key={idx}
+                className="w-2 h-2 border border-black transition-colors"
+                style={{ backgroundColor: idx <= messageIndex ? '#1D3354' : '#FFFFFF' }}
+              />
+            ))}
           </div>
         </div>
 
@@ -687,10 +709,10 @@ function ScrapingLoader() {
           />
         </div>
 
-        {/* Tips carousel */}
+        {/* Tip */}
         <div className="mt-6 px-4">
           <p className="text-xs text-black/50 font-body">
-            💡 Astuce : Les vidéos augmentent tes ventes jusqu'à +300% !
+            Les videos augmentent tes ventes jusqu'a +300%
           </p>
         </div>
       </div>

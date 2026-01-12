@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import type { VideoConfig, VideoGenerationResult, MusicTrack } from '../types/vinted'
+import { supabase, uploadVideoToStorage } from '../lib/supabase'
 
 const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
 const API_KEY = import.meta.env.VITE_SCRAPER_API_KEY || ''
@@ -46,6 +47,12 @@ export function useVideoGeneration() {
     setResult(null)
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        throw new Error('Utilisateur non connecte')
+      }
+
       const response = await fetch(`${API_URL}/api/video/generate`, {
         method: 'POST',
         headers: getHeaders(),
@@ -61,14 +68,62 @@ export function useVideoGeneration() {
       const data = await response.json()
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Erreur lors de la génération')
+        throw new Error(data.error || 'Erreur lors de la generation')
+      }
+
+      // Fetch video and thumbnail blobs from API
+      const videoUrl = `${API_URL}${data.videoUrl}`
+      const thumbnailUrl = `${API_URL}${data.thumbnailUrl}`
+
+      let supabaseVideoUrl = videoUrl
+      let supabaseThumbnailUrl = thumbnailUrl
+
+      try {
+        // Fetch video blob
+        const videoResponse = await fetch(videoUrl)
+        const videoBlob = await videoResponse.blob()
+
+        // Fetch thumbnail blob
+        const thumbResponse = await fetch(thumbnailUrl)
+        const thumbBlob = await thumbResponse.blob()
+
+        // Upload to Supabase storage
+        const uploadResult = await uploadVideoToStorage(
+          user.id,
+          data.videoId,
+          videoBlob,
+          thumbBlob
+        )
+
+        if (uploadResult.videoUrl) {
+          supabaseVideoUrl = uploadResult.videoUrl
+        }
+        if (uploadResult.thumbnailUrl) {
+          supabaseThumbnailUrl = uploadResult.thumbnailUrl
+        }
+
+        // Save video record to database
+        await supabase.from('user_videos').insert({
+          user_id: user.id,
+          video_id: data.videoId,
+          video_url: supabaseVideoUrl,
+          thumbnail_url: supabaseThumbnailUrl,
+          title: config.title || '',
+          duration: data.duration,
+          file_size: data.fileSize,
+          template: config.template || 'classic',
+          articles_count: config.articles.length,
+        })
+      } catch (uploadErr) {
+        console.error('Erreur lors de l\'upload vers Supabase:', uploadErr)
+        // Continue with API URLs if Supabase upload fails
       }
 
       const videoResult: VideoGenerationResult = {
         success: true,
         videoId: data.videoId,
-        videoUrl: `${API_URL}${data.videoUrl}`,
-        thumbnailUrl: `${API_URL}${data.thumbnailUrl}`,
+        videoUrl: supabaseVideoUrl,
+        thumbnailUrl: supabaseThumbnailUrl,
         duration: data.duration,
         fileSize: data.fileSize,
       }

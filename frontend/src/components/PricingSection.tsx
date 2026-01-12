@@ -8,7 +8,7 @@ interface PricingPlan {
   description: string
   features: string[]
   buttonText: string
-  buttonStyle: 'white' | 'red' | 'cyan'
+  buttonStyle: 'white' | 'red' | 'cyan' | 'navy'
   popular?: boolean
   highlight?: string
   isFree?: boolean
@@ -18,26 +18,26 @@ const plans: PricingPlan[] = [
   {
     name: 'GRATUIT',
     price: '0€',
-    videos: '1 vidéo',
-    description: 'Pour découvrir',
+    videos: '1 video',
+    description: 'Pour decouvrir',
     features: [
-      '1 vidéo HD offerte',
+      '1 video HD offerte',
       'Templates basiques',
       'Watermark VintBoost',
       'Export rapide',
     ],
     buttonText: 'ESSAYER GRATUIT',
-    buttonStyle: 'white',
+    buttonStyle: 'navy',
     isFree: true,
   },
   {
     name: 'PRO',
-    price: '9.99€',
+    price: '3.99€',
     period: '/mois',
-    videos: '15 vidéos',
+    videos: '15 videos',
     description: 'Le plus populaire',
     features: [
-      '15 vidéos HD/mois',
+      '15 videos HD/mois',
       'Tous les templates',
       'Sans watermark',
       'Support prioritaire',
@@ -50,19 +50,19 @@ const plans: PricingPlan[] = [
   },
   {
     name: 'BUSINESS',
-    price: '24.99€',
+    price: '12.99€',
     period: '/mois',
-    videos: '50 vidéos',
+    videos: '50 videos',
     description: 'Pour les pros',
     features: [
-      '50 vidéos 4K/mois',
+      '50 videos 4K/mois',
       'Tous les templates',
       'Sans watermark',
       'Support 24/7',
       'Export 4K',
     ],
     buttonText: 'CHOISIR BUSINESS',
-    buttonStyle: 'cyan',
+    buttonStyle: 'navy',
   },
 ]
 
@@ -163,7 +163,7 @@ export function PricingSection() {
                 <button
                   className={`w-full px-4 py-3 border-2 border-black font-display font-bold text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200`}
                   style={{
-                    backgroundColor: plan.buttonStyle === 'white' ? '#FFFFFF' : plan.buttonStyle === 'red' ? '#D64045' : '#9ED8DB',
+                    backgroundColor: plan.buttonStyle === 'white' ? '#FFFFFF' : plan.buttonStyle === 'red' ? '#D64045' : plan.buttonStyle === 'navy' ? '#1D3354' : '#9ED8DB',
                     color: plan.buttonStyle === 'white' || plan.buttonStyle === 'cyan' ? '#000000' : '#FFFFFF'
                   }}
                 >

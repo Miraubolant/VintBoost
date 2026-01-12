@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWardrobe } from '../context/WardrobeContext'
+import { useAuth } from '../context/AuthContext'
 import { Zap, Star } from 'lucide-react'
+import { AuthModal } from './AuthModal'
+import { NoCreditModal } from './NoCreditModal'
 
 export function VintedScraperPage() {
   const [url, setUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showNoCreditModal, setShowNoCreditModal] = useState(false)
   const { setPendingUrl } = useWardrobe()
+  const { user, canGenerateVideo } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -21,9 +27,29 @@ export function VintedScraperPage() {
       return
     }
 
+    // Check if user is logged in
+    if (!user) {
+      setShowAuthModal(true)
+      return
+    }
+
+    // Check if user has credits
+    if (!canGenerateVideo()) {
+      setShowNoCreditModal(true)
+      return
+    }
+
     // Store URL and redirect immediately
     setPendingUrl(trimmedUrl)
     navigate('/resultat')
+  }
+
+  const handleNavigateToPricing = () => {
+    setShowNoCreditModal(false)
+    const pricingSection = document.getElementById('pricing')
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return (
@@ -165,6 +191,19 @@ export function VintedScraperPage() {
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
+
+      {/* No Credit Modal */}
+      <NoCreditModal
+        isOpen={showNoCreditModal}
+        onClose={() => setShowNoCreditModal(false)}
+        onNavigateToPricing={handleNavigateToPricing}
+      />
     </div>
   )
 }

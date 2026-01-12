@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ChevronDown, ArrowLeft, MessageCircle, Mail } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -42,7 +42,7 @@ const faqItems: FAQItem[] = [
   {
     category: 'TARIFS',
     question: "Quel plan choisir ?",
-    answer: "Le plan Gratuit te permet de tester avec 1 video. Le plan Pro a 9,99 euros/mois est ideal pour les vendeurs reguliers avec 15 videos/mois. Le plan Business a 24,99 euros/mois convient aux vendeurs professionnels avec 50 videos 4K/mois."
+    answer: "Le plan Gratuit te permet de tester avec 1 video. Le plan Pro a 3,99 euros/mois est ideal pour les vendeurs reguliers avec 15 videos/mois. Le plan Business a 12,99 euros/mois convient aux vendeurs professionnels avec 50 videos 4K/mois."
   },
   {
     category: 'TARIFS',
@@ -66,6 +66,10 @@ const categories = ['TOUS', 'GENERAL', 'FONCTIONNALITES', 'UTILISATION', 'TARIFS
 export function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [activeCategory, setActiveCategory] = useState('TOUS')
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)

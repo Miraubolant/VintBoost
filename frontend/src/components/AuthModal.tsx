@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { X, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
@@ -325,9 +326,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <div className="px-5 pb-4">
           <p className="text-[10px] text-black/50 font-body text-center">
             En continuant, tu acceptes nos{' '}
-            <a href="#" className="underline hover:text-black">Conditions d'utilisation</a>
+            <Link to="/cgu" onClick={onClose} className="underline hover:text-black">Conditions d'utilisation</Link>
             {' '}et notre{' '}
-            <a href="#" className="underline hover:text-black">Politique de confidentialite</a>
+            <Link to="/confidentialite" onClick={onClose} className="underline hover:text-black">Politique de confidentialite</Link>
           </p>
         </div>
       </div>

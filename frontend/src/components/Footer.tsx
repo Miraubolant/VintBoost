@@ -1,4 +1,5 @@
-import { Sparkles, Mail, MapPin } from 'lucide-react'
+import { Sparkles, Mail, MapPin, FileText, Shield, Scale } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 // TikTok icon
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -87,6 +88,35 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Legal Links */}
+        <div className="border-t-2 border-black py-3 sm:py-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <Link
+              to="/mentions-legales"
+              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
+            >
+              <Scale className="w-2.5 h-2.5" />
+              Mentions legales
+            </Link>
+            <span className="text-black/30">|</span>
+            <Link
+              to="/cgu"
+              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
+            >
+              <FileText className="w-2.5 h-2.5" />
+              CGU
+            </Link>
+            <span className="text-black/30">|</span>
+            <Link
+              to="/confidentialite"
+              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
+            >
+              <Shield className="w-2.5 h-2.5" />
+              Confidentialite
+            </Link>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div className="border-t-2 border-black py-3 sm:py-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -94,7 +124,7 @@ export function Footer() {
             {/* Copyright */}
             <div className="text-center sm:text-left">
               <span className="font-display font-bold text-[9px] sm:text-[10px] text-black">
-                © 2025 VINTBOOST - Scrape & Generate Videos
+                © 2026 VINTBOOST
               </span>
             </div>
 
@@ -112,7 +142,7 @@ export function Footer() {
 
               {/* TikTok Link */}
               <a
-                href="https://www.tiktok.com/@vintboost"
+                href="https://www.tiktok.com/@vintdress.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-black text-white font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:text-black hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-1"

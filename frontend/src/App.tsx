@@ -11,6 +11,9 @@ import { VintDressSection } from './components/VintDressSection'
 import { FAQPage } from './pages/FAQPage'
 import { ResultatPage } from './pages/ResultatPage'
 import { AccountPage } from './pages/AccountPage'
+import { MentionsLegalesPage } from './pages/MentionsLegalesPage'
+import { CGUPage } from './pages/CGUPage'
+import { ConfidentialitePage } from './pages/ConfidentialitePage'
 import { ScrollToTop } from './components/ScrollToTop'
 import { WardrobeProvider } from './context/WardrobeContext'
 import { AuthProvider } from './context/AuthContext'
@@ -42,6 +45,9 @@ function App() {
                 <Route path="/resultat" element={<ResultatPage />} />
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
+                <Route path="/cgu" element={<CGUPage />} />
+                <Route path="/confidentialite" element={<ConfidentialitePage />} />
               </Routes>
             </main>
             <Footer />

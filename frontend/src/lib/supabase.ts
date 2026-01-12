@@ -71,6 +71,71 @@ export interface UserAnalytics {
   updated_at: string
 }
 
+// Storage helper functions
+export async function uploadVideoToStorage(
+  userId: string,
+  videoId: string,
+  videoBlob: Blob,
+  thumbnailBlob?: Blob
+): Promise<{ videoUrl: string | null; thumbnailUrl: string | null }> {
+  const videoPath = `${userId}/${videoId}.mp4`
+  const thumbnailPath = `${userId}/${videoId}-thumb.jpg`
+
+  let videoUrl: string | null = null
+  let thumbnailUrl: string | null = null
+
+  // Upload video
+  const { error: videoError } = await supabase.storage
+    .from('videos')
+    .upload(videoPath, videoBlob, {
+      contentType: 'video/mp4',
+      upsert: true,
+    })
+
+  if (!videoError) {
+    const { data } = supabase.storage.from('videos').getPublicUrl(videoPath)
+    videoUrl = data.publicUrl
+  }
+
+  // Upload thumbnail if provided
+  if (thumbnailBlob) {
+    const { error: thumbError } = await supabase.storage
+      .from('videos')
+      .upload(thumbnailPath, thumbnailBlob, {
+        contentType: 'image/jpeg',
+        upsert: true,
+      })
+
+    if (!thumbError) {
+      const { data } = supabase.storage.from('videos').getPublicUrl(thumbnailPath)
+      thumbnailUrl = data.publicUrl
+    }
+  }
+
+  return { videoUrl, thumbnailUrl }
+}
+
+export async function deleteVideoFromStorage(userId: string, videoId: string): Promise<boolean> {
+  const videoPath = `${userId}/${videoId}.mp4`
+  const thumbnailPath = `${userId}/${videoId}-thumb.jpg`
+
+  const { error: videoError } = await supabase.storage
+    .from('videos')
+    .remove([videoPath, thumbnailPath])
+
+  return !videoError
+}
+
+export function getVideoPublicUrl(userId: string, videoId: string): string {
+  const { data } = supabase.storage.from('videos').getPublicUrl(`${userId}/${videoId}.mp4`)
+  return data.publicUrl
+}
+
+export function getThumbnailPublicUrl(userId: string, videoId: string): string {
+  const { data } = supabase.storage.from('videos').getPublicUrl(`${userId}/${videoId}-thumb.jpg`)
+  return data.publicUrl
+}
+
 // Database type for Supabase
 export interface Database {
   public: {
