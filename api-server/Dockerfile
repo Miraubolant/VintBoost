@@ -1,10 +1,12 @@
-# Dockerfile pour Coolify
+# API Server - Node.js + Puppeteer + Remotion
 FROM node:20-slim
 
-# Installer les dépendances pour Puppeteer
+# Install dependencies for Puppeteer + FFmpeg for Remotion
 RUN apt-get update && apt-get install -y \
     chromium \
+    ffmpeg \
     fonts-liberation \
+    fonts-noto-color-emoji \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
@@ -23,17 +25,23 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Variables d'environnement Puppeteer
+# Puppeteer environment
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
-# Copier les fichiers
+# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
 
+# Install all dependencies (including devDependencies for Remotion)
+RUN npm ci
+
+# Copy source
 COPY . .
+
+# Create output directory
+RUN mkdir -p output assets
 
 EXPOSE 3000
 
