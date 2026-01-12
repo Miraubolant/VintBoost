@@ -572,11 +572,10 @@ function ItemCard({
   return (
     <div
       className={`border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden transition-all group cursor-pointer active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] ${
-        isSelected ? 'ring-2 ring-offset-1' : ''
+        isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''
       } ${selectionDisabled && !isSelected ? 'opacity-50' : ''}`}
       style={{
-        backgroundColor: '#FFFFFF',
-        ringColor: '#1D3354'
+        backgroundColor: '#FFFFFF'
       }}
       onClick={onToggle}
     >

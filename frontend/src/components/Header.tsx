@@ -13,7 +13,7 @@ export function Header() {
   const location = useLocation()
 
   // Use Supabase auth
-  const { user, subscription, credits, signOut, loading } = useAuth()
+  const { user, subscription, credits, signOut } = useAuth()
 
   // Close dropdown when clicking outside
   useEffect(() => {
