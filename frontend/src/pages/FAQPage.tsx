@@ -94,15 +94,19 @@ export function FAQPage() {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-4">
-            <span
-              className="inline-block text-black border-3 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-              style={{ backgroundColor: '#9ED8DB' }}
-            >
-              QUESTIONS FREQUENTES
-            </span>
+          <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
+            <div className="text-black transform -rotate-2 mb-4 relative">
+              <span className="inline-block bg-white border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                QUESTIONS
+              </span>
+            </div>
+            <div className="text-white transform rotate-2 relative">
+              <span className="inline-block border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#1D3354' }}>
+                FREQUENTES
+              </span>
+            </div>
           </h1>
-          <p className="text-base sm:text-lg text-black/70 font-body max-w-lg mx-auto">
+          <p className="text-base sm:text-lg text-black/70 font-body max-w-lg mx-auto mt-4">
             Tout ce que tu dois savoir sur VintBoost
           </p>
         </div>
