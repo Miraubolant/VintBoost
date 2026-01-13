@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { VintedScraperPage } from './components/VintedScraperPage'
@@ -9,6 +10,8 @@ import { BlogSection } from './components/BlogSection'
 import { FAQSection } from './components/FAQSection'
 import { VintDressSection } from './components/VintDressSection'
 import { FAQPage } from './pages/FAQPage'
+import { BlogPage } from './pages/BlogPage'
+import { BlogArticlePage } from './pages/BlogArticlePage'
 import { ResultatPage } from './pages/ResultatPage'
 import { AccountPage } from './pages/AccountPage'
 import { MentionsLegalesPage } from './pages/MentionsLegalesPage'
@@ -34,28 +37,32 @@ function HomePage() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <WardrobeProvider>
-          <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#E8DFD5' }}>
-            <Header />
-            <main className="flex-1 pt-12 sm:pt-14">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/resultat" element={<ResultatPage />} />
-                <Route path="/faq" element={<FAQPage />} />
-                <Route path="/account" element={<AccountPage />} />
-                <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
-                <Route path="/cgu" element={<CGUPage />} />
-                <Route path="/confidentialite" element={<ConfidentialitePage />} />
-              </Routes>
-            </main>
-            <Footer />
-            <ScrollToTop />
-          </div>
-        </WardrobeProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <WardrobeProvider>
+            <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#E8DFD5' }}>
+              <Header />
+              <main className="flex-1 pt-12 sm:pt-14">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/resultat" element={<ResultatPage />} />
+                  <Route path="/faq" element={<FAQPage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/blog/:slug" element={<BlogArticlePage />} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
+                  <Route path="/cgu" element={<CGUPage />} />
+                  <Route path="/confidentialite" element={<ConfidentialitePage />} />
+                </Routes>
+              </main>
+              <Footer />
+              <ScrollToTop />
+            </div>
+          </WardrobeProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }
 

@@ -39,8 +39,9 @@ export function MentionsLegalesPage() {
               <h2 className="font-display font-bold text-lg text-black mb-3">1. Editeur du site</h2>
               <p>
                 Le site VintBoost (vintboost.com) est edite par :<br />
-                <strong>VintBoost</strong><br />
-                Siege social : France<br />
+                <strong>Miraubolant</strong><br />
+                SIREN : 995105442<br />
+                Siege social : 113 rue Saint Honore, 75001 Paris<br />
                 Email : contact@vintboost.com
               </p>
             </section>
