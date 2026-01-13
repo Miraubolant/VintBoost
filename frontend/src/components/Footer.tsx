@@ -17,7 +17,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t-4 border-black mt-auto" style={{ backgroundColor: '#E8DFD5' }}>
+    <footer className="border-t-4 border-black mt-auto" style={{ backgroundColor: '#FFFFFF' }}>
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
 
         {/* Main Footer Content */}

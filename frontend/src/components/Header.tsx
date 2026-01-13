@@ -69,7 +69,7 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[9999] border-b-4 border-black" style={{ backgroundColor: '#E8DFD5' }}>
+      <header className="fixed top-0 left-0 right-0 z-[9999] border-b-4 border-black" style={{ backgroundColor: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
 
