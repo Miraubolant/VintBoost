@@ -103,7 +103,7 @@ export function BeforeAfterSection() {
   }, [])
 
   return (
-    <section id="before-after" className="py-8 sm:py-12 lg:py-16 px-4 relative overflow-hidden">
+    <section id="before-after" className="py-6 sm:py-8 lg:py-12 px-4 relative overflow-hidden">
       {/* Decorative elements - Desktop only */}
       <div
         className="hidden lg:block absolute -left-4 top-20 w-8 h-8 border-2 border-black transform rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
