@@ -51,7 +51,7 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 - `src/context/AuthContext.tsx` - Supabase auth
 - `src/components/Header.tsx` - Navigation
 - `src/components/Footer.tsx` - Footer with legal links
-- `src/components/BeforeAfterSection.tsx` - 5 steps tutorial
+- `src/components/BeforeAfterSection.tsx` - 4 steps tutorial
 - `src/components/VintDressSection.tsx` - VintDress promo
 - `src/components/VintedScraperPage.tsx` - Hero section with URL input
 - `src/components/VideoConfigPanel.tsx` - Video generation options (watermark, duration, etc.)
@@ -148,3 +148,39 @@ Videos are uploaded to Supabase Storage bucket `videos`:
 - Thumbnail: `{user_id}/{video_id}-thumb.jpg`
 - Public read access for sharing
 - User-scoped write/delete access
+
+## Stripe Integration
+
+### Edge Functions (`/supabase/functions`)
+- `create-checkout-session` - Creates Stripe checkout session for subscriptions
+- `stripe-webhook` - Handles Stripe events (subscription updates, payments)
+- `customer-portal` - Opens Stripe customer portal for subscription management
+
+### Stripe Configuration
+- **Pro Plan**: `price_1Sow53K7Yon7d585HdHNbLgS` (3.99€/month)
+- **Business Plan**: `price_1Sow6DK7Yon7d585RsV1cflP` (12.99€/month)
+- **Webhook URL**: `https://mkzhgzvtvsezqlpesdgc.supabase.co/functions/v1/stripe-webhook`
+
+### Supabase Secrets
+```bash
+supabase secrets set STRIPE_SECRET_KEY=sk_live_xxxxx
+supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_xxxxx
+```
+
+### Frontend Hook
+- `src/hooks/useStripe.ts` - Hook for checkout and customer portal
+
+### Database Fields (Stripe)
+- `profiles.stripe_customer_id` - Stripe customer ID
+- `subscriptions.stripe_subscription_id` - Stripe subscription ID
+- `subscriptions.stripe_customer_id` - Stripe customer ID
+- `subscriptions.current_period_start` - Billing period start
+- `subscriptions.current_period_end` - Billing period end
+- `subscriptions.cancel_at_period_end` - Cancellation flag
+
+### Deploy Edge Functions
+```bash
+supabase functions deploy create-checkout-session --no-verify-jwt
+supabase functions deploy customer-portal --no-verify-jwt
+supabase functions deploy stripe-webhook --no-verify-jwt
+```
