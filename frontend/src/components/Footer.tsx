@@ -1,5 +1,6 @@
-import { Sparkles, Mail, MapPin } from 'lucide-react'
+import { Sparkles, Mail, MapPin, Cookie } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { openCookieSettings } from './CookieConsent'
 
 // TikTok icon
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -104,17 +105,38 @@ export function Footer() {
               </span>
             </div>
 
-            {/* Actions */}
+            {/* Legal Links */}
             <div className="flex flex-wrap items-center justify-center gap-1.5">
-              {/* Mentions légales */}
               <Link
                 to="/mentions-legales"
                 className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
               >
-                Mentions légales
+                Mentions legales
               </Link>
+              <Link
+                to="/cgu"
+                className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+              >
+                CGU
+              </Link>
+              <Link
+                to="/confidentialite"
+                className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+              >
+                Confidentialite
+              </Link>
+              <button
+                onClick={openCookieSettings}
+                className="text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-1"
+                style={{ backgroundColor: '#9ED8DB' }}
+              >
+                <Cookie className="w-2.5 h-2.5" />
+                Cookies
+              </button>
+            </div>
 
-              {/* Contact Link */}
+            {/* Contact & Social */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
               <a
                 href="mailto:contact@vintboost.com"
                 className="text-white font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-1"
@@ -123,8 +145,6 @@ export function Footer() {
                 <Mail className="w-2.5 h-2.5" />
                 Contact
               </a>
-
-              {/* TikTok Link */}
               <a
                 href="https://www.tiktok.com/@vintboost"
                 target="_blank"

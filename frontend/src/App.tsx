@@ -18,6 +18,7 @@ import { MentionsLegalesPage } from './pages/MentionsLegalesPage'
 import { CGUPage } from './pages/CGUPage'
 import { ConfidentialitePage } from './pages/ConfidentialitePage'
 import { ScrollToTop } from './components/ScrollToTop'
+import { CookieConsent } from './components/CookieConsent'
 import { WardrobeProvider } from './context/WardrobeContext'
 import { AuthProvider } from './context/AuthContext'
 
@@ -58,6 +59,7 @@ function App() {
               </main>
               <Footer />
               <ScrollToTop />
+              <CookieConsent />
             </div>
           </WardrobeProvider>
         </AuthProvider>
