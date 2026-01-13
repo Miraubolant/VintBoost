@@ -9,19 +9,27 @@ import {
   Upload,
   Crown,
   ChevronDown,
+  Monitor,
+  Smartphone,
+  Square,
 } from 'lucide-react'
+import type { VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
 
 interface VideoConfigFormProps {
   videoDuration: 15 | 30 | 60
   onDurationChange: (duration: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (track: string) => void
-  template: string
-  onTemplateChange: (template: string) => void
+  template: VideoTemplate
+  onTemplateChange: (template: VideoTemplate) => void
   customText: string
   onCustomTextChange: (text: string) => void
   hasWatermark: boolean
   onWatermarkChange: (hasWatermark: boolean) => void
+  resolution: VideoResolution
+  onResolutionChange: (resolution: VideoResolution) => void
+  aspectRatio: VideoAspectRatio
+  onAspectRatioChange: (ratio: VideoAspectRatio) => void
   plan: 'free' | 'pro' | 'business'
   username?: string
   onUpgradeClick?: () => void
@@ -31,26 +39,41 @@ interface VideoConfigFormProps {
 export const PLAN_FEATURES = {
   free: {
     durations: [15] as const,
-    templates: ['classic'],
+    templates: ['classic'] as VideoTemplate[],
+    resolutions: ['720p'] as VideoResolution[],
+    aspectRatios: ['9:16'] as VideoAspectRatio[],
     canUploadMusic: false,
     canRemoveWatermark: false,
-    resolution: '1080p',
   },
   pro: {
     durations: [15, 30, 60] as const,
-    templates: ['classic', 'modern', 'premium'],
+    templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
+    resolutions: ['720p', '1080p'] as VideoResolution[],
+    aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
     canUploadMusic: true,
     canRemoveWatermark: true,
-    resolution: '1080p',
   },
   business: {
     durations: [15, 30, 60] as const,
-    templates: ['classic', 'modern', 'premium'],
+    templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
+    resolutions: ['720p', '1080p', '4K'] as VideoResolution[],
+    aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
     canUploadMusic: true,
     canRemoveWatermark: true,
-    resolution: '4K',
   },
 } as const
+
+const aspectRatioOptions = [
+  { id: '9:16' as VideoAspectRatio, name: 'Vertical', icon: Smartphone, description: 'TikTok, Reels' },
+  { id: '16:9' as VideoAspectRatio, name: 'Horizontal', icon: Monitor, description: 'YouTube' },
+  { id: '1:1' as VideoAspectRatio, name: 'Carre', icon: Square, description: 'Instagram' },
+]
+
+const resolutionOptions = [
+  { id: '720p' as VideoResolution, name: '720p', description: 'HD' },
+  { id: '1080p' as VideoResolution, name: '1080p', description: 'Full HD' },
+  { id: '4K' as VideoResolution, name: '4K', description: 'Ultra HD' },
+]
 
 const musicTracks = [
   { id: '', name: 'Sans musique' },
@@ -62,7 +85,7 @@ const musicTracks = [
   { id: 'elegant', name: 'Elegant Style' },
 ]
 
-const templates = [
+const templates: { id: VideoTemplate; name: string; color: string; premium: boolean }[] = [
   { id: 'classic', name: 'Classique', color: '#1D3354', premium: false },
   { id: 'modern', name: 'Moderne', color: '#9ED8DB', premium: true },
   { id: 'premium', name: 'Premium', color: '#D64045', premium: true },
@@ -79,6 +102,10 @@ export function VideoConfigForm({
   onCustomTextChange,
   hasWatermark,
   onWatermarkChange,
+  resolution,
+  onResolutionChange,
+  aspectRatio,
+  onAspectRatioChange,
   plan,
   username,
   onUpgradeClick,
@@ -221,16 +248,79 @@ export function VideoConfigForm({
         />
       </div>
 
-      {/* Premium Options - Compact row */}
-      <div
-        className="flex items-center justify-between p-3 border-2 border-black"
-        style={{ backgroundColor: isPremium ? '#FFFFFF' : '#F5F5F5' }}
-      >
-        <div className="flex items-center gap-4">
-          {/* Watermark toggle */}
-          <div className="flex items-center gap-2">
+      {/* Aspect Ratio */}
+      <div>
+        <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+          <Monitor className="w-4 h-4" />
+          FORMAT
+        </label>
+        <div className="flex gap-2">
+          {aspectRatioOptions.map((opt) => {
+            const isAvailable = features.aspectRatios.includes(opt.id)
+            const isSelected = aspectRatio === opt.id
+            const Icon = opt.icon
+            return (
+              <button
+                key={opt.id}
+                onClick={() => isAvailable && onAspectRatioChange(opt.id)}
+                disabled={!isAvailable}
+                className={`
+                  relative flex-1 flex flex-col items-center gap-1 py-2 border-2 border-black
+                  ${isSelected ? 'ring-2 ring-[#1D3354]' : ''}
+                  ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                `}
+                style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="font-bold text-[10px]">{opt.name}</span>
+                <span className="text-[8px] text-black/50">{opt.description}</span>
+                {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2.5 h-2.5" />}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Resolution & Watermark Row */}
+      <div className="flex gap-3">
+        {/* Resolution */}
+        <div className="flex-1">
+          <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+            RESOLUTION
+          </label>
+          <div className="flex gap-1">
+            {resolutionOptions.map((opt) => {
+              const isAvailable = features.resolutions.includes(opt.id)
+              const isSelected = resolution === opt.id
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() => isAvailable && onResolutionChange(opt.id)}
+                  disabled={!isAvailable}
+                  className={`
+                    relative flex-1 py-1.5 border-2 border-black font-display font-bold text-[10px]
+                    ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                  `}
+                  style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
+                >
+                  {opt.name}
+                  {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2 h-2" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Watermark toggle */}
+        <div>
+          <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+            WATERMARK
+          </label>
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 border-2 border-black"
+            style={{ backgroundColor: isPremium ? '#FFFFFF' : '#F5F5F5' }}
+          >
             <Stamp className="w-4 h-4" />
-            <span className="font-bold text-xs">Watermark</span>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -255,27 +345,17 @@ export function VideoConfigForm({
                 />
               </div>
             </label>
+            {!features.canRemoveWatermark && (
+              <button
+                onClick={onUpgradeClick}
+                className="flex items-center gap-1 text-[10px] font-bold hover:opacity-80 transition-opacity"
+                style={{ color: '#1D3354' }}
+              >
+                <Crown className="w-3 h-3" />
+              </button>
+            )}
           </div>
-
-          {/* Resolution badge */}
-          <span
-            className="px-2 py-0.5 border border-black font-bold text-[10px]"
-            style={{ backgroundColor: features.resolution === '4K' ? '#9ED8DB' : '#FFFFFF' }}
-          >
-            {features.resolution}
-          </span>
         </div>
-
-        {!isPremium && (
-          <button
-            onClick={onUpgradeClick}
-            className="flex items-center gap-1 text-[10px] font-bold hover:opacity-80 transition-opacity"
-            style={{ color: '#1D3354' }}
-          >
-            <Crown className="w-3 h-3" />
-            PRO
-          </button>
-        )}
       </div>
     </div>
   )

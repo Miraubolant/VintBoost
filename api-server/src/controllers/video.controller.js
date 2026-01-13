@@ -19,7 +19,11 @@ class VideoController {
       musicTrack,
       title,
       hasWatermark = true,
-      username
+      username,
+      template = 'classic',
+      customText = '',
+      resolution = '1080p',
+      aspectRatio = '9:16'
     } = req.body
 
     // Validation basique
@@ -30,10 +34,10 @@ class VideoController {
       })
     }
 
-    if (articles.length > 10) {
+    if (articles.length > 20) {
       return res.status(400).json({
         success: false,
-        error: 'Maximum 10 articles allowed'
+        error: 'Maximum 20 articles allowed'
       })
     }
 
@@ -41,6 +45,30 @@ class VideoController {
       return res.status(400).json({
         success: false,
         error: 'Duration must be 15, 30, 45, or 60 seconds'
+      })
+    }
+
+    const validTemplates = ['classic', 'modern', 'premium']
+    if (!validTemplates.includes(template)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Template must be classic, modern, or premium'
+      })
+    }
+
+    const validResolutions = ['720p', '1080p', '4K']
+    if (!validResolutions.includes(resolution)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Resolution must be 720p, 1080p, or 4K'
+      })
+    }
+
+    const validAspectRatios = ['9:16', '16:9', '1:1']
+    if (!validAspectRatios.includes(aspectRatio)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Aspect ratio must be 9:16, 16:9, or 1:1'
       })
     }
 
@@ -55,7 +83,7 @@ class VideoController {
     }
 
     try {
-      console.log(`[API] Video generation request: ${articles.length} articles, ${duration}s`)
+      console.log(`[API] Video generation request: ${articles.length} articles, ${duration}s, template=${template}, ${resolution} ${aspectRatio}`)
 
       const result = await videoService.generateVideo({
         articles,
@@ -63,7 +91,11 @@ class VideoController {
         musicTrack,
         title,
         hasWatermark,
-        username
+        username,
+        template,
+        customText,
+        resolution,
+        aspectRatio
       })
 
       console.log(`[API] Video generated successfully: ${result.videoId}`)

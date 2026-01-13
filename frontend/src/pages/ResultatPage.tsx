@@ -4,7 +4,7 @@ import { useWardrobe } from '../context/WardrobeContext'
 import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
-import type { VintedItem, VideoArticle } from '../types/vinted'
+import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
 import { Video, X, AlertCircle, ArrowLeft } from 'lucide-react'
 
 // Decomposed components
@@ -27,8 +27,10 @@ export function ResultatPage() {
   const [orderedArticles, setOrderedArticles] = useState<VintedItem[]>([])
   const [videoDuration, setVideoDuration] = useState<15 | 30 | 60>(15)
   const [musicTrack, setMusicTrack] = useState('')
-  const [template, setTemplate] = useState('classic')
+  const [template, setTemplate] = useState<VideoTemplate>('classic')
   const [customText, setCustomText] = useState('')
+  const [resolution, setResolution] = useState<VideoResolution>('1080p')
+  const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('9:16')
 
   // Mobile panel state
   const [showMobilePanel, setShowMobilePanel] = useState(false)
@@ -133,7 +135,11 @@ export function ResultatPage() {
       musicTrack: musicTrack,
       title: customText || (wardrobeData?.username ? `@${wardrobeData.username}` : ''),
       template: template,
+      customText: customText,
       hasWatermark: hasWatermark,
+      resolution: resolution,
+      aspectRatio: aspectRatio,
+      username: wardrobeData?.username || '',
     })
 
     // Consume credit only after successful video generation
@@ -271,6 +277,10 @@ export function ResultatPage() {
                     onCustomTextChange={setCustomText}
                     hasWatermark={hasWatermark}
                     onWatermarkChange={setHasWatermark}
+                    resolution={resolution}
+                    onResolutionChange={setResolution}
+                    aspectRatio={aspectRatio}
+                    onAspectRatioChange={setAspectRatio}
                     plan={plan}
                     username={wardrobeData.username}
                     onUpgradeClick={() => setShowPricingModal(true)}
@@ -496,8 +506,8 @@ function MobileConfigPanel({
   onDurationChange: (d: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (t: string) => void
-  template: string
-  onTemplateChange: (t: string) => void
+  template: VideoTemplate
+  onTemplateChange: (t: VideoTemplate) => void
   customText: string
   onCustomTextChange: (t: string) => void
   hasWatermark: boolean

@@ -60,7 +60,12 @@ export function useVideoGeneration() {
           duration: config.duration,
           musicTrack: config.musicTrack,
           title: config.title || '',
+          template: config.template || 'classic',
+          customText: config.customText || '',
           hasWatermark: config.hasWatermark,
+          resolution: config.resolution || '1080p',
+          aspectRatio: config.aspectRatio || '9:16',
+          username: config.username || '',
         }),
       })
 

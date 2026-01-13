@@ -50,13 +50,21 @@ export interface WardrobeData {
 }
 
 // Types pour la génération vidéo
+export type VideoResolution = '720p' | '1080p' | '4K'
+export type VideoAspectRatio = '9:16' | '16:9' | '1:1'
+export type VideoTemplate = 'classic' | 'modern' | 'premium'
+
 export interface VideoConfig {
   articles: VideoArticle[]
   duration: 15 | 30 | 45 | 60
   musicTrack: string
   title?: string
-  template?: string
+  template: VideoTemplate
+  customText?: string
   hasWatermark: boolean
+  resolution: VideoResolution
+  aspectRatio: VideoAspectRatio
+  username?: string
 }
 
 export interface VideoArticle {

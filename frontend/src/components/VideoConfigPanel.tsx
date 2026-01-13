@@ -3,7 +3,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Music, Layout, Type, GripVertical, X, Clock, Sparkles, Stamp, ChevronDown, ChevronUp, Crown } from 'lucide-react'
-import type { VintedItem } from '../types/vinted'
+import type { VintedItem, VideoTemplate } from '../types/vinted'
 
 interface VideoConfigPanelProps {
   selectedArticles: VintedItem[]
@@ -13,8 +13,8 @@ interface VideoConfigPanelProps {
   onDurationChange: (duration: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (track: string) => void
-  template: string
-  onTemplateChange: (template: string) => void
+  template: VideoTemplate
+  onTemplateChange: (template: VideoTemplate) => void
   customText: string
   onCustomTextChange: (text: string) => void
   hasWatermark: boolean
@@ -35,7 +35,7 @@ const musicTracks = [
   { id: 'elegant', name: 'Elegant Style' },
 ]
 
-const templates = [
+const templates: { id: VideoTemplate; name: string; color: string }[] = [
   { id: 'classic', name: 'Classique', color: '#1D3354' },
   { id: 'modern', name: 'Moderne', color: '#9ED8DB' },
   { id: 'premium', name: 'Premium', color: '#D64045' },

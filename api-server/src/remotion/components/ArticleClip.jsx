@@ -1,20 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Img, delayRender, continueRender } from 'remotion';
 
-const ACCENT_COLORS = [
-  '#FF6B6B', // Rouge corail
-  '#4ECDC4', // Turquoise
-  '#FFE66D', // Jaune
-  '#A855F7', // Violet
-  '#EC4899', // Rose
-  '#84CC16', // Lime
-];
+// Template configurations for article clips
+const TEMPLATE_CONFIGS = {
+  classic: {
+    accentColors: ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A855F7', '#EC4899', '#84CC16'],
+    gradientOverlay: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)',
+    priceBg: '#FFFFFF',
+    priceColor: '#000000',
+    brandTextColor: '#000000',
+    titleColor: '#FFFFFF',
+    badgeColor: '#000000',
+    topBarColor: null, // Uses accent color
+  },
+  modern: {
+    accentColors: ['#D64045', '#1D3354', '#9ED8DB', '#467599', '#E8DFD5', '#1D3354'],
+    gradientOverlay: 'linear-gradient(to top, rgba(29,51,84,0.95) 0%, rgba(29,51,84,0) 100%)',
+    priceBg: '#D64045',
+    priceColor: '#FFFFFF',
+    brandTextColor: '#FFFFFF',
+    titleColor: '#FFFFFF',
+    badgeColor: '#FFFFFF',
+    topBarColor: '#1D3354',
+  },
+  premium: {
+    accentColors: ['#D4AF37', '#C0C0C0', '#B76E79', '#8B4513', '#D4AF37', '#C0C0C0'],
+    gradientOverlay: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%)',
+    priceBg: 'linear-gradient(135deg, #D4AF37 0%, #F4E4BA 50%, #D4AF37 100%)',
+    priceColor: '#0D0D0D',
+    brandTextColor: '#0D0D0D',
+    titleColor: '#F4E4BA',
+    badgeColor: '#0D0D0D',
+    topBarColor: '#D4AF37',
+  },
+};
 
-export const ArticleClip = ({ article, index, imageUrl }) => {
+export const ArticleClip = ({ article, index, imageUrl, template = 'classic' }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [handle] = useState(() => delayRender(`Loading image ${index}`));
+
+  const config = TEMPLATE_CONFIGS[template] || TEMPLATE_CONFIGS.classic;
 
   useEffect(() => {
     const img = new Image();
@@ -30,7 +57,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
     img.src = imageUrl;
   }, [imageUrl, handle]);
 
-  const accentColor = ACCENT_COLORS[index % ACCENT_COLORS.length];
+  const accentColor = config.accentColors[index % config.accentColors.length];
 
   // Entry animations
   const slideIn = spring({
@@ -107,7 +134,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
             left: 0,
             right: 0,
             height: '50%',
-            background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%)',
+            background: config.gradientOverlay,
           }}
         />
       </AbsoluteFill>
@@ -119,7 +146,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
           top: 40,
           left: 40,
           backgroundColor: accentColor,
-          color: '#000',
+          color: config.badgeColor,
           fontSize: 36,
           fontWeight: 800,
           fontFamily: 'Inter, Arial, sans-serif',
@@ -150,7 +177,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
             style={{
               display: 'inline-block',
               backgroundColor: accentColor,
-              color: '#000',
+              color: config.brandTextColor,
               fontSize: 28,
               fontWeight: 700,
               fontFamily: 'Inter, Arial, sans-serif',
@@ -171,7 +198,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
             style={{
               fontSize: 38,
               fontWeight: 600,
-              color: '#fff',
+              color: config.titleColor,
               fontFamily: 'Inter, Arial, sans-serif',
               margin: 0,
               marginBottom: 20,
@@ -190,8 +217,8 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
         <div
           style={{
             display: 'inline-block',
-            backgroundColor: '#fff',
-            color: '#000',
+            background: config.priceBg,
+            color: config.priceColor,
             fontSize: 56,
             fontWeight: 800,
             fontFamily: 'Inter, Arial, sans-serif',
@@ -213,7 +240,7 @@ export const ArticleClip = ({ article, index, imageUrl }) => {
           left: 0,
           right: 0,
           height: 6,
-          backgroundColor: accentColor,
+          backgroundColor: config.topBarColor || accentColor,
           opacity: exitOpacity,
         }}
       />

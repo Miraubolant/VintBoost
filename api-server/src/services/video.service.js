@@ -8,6 +8,7 @@ const path = require('path')
 const fs = require('fs')
 const fileUtils = require('../utils/file.utils')
 const remotionService = require('../remotion/render.service')
+const audioService = require('./audio.service')
 const appConfig = require('../config')
 
 class VideoService {
@@ -35,7 +36,11 @@ class VideoService {
       musicTrack,
       title = 'Ma vidéo VintBoost',
       hasWatermark = true,
-      username = ''
+      username = '',
+      template = 'classic',
+      customText = '',
+      resolution = '1080p',
+      aspectRatio = '9:16'
     } = config
 
     // Validation
@@ -43,13 +48,13 @@ class VideoService {
       throw new Error('No articles provided')
     }
 
-    if (articles.length > 10) {
-      throw new Error('Maximum 10 articles allowed')
+    if (articles.length > 20) {
+      throw new Error('Maximum 20 articles allowed')
     }
 
     const jobId = uuidv4()
     console.log(`[VIDEO] Starting Remotion generation job ${jobId}`)
-    console.log(`[VIDEO] Config: ${articles.length} articles, ${duration}s target, watermark=${hasWatermark}`)
+    console.log(`[VIDEO] Config: ${articles.length} articles, ${duration}s target, watermark=${hasWatermark}, template=${template}, ${resolution} ${aspectRatio}`)
 
     let tempDirs = null
 
@@ -112,12 +117,34 @@ class VideoService {
         username,
         clipDuration,
         outputPath,
+        template,
+        customText,
+        hasWatermark,
+        resolution,
+        aspectRatio,
         onProgress: (percent) => {
           // Optionnel: callback de progression
         },
       })
 
-      // 7. Générer la thumbnail
+      // 7. Ajouter la musique si sélectionnée
+      if (musicTrack && musicTrack !== '' && musicTrack !== 'none') {
+        console.log(`[VIDEO] Adding music track: ${musicTrack}`)
+        try {
+          await audioService.addAudioToVideo(
+            outputPath,
+            musicTrack,
+            null, // Remplacer le fichier original
+            renderResult.duration
+          )
+          console.log(`[VIDEO] Music added successfully`)
+        } catch (audioError) {
+          console.warn('[VIDEO] Failed to add music:', audioError.message)
+          // Continue sans musique
+        }
+      }
+
+      // 8. Générer la thumbnail
       console.log(`[VIDEO] Generating thumbnail...`)
 
       try {
@@ -127,6 +154,11 @@ class VideoService {
           clipDuration,
           outputPath: thumbnailPath,
           frame: 90, // Frame après l'intro (3 secondes)
+          template,
+          customText,
+          hasWatermark,
+          resolution,
+          aspectRatio,
         })
       } catch (thumbError) {
         console.warn('[VIDEO] Thumbnail generation failed:', thumbError.message)
@@ -135,7 +167,7 @@ class VideoService {
       console.log(`[VIDEO] Video generated successfully!`)
       console.log(`[VIDEO] Duration: ${renderResult.duration.toFixed(2)}s, Size: ${renderResult.fileSize}MB`)
 
-      // 8. Cleanup
+      // 9. Cleanup
       await fileUtils.cleanup(tempDir)
 
       return {

@@ -58,6 +58,44 @@ function calculateTotalFrames(articlesCount, clipDuration, fps = 30) {
 }
 
 /**
+ * Calculer les dimensions de la vidéo en fonction de la résolution et du ratio
+ */
+function calculateDimensions(resolution, aspectRatio) {
+  // Base heights for each resolution
+  const resolutionHeights = {
+    '720p': 720,
+    '1080p': 1080,
+    '4K': 2160,
+  };
+
+  // Parse aspect ratio
+  const [widthRatio, heightRatio] = aspectRatio.split(':').map(Number);
+  const baseHeight = resolutionHeights[resolution] || 1080;
+
+  let width, height;
+
+  if (aspectRatio === '9:16') {
+    // Portrait (TikTok/Reels style)
+    height = baseHeight;
+    width = Math.round(height * (widthRatio / heightRatio));
+  } else if (aspectRatio === '16:9') {
+    // Landscape
+    height = baseHeight;
+    width = Math.round(height * (widthRatio / heightRatio));
+  } else {
+    // Square (1:1)
+    width = baseHeight;
+    height = baseHeight;
+  }
+
+  // Ensure dimensions are even (required for video encoding)
+  width = Math.round(width / 2) * 2;
+  height = Math.round(height / 2) * 2;
+
+  return { width, height };
+}
+
+/**
  * Rendre une vidéo avec Remotion
  */
 async function renderVideo(config) {
@@ -67,12 +105,20 @@ async function renderVideo(config) {
     clipDuration = 3.5,
     outputPath,
     onProgress,
+    template = 'classic',
+    customText = '',
+    hasWatermark = true,
+    resolution = '1080p',
+    aspectRatio = '9:16',
   } = config;
 
   const fps = 30;
   const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps);
+  const { width, height } = calculateDimensions(resolution, aspectRatio);
 
   console.log(`[REMOTION] Starting render: ${articles.length} articles, ${clipDuration}s each`);
+  console.log(`[REMOTION] Resolution: ${width}x${height} (${resolution} ${aspectRatio})`);
+  console.log(`[REMOTION] Template: ${template}, Watermark: ${hasWatermark}`);
   console.log(`[REMOTION] Total duration: ${totalFrames / fps}s (${totalFrames} frames)`);
 
   try {
@@ -83,6 +129,9 @@ async function renderVideo(config) {
     const inputProps = {
       username,
       clipDuration,
+      template,
+      customText,
+      hasWatermark,
       articles: articles.map((article) => {
         const imgUrl = article.localImagePath || article.imageUrl;
         console.log(`[REMOTION] Article ${article.id} image: ${imgUrl}`);
@@ -106,10 +155,12 @@ async function renderVideo(config) {
       inputProps,
     });
 
-    // Override la durée avec notre calcul
+    // Override la durée et les dimensions avec nos calculs
     const compositionWithDuration = {
       ...composition,
       durationInFrames: totalFrames,
+      width,
+      height,
     };
 
     console.log('[REMOTION] Rendering video...');
@@ -165,16 +216,25 @@ async function renderThumbnail(config) {
     clipDuration = 3.5,
     outputPath,
     frame = 75, // Frame 2.5s (après l'intro)
+    template = 'classic',
+    customText = '',
+    hasWatermark = true,
+    resolution = '1080p',
+    aspectRatio = '9:16',
   } = config;
 
   try {
     const bundled = await ensureBundle();
     const fps = 30;
     const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps);
+    const { width, height } = calculateDimensions(resolution, aspectRatio);
 
     const inputProps = {
       username,
       clipDuration,
+      template,
+      customText,
+      hasWatermark,
       articles: articles.map((article) => ({
         id: article.id,
         title: article.title || '',
@@ -197,6 +257,8 @@ async function renderThumbnail(config) {
       composition: {
         ...composition,
         durationInFrames: totalFrames,
+        width,
+        height,
       },
       serveUrl: bundled,
       output: outputPath,
@@ -230,4 +292,5 @@ module.exports = {
   renderThumbnail,
   preloadBundle,
   calculateTotalFrames,
+  calculateDimensions,
 };
