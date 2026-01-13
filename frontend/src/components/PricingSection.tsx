@@ -155,10 +155,14 @@ export function PricingSection() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative bg-white border-4 border-black p-5 sm:p-6 lg:p-8 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ${
+              className={`relative border-4 border-black p-5 sm:p-6 lg:p-8 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transform hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ${
                 plan.popular ? 'md:scale-105 mt-6 md:mt-0' : ''
               }`}
-              style={{ borderColor: plan.popular ? '#D64045' : '#000000', borderWidth: plan.popular ? '5px' : '4px' }}
+              style={{
+                backgroundColor: plan.popular ? '#1D3354' : '#FFFFFF',
+                borderColor: plan.popular ? '#D64045' : '#000000',
+                borderWidth: plan.popular ? '5px' : '4px'
+              }}
             >
               {/* Badge populaire */}
               {plan.popular && plan.highlight && (
@@ -176,8 +180,8 @@ export function PricingSection() {
                 >
                   <plan.icon className={`w-7 h-7 sm:w-8 sm:h-8 ${index === 2 || plan.popular ? 'text-white' : 'text-black'}`} />
                 </div>
-                <h3 className="font-display font-bold text-xl sm:text-2xl text-black">{plan.name}</h3>
-                <p className="text-xs sm:text-sm font-body text-black/50 mt-1">{plan.description}</p>
+                <h3 className={`font-display font-bold text-xl sm:text-2xl ${plan.popular ? 'text-white' : 'text-black'}`}>{plan.name}</h3>
+                <p className={`text-xs sm:text-sm font-body mt-1 ${plan.popular ? 'text-white/70' : 'text-black/50'}`}>{plan.description}</p>
               </div>
 
               {/* Prix en vedette */}
@@ -214,7 +218,7 @@ export function PricingSection() {
                     >
                       <Check className={`w-3 h-3 sm:w-4 sm:h-4 ${index === 2 || plan.popular ? 'text-white' : 'text-black'}`} />
                     </div>
-                    <span className="font-body font-semibold text-sm sm:text-base text-black leading-relaxed">{feature}</span>
+                    <span className={`font-body font-semibold text-sm sm:text-base leading-relaxed ${plan.popular ? 'text-white' : 'text-black'}`}>{feature}</span>
                   </li>
                 ))}
               </ul>
