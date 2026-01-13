@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image, Settings, Loader2, Calendar, Zap, Clock, Play, ExternalLink } from 'lucide-react'
+import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image, Settings, Loader2, Calendar, Zap, Clock, Play, Grid3X3, List } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useStripe } from '../hooks/useStripe'
 import { supabase } from '../lib/supabase'
+import { VideoPlayerModal } from '../components/VideoPlayerModal'
 
 interface UserVideo {
   id: string
@@ -37,6 +38,9 @@ export function AccountPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deleting, setDeleting] = useState(false)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [selectedVideo, setSelectedVideo] = useState<UserVideo | null>(null)
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -424,149 +428,268 @@ export function AccountPage() {
 
         {/* History Tab */}
         {activeTab === 'history' && (
-          <div
-            className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden"
-            style={{ backgroundColor: '#FFFFFF' }}
-          >
-            {/* Header */}
-            <div className="px-5 py-4 border-b-3 border-black flex items-center justify-between" style={{ backgroundColor: '#1D3354' }}>
+          <div>
+            {/* Header bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <Video className="w-5 h-5 text-white" />
-                <h2 className="font-display font-bold text-lg text-white">MES VIDEOS</h2>
+                <div
+                  className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                  style={{ backgroundColor: '#1D3354' }}
+                >
+                  <Video className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="font-display font-bold text-lg">MES VIDEOS</h2>
+                  <p className="font-body text-xs text-black/60">
+                    {videos.length} video{videos.length > 1 ? 's' : ''} generee{videos.length > 1 ? 's' : ''}
+                  </p>
+                </div>
               </div>
-              <span
-                className="px-2 py-1 border-2 border-black font-display font-bold text-xs"
-                style={{ backgroundColor: '#9ED8DB' }}
-              >
-                {videos.length} video{videos.length > 1 ? 's' : ''}
-              </span>
+
+              {/* View mode toggle */}
+              {videos.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`w-9 h-9 border-2 border-black flex items-center justify-center transition-all ${
+                      viewMode === 'grid' ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : ''
+                    }`}
+                    style={{ backgroundColor: viewMode === 'grid' ? '#1D3354' : '#FFFFFF' }}
+                  >
+                    <Grid3X3 className={`w-4 h-4 ${viewMode === 'grid' ? 'text-white' : 'text-black'}`} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`w-9 h-9 border-2 border-black flex items-center justify-center transition-all ${
+                      viewMode === 'list' ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : ''
+                    }`}
+                    style={{ backgroundColor: viewMode === 'list' ? '#1D3354' : '#FFFFFF' }}
+                  >
+                    <List className={`w-4 h-4 ${viewMode === 'list' ? 'text-white' : 'text-black'}`} />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Content */}
-            <div className="p-5">
-              {loadingData ? (
-                <div className="text-center py-12">
+            {loadingData ? (
+              <div
+                className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-12"
+                style={{ backgroundColor: '#FFFFFF' }}
+              >
+                <div className="text-center">
                   <Loader2 className="w-10 h-10 mx-auto mb-3 animate-spin text-black/30" />
                   <p className="font-body text-sm text-black/50">Chargement...</p>
                 </div>
-              ) : videos.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 mx-auto mb-4 border-3 border-black flex items-center justify-center" style={{ backgroundColor: '#E8DFD5' }}>
-                    <Video className="w-10 h-10 text-black/30" />
+              </div>
+            ) : videos.length === 0 ? (
+              <div
+                className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-8 sm:p-12"
+                style={{ backgroundColor: '#FFFFFF' }}
+              >
+                <div className="text-center">
+                  <div
+                    className="w-24 h-24 mx-auto mb-6 border-3 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    style={{ backgroundColor: '#E8DFD5' }}
+                  >
+                    <Video className="w-12 h-12 text-black/30" />
                   </div>
-                  <p className="font-display font-bold text-lg mb-2">Aucune video</p>
-                  <p className="font-body text-sm text-black/60 mb-6">Tu n'as pas encore genere de video</p>
+                  <h3 className="font-display font-bold text-xl mb-2">Aucune video</h3>
+                  <p className="font-body text-sm text-black/60 mb-6 max-w-sm mx-auto">
+                    Tu n'as pas encore genere de video. Cree ta premiere video promotionnelle !
+                  </p>
                   <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-3 border-2 border-black font-display font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
-                    style={{ backgroundColor: '#D64045', color: '#FFFFFF' }}
+                    className="px-6 py-3 border-3 border-black font-display font-bold text-sm text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    style={{ backgroundColor: '#D64045' }}
                   >
                     CREER MA PREMIERE VIDEO
                   </button>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {videos.map((video) => (
-                    <div
-                      key={video.id}
-                      className="border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                      style={{ backgroundColor: '#FFFFFF' }}
-                    >
-                      <div className="flex flex-col sm:flex-row">
-                        {/* Thumbnail */}
-                        <div className="sm:w-48 h-32 sm:h-auto border-b-2 sm:border-b-0 sm:border-r-2 border-black flex-shrink-0 relative overflow-hidden" style={{ backgroundColor: '#1D3354' }}>
-                          {video.thumbnail_url ? (
-                            <img
-                              src={video.thumbnail_url}
-                              alt={video.title || 'Video'}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full min-h-[100px] flex items-center justify-center">
-                              <Video className="w-10 h-10 text-white/30" />
-                            </div>
-                          )}
-                          {/* Play overlay */}
-                          {video.video_url && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 hover:opacity-100 transition-opacity">
-                              <div className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center bg-white/20">
-                                <Play className="w-6 h-6 text-white fill-white" />
-                              </div>
-                            </div>
-                          )}
-                          {/* Duration badge */}
-                          {video.duration && (
-                            <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/80 text-white text-xs font-display font-bold">
-                              {formatDuration(video.duration)}
-                            </div>
-                          )}
+              </div>
+            ) : viewMode === 'grid' ? (
+              /* Grid View */
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {videos.map((video) => (
+                  <div
+                    key={video.id}
+                    onClick={() => {
+                      setSelectedVideo(video)
+                      setShowVideoPlayer(true)
+                    }}
+                    className="border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden cursor-pointer hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all group"
+                    style={{ backgroundColor: '#FFFFFF' }}
+                  >
+                    {/* Thumbnail */}
+                    <div className="aspect-[9/16] relative overflow-hidden" style={{ backgroundColor: '#1D3354' }}>
+                      {video.thumbnail_url ? (
+                        <img
+                          src={video.thumbnail_url}
+                          alt={video.title || 'Video'}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Video className="w-8 h-8 text-white/30" />
+                        </div>
+                      )}
+
+                      {/* Play overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
+                        <div
+                          className="w-12 h-12 border-2 border-black flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                          style={{ backgroundColor: '#D64045' }}
+                        >
+                          <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                        </div>
+                      </div>
+
+                      {/* Duration badge */}
+                      {video.duration && (
+                        <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-display font-bold">
+                          {formatDuration(video.duration)}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Info */}
+                    <div className="p-2 sm:p-3 border-t-2 border-black">
+                      <h3 className="font-display font-bold text-xs sm:text-sm truncate mb-1">
+                        {video.title || 'Video sans titre'}
+                      </h3>
+                      <div className="flex items-center justify-between text-[10px] text-black/50">
+                        <span className="font-body">{formatDate(video.created_at)}</span>
+                        {video.articles_count && (
+                          <span className="font-display font-bold">{video.articles_count} art.</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* List View */
+              <div className="space-y-3">
+                {videos.map((video) => (
+                  <div
+                    key={video.id}
+                    className="border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    style={{ backgroundColor: '#FFFFFF' }}
+                  >
+                    <div className="flex">
+                      {/* Thumbnail */}
+                      <div
+                        className="w-20 sm:w-32 h-20 sm:h-24 flex-shrink-0 border-r-2 border-black relative overflow-hidden cursor-pointer"
+                        style={{ backgroundColor: '#1D3354' }}
+                        onClick={() => {
+                          setSelectedVideo(video)
+                          setShowVideoPlayer(true)
+                        }}
+                      >
+                        {video.thumbnail_url ? (
+                          <img
+                            src={video.thumbnail_url}
+                            alt={video.title || 'Video'}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Video className="w-6 h-6 text-white/30" />
+                          </div>
+                        )}
+
+                        {/* Play overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 hover:opacity-100 transition-opacity">
+                          <div
+                            className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                            style={{ backgroundColor: '#D64045' }}
+                          >
+                            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                          </div>
                         </div>
 
-                        {/* Info */}
-                        <div className="flex-1 p-4">
-                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-display font-bold text-base mb-1 truncate">
-                                {video.title || 'Video sans titre'}
-                              </h3>
-                              <div className="flex flex-wrap items-center gap-3 text-xs text-black/60">
-                                <div className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  <span className="font-body">{formatDate(video.created_at)}</span>
-                                </div>
-                                {video.articles_count && (
-                                  <div className="flex items-center gap-1">
-                                    <Image className="w-3 h-3" />
-                                    <span className="font-body">{video.articles_count} articles</span>
-                                  </div>
-                                )}
-                                {video.template && (
-                                  <span
-                                    className="px-2 py-0.5 border border-black font-display font-bold text-[10px]"
-                                    style={{ backgroundColor: '#E8DFD5' }}
-                                  >
-                                    {video.template}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center gap-2">
-                              {video.video_url && (
-                                <>
-                                  <a
-                                    href={video.video_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1.5 px-3 py-2 border-2 border-black font-display font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
-                                    style={{ backgroundColor: '#9ED8DB' }}
-                                  >
-                                    <ExternalLink className="w-3 h-3" />
-                                    VOIR
-                                  </a>
-                                  <a
-                                    href={video.video_url}
-                                    download
-                                    className="flex items-center gap-1.5 px-3 py-2 border-2 border-black font-display font-bold text-xs text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
-                                    style={{ backgroundColor: '#1D3354' }}
-                                  >
-                                    <Download className="w-3 h-3" />
-                                    TELECHARGER
-                                  </a>
-                                </>
-                              )}
-                            </div>
+                        {/* Duration badge */}
+                        {video.duration && (
+                          <div className="absolute bottom-1 right-1 px-1 py-0.5 bg-black/80 text-white text-[9px] font-display font-bold">
+                            {formatDuration(video.duration)}
                           </div>
+                        )}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
+                        <div>
+                          <h3 className="font-display font-bold text-sm truncate mb-1">
+                            {video.title || 'Video sans titre'}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-2 text-[10px] text-black/60">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              <span className="font-body">{formatDate(video.created_at)}</span>
+                            </div>
+                            {video.articles_count && (
+                              <div className="flex items-center gap-1">
+                                <Image className="w-3 h-3" />
+                                <span className="font-body">{video.articles_count} articles</span>
+                              </div>
+                            )}
+                            {video.template && (
+                              <span
+                                className="px-1.5 py-0.5 border border-black font-display font-bold"
+                                style={{ backgroundColor: '#E8DFD5' }}
+                              >
+                                {video.template}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Actions - Mobile optimized */}
+                        <div className="flex items-center gap-2 mt-2">
+                          <button
+                            onClick={() => {
+                              setSelectedVideo(video)
+                              setShowVideoPlayer(true)
+                            }}
+                            className="flex items-center gap-1 px-2 py-1.5 border-2 border-black font-display font-bold text-[10px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
+                            style={{ backgroundColor: '#9ED8DB' }}
+                          >
+                            <Play className="w-3 h-3" />
+                            <span className="hidden sm:inline">LIRE</span>
+                          </button>
+                          {video.video_url && (
+                            <a
+                              href={video.video_url}
+                              download
+                              onClick={(e) => e.stopPropagation()}
+                              className="flex items-center gap-1 px-2 py-1.5 border-2 border-black font-display font-bold text-[10px] text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
+                              style={{ backgroundColor: '#1D3354' }}
+                            >
+                              <Download className="w-3 h-3" />
+                              <span className="hidden sm:inline">TELECHARGER</span>
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
+
+        {/* Video Player Modal */}
+        <VideoPlayerModal
+          isOpen={showVideoPlayer}
+          onClose={() => {
+            setShowVideoPlayer(false)
+            setSelectedVideo(null)
+          }}
+          videoUrl={selectedVideo?.video_url || null}
+          title={selectedVideo?.title || null}
+          thumbnailUrl={selectedVideo?.thumbnail_url || null}
+        />
 
         {/* Delete Modal */}
         {showDeleteModal && (
