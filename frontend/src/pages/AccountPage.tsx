@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image } from 'lucide-react'
+import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image, Settings, Loader2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useStripe } from '../hooks/useStripe'
 import { supabase } from '../lib/supabase'
 
 interface UserVideo {
@@ -28,6 +29,7 @@ type TabType = 'statistics' | 'history'
 export function AccountPage() {
   const navigate = useNavigate()
   const { user, subscription, credits, signOut, loading } = useAuth()
+  const { openCustomerPortal, loading: stripeLoading } = useStripe()
   const [activeTab, setActiveTab] = useState<TabType>('statistics')
   const [videos, setVideos] = useState<UserVideo[]>([])
   const [analytics, setAnalytics] = useState<UserAnalytics | null>(null)
@@ -114,10 +116,6 @@ export function AccountPage() {
       year: 'numeric'
     })
   }
-
-  const remainingVideos = subscription
-    ? Math.max(0, subscription.videosLimit - subscription.videosUsed) + credits
-    : 0
 
   if (loading || !user) {
     return (
@@ -299,6 +297,25 @@ export function AccountPage() {
                     {subscription?.videosUsed || 0} / {subscription?.videosLimit || 1} utilises ce mois
                   </p>
                 </div>
+
+                {/* Manage Subscription Button - Only for paid plans */}
+                {subscription?.plan && subscription.plan !== 'free' && (
+                  <div className="flex items-end">
+                    <button
+                      onClick={openCustomerPortal}
+                      disabled={stripeLoading}
+                      className="flex items-center gap-2 px-4 py-2.5 border-2 border-black font-display font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
+                      style={{ backgroundColor: '#1D3354', color: '#FFFFFF' }}
+                    >
+                      {stripeLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Settings className="w-4 h-4" />
+                      )}
+                      GERER MON ABONNEMENT
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 

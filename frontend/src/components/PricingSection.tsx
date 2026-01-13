@@ -1,4 +1,6 @@
-import { Check, Zap, Sparkles, Shield, Clock } from 'lucide-react'
+import { Check, Zap, Sparkles, Shield, Clock, Loader2 } from 'lucide-react'
+import { useStripe } from '../hooks/useStripe'
+import { useAuth } from '../context/AuthContext'
 
 interface PricingPlan {
   name: string
@@ -12,6 +14,7 @@ interface PricingPlan {
   popular?: boolean
   highlight?: string
   isFree?: boolean
+  stripePlan?: 'pro' | 'business'
 }
 
 const plans: PricingPlan[] = [
@@ -47,6 +50,7 @@ const plans: PricingPlan[] = [
     buttonStyle: 'red',
     popular: true,
     highlight: 'POPULAIRE',
+    stripePlan: 'pro',
   },
   {
     name: 'BUSINESS',
@@ -63,10 +67,33 @@ const plans: PricingPlan[] = [
     ],
     buttonText: 'CHOISIR BUSINESS',
     buttonStyle: 'navy',
+    stripePlan: 'business',
   },
 ]
 
 export function PricingSection() {
+  const { createCheckoutSession, loading } = useStripe()
+  const { user, signInWithGoogle } = useAuth()
+
+  const handlePlanClick = async (plan: PricingPlan) => {
+    if (plan.isFree) {
+      // Scroll to hero section for free plan
+      const hero = document.getElementById('hero')
+      if (hero) hero.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+
+    if (!user) {
+      // If not logged in, trigger Google sign-in first
+      await signInWithGoogle()
+      return
+    }
+
+    if (plan.stripePlan) {
+      await createCheckoutSession(plan.stripePlan)
+    }
+  }
+
   return (
     <section id="pricing" className="py-8 sm:py-12 lg:py-16 px-4 relative overflow-hidden">
       {/* Decorative elements - Desktop only */}
@@ -187,14 +214,20 @@ export function PricingSection() {
 
                 {/* CTA Button */}
                 <button
-                  className={`w-full px-4 py-3 border-2 border-black font-display font-bold text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200`}
+                  onClick={() => handlePlanClick(plan)}
+                  disabled={loading && !plan.isFree}
+                  className={`w-full px-4 py-3 border-2 border-black font-display font-bold text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`}
                   style={{
                     backgroundColor: plan.buttonStyle === 'white' ? '#FFFFFF' : plan.buttonStyle === 'red' ? '#D64045' : plan.buttonStyle === 'navy' ? '#1D3354' : '#9ED8DB',
                     color: plan.buttonStyle === 'white' || plan.buttonStyle === 'cyan' ? '#000000' : '#FFFFFF'
                   }}
                 >
-                  <Zap className="w-4 h-4" />
-                  {plan.buttonText}
+                  {loading && !plan.isFree ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Zap className="w-4 h-4" />
+                  )}
+                  {!user && !plan.isFree ? 'SE CONNECTER' : plan.buttonText}
                 </button>
               </div>
             </div>
