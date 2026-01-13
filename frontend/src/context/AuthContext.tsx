@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (profileError && profileError.code === 'PGRST116') {
         // Profile doesn't exist, create it
-        const { error: insertError } = await supabase
+        await supabase
           .from('profiles')
           .insert({
             id: userId,
@@ -88,8 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             full_name: authUser?.user_metadata?.full_name || authUser?.user_metadata?.name || null,
             avatar_url: authUser?.user_metadata?.avatar_url || null,
           })
-
-        // Silently handle profile creation
       } else if (profile) {
         // Update user with profile data
         setUser({
@@ -109,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (subError && subError.code === 'PGRST116') {
         // Create default free subscription
-        const { error: insertSubError } = await supabase
+        await supabase
           .from('subscriptions')
           .insert({
             user_id: userId,
@@ -119,8 +117,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             videos_used: 0,
             period_start: new Date().toISOString(),
           })
-
-        // Silently handle subscription creation
       } else if (sub) {
         setSubscription({
           plan: sub.plan as 'free' | 'pro' | 'business',
@@ -140,11 +136,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (credError && credError.code === 'PGRST116') {
         // Create default credits
-        const { error: insertCredError } = await supabase
+        await supabase
           .from('credits')
           .insert({ user_id: userId, amount: 0 })
-
-        // Silently handle credits creation
       } else if (cred) {
         setCredits(cred.amount)
       }
@@ -180,7 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get initial session
     const initSession = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession()
+        const { data: { session } } = await supabase.auth.getSession()
 
         if (session?.user && mounted) {
           await fetchUserData(session.user.id, session.user.email || undefined)
