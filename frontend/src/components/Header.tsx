@@ -127,14 +127,14 @@ export function Header() {
               >
                 AVIS
               </button>
-              <button
-                onClick={() => scrollToSection('blog')}
+              <Link
+                to="/blog"
                 className="px-3 py-2.5 font-display font-bold text-sm uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D3354'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 BLOG
-              </button>
+              </Link>
             </nav>
 
             {/* Auth Button */}
@@ -273,8 +273,9 @@ export function Header() {
                   <span className="font-display font-bold text-[9px]">AVIS</span>
                 </button>
 
-                <button
-                  onClick={() => scrollToSection('blog')}
+                <Link
+                  to="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="flex flex-col items-center gap-1 p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#FFFFFF' }}
                 >
@@ -282,7 +283,7 @@ export function Header() {
                     <BookOpen className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-display font-bold text-[9px]">BLOG</span>
-                </button>
+                </Link>
               </div>
 
               {/* FAQ + VintDress - Ligne compacte */}
