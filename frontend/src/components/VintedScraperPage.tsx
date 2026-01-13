@@ -66,7 +66,7 @@ export function VintedScraperPage() {
         />
         <div
           className="hidden lg:block absolute -right-8 top-8 w-12 h-12 border-3 border-black transform rotate-12 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-          style={{ backgroundColor: '#9ED8DB' }}
+          style={{ backgroundColor: '#1D3354' }}
         />
         <div
           className="hidden lg:block absolute right-16 top-48 w-8 h-8 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
