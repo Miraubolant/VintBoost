@@ -355,11 +355,7 @@ export function AccountPage() {
               <h2 className="font-display font-bold text-lg">MES VIDEOS</h2>
             </div>
 
-            {loadingData ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="w-10 h-10 border-3 border-black animate-spin" style={{ borderTopColor: '#1D3354' }} />
-              </div>
-            ) : videos.length === 0 ? (
+            {videos.length === 0 ? (
               <div className="text-center py-12">
                 <Video className="w-16 h-16 mx-auto mb-4 text-black/20" />
                 <p className="font-body text-sm text-black/60 mb-4">Aucune video generee pour le moment</p>

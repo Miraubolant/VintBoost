@@ -154,27 +154,6 @@ export function VintDressSection() {
               </div>
             </div>
           </div>
-
-          {/* Bottom stats bar */}
-          <div
-            className="flex flex-wrap items-center justify-center gap-4 px-4 py-4 border-t-3 border-black"
-            style={{ backgroundColor: VINTDRESS_COLORS.primary }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-lg sm:text-xl text-white">30s</span>
-              <span className="font-body text-xs text-white/70">par photo</span>
-            </div>
-            <div className="w-px h-6 bg-white/30" />
-            <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-lg sm:text-xl text-white">HD</span>
-              <span className="font-body text-xs text-white/70">qualité export</span>
-            </div>
-            <div className="w-px h-6 bg-white/30" />
-            <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-lg sm:text-xl text-white">3.99€</span>
-              <span className="font-body text-xs text-white/70">10 photos</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>

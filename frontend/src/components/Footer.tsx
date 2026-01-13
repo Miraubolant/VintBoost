@@ -17,7 +17,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t-3 border-black mt-auto" style={{ backgroundColor: '#FFFFFF' }}>
+    <footer className="border-t-4 border-black mt-auto" style={{ backgroundColor: '#E8DFD5' }}>
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
 
         {/* Main Footer Content */}
@@ -68,6 +68,13 @@ export function Footer() {
                   TARIFS
                 </button>
                 <button
+                  onClick={() => scrollToSection('testimonials')}
+                  className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                  style={{ backgroundColor: '#1D3354' }}
+                >
+                  AVIS
+                </button>
+                <button
                   onClick={() => scrollToSection('faq')}
                   className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                   style={{ backgroundColor: '#1D3354' }}
@@ -89,7 +96,7 @@ export function Footer() {
         </div>
 
         {/* Legal Links */}
-        <div className="border-t-2 border-black py-3 sm:py-4">
+        <div className="border-t-4 border-black py-3 sm:py-4">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <Link
               to="/mentions-legales"
@@ -118,7 +125,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t-2 border-black py-3 sm:py-4">
+        <div className="border-t-4 border-black py-3 sm:py-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 
             {/* Copyright */}
