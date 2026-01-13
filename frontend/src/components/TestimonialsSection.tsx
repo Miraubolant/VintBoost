@@ -16,7 +16,7 @@ const testimonials: Testimonial[] = [
     username: '@marie_vinted',
     initials: 'ML',
     rating: 5,
-    text: "Incroyable ! J'ai double mes ventes depuis que j'utilise VintBoost. Les videos attirent vraiment plus d'acheteurs.",
+    text: "Incroyable ! J'ai doublé mes ventes depuis que j'utilise VintBoost. Les vidéos attirent vraiment plus d'acheteurs.",
     result: '+150%',
     resultLabel: 'de vues',
   },
@@ -25,7 +25,7 @@ const testimonials: Testimonial[] = [
     username: '@tom_vintage',
     initials: 'TB',
     rating: 5,
-    text: "Super facile a utiliser. En 30 secondes j'ai une video pro pour mes articles. Je recommande a tous les vendeurs !",
+    text: "Super facile à utiliser. En 30 secondes j'ai une vidéo pro pour mes articles. Je recommande à tous les vendeurs !",
     result: '+80',
     resultLabel: 'ventes/mois',
   },
@@ -34,7 +34,7 @@ const testimonials: Testimonial[] = [
     username: '@sophie_mode',
     initials: 'SM',
     rating: 5,
-    text: "Le plan Pro est parfait pour moi. Les templates premium font vraiment la difference sur TikTok et Instagram.",
+    text: "Le plan Pro est parfait pour moi. Les templates premium font vraiment la différence sur TikTok et Instagram.",
     result: '2K+',
     resultLabel: 'followers',
   },
@@ -43,7 +43,7 @@ const testimonials: Testimonial[] = [
     username: '@lucas_deals',
     initials: 'LD',
     rating: 5,
-    text: "Tres bon outil ! Mes articles partent beaucoup plus vite depuis que je poste des videos sur mes reseaux.",
+    text: "Très bon outil ! Mes articles partent beaucoup plus vite depuis que je poste des vidéos sur mes réseaux.",
     result: '+200%',
     resultLabel: 'de ventes',
   },
@@ -90,7 +90,7 @@ export function TestimonialsSection() {
             </div>
           </h2>
           <p className="text-sm sm:text-base text-black/70 font-body max-w-lg mx-auto mt-4">
-            <span style={{ color: '#1D3354' }} className="font-semibold">+10 000 vendeurs</span> ont deja booste leurs ventes. Decouvre leurs temoignages !
+            <span style={{ color: '#1D3354' }} className="font-semibold">+10 000 vendeurs</span> ont déjà boosté leurs ventes. Découvre leurs témoignages !
           </p>
         </div>
 
@@ -153,7 +153,7 @@ export function TestimonialsSection() {
         {/* Bottom CTA */}
         <div className="text-center mt-10">
           <p className="font-body text-sm text-black/60 mb-3">
-            Tu veux les memes resultats ?
+            Tu veux les mêmes résultats ?
           </p>
           <button
             onClick={() => {

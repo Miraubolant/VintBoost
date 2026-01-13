@@ -21,8 +21,8 @@ const steps: Step[] = [
   },
   {
     number: 2,
-    title: 'SELECTIONNE',
-    description: 'Choisis les articles a mettre en avant',
+    title: 'SÉLECTIONNE',
+    description: 'Choisis les articles à mettre en avant',
     image: '/Etape3.png',
     icon: <CheckSquare className="w-4 h-4" />,
     color: '#1D3354',
@@ -30,15 +30,15 @@ const steps: Step[] = [
   {
     number: 3,
     title: 'PERSONNALISE',
-    description: 'Regle duree, musique et template',
+    description: 'Règle durée, musique et template',
     image: '/Etape4.png',
     icon: <Settings className="w-4 h-4" />,
     color: '#D64045',
   },
   {
     number: 4,
-    title: 'TELECHARGE',
-    description: 'Ta video est prete en 30 secondes !',
+    title: 'TÉLÉCHARGE',
+    description: 'Ta vidéo est prête en 30 secondes !',
     image: '/Etape5.png',
     icon: <Download className="w-4 h-4" />,
     color: '#1D3354',
@@ -131,23 +131,23 @@ export function BeforeAfterSection() {
         <div className="text-center mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#D64045' }}>
             <Sparkles className="w-4 h-4 text-white" />
-            <span className="font-display font-bold text-xs text-white">COMMENT CA MARCHE</span>
+            <span className="font-display font-bold text-xs text-white">COMMENT ÇA MARCHE</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
             <div className="text-black transform -rotate-2 mb-4 relative">
               <span className="inline-block bg-white border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                CREE TA VIDEO
+                CRÉE TA VIDÉO
               </span>
             </div>
             <div className="text-white transform rotate-2 relative">
               <span className="inline-block border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#1D3354' }}>
-                EN 4 ETAPES
+                EN 4 ÉTAPES
               </span>
             </div>
           </h2>
           <p className="text-sm sm:text-base text-black/70 font-body max-w-lg mx-auto mt-4">
-            Pas de competences requises. <span style={{ color: '#D64045' }} className="font-semibold">30 secondes</span> suffisent pour creer une video pro !
+            Pas de compétences requises. <span style={{ color: '#D64045' }} className="font-semibold">30 secondes</span> suffisent pour créer une vidéo pro !
           </p>
         </div>
 
@@ -313,7 +313,7 @@ export function BeforeAfterSection() {
             className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             style={{ backgroundColor: '#1D3354' }}
           >
-            <span className="font-display font-bold text-xs sm:text-sm text-white">RESULTAT :</span>
+            <span className="font-display font-bold text-xs sm:text-sm text-white">RÉSULTAT :</span>
             <span className="font-display font-bold text-base sm:text-lg" style={{ color: '#D64045' }}>+300% DE VUES</span>
             <span className="font-display font-bold text-xs sm:text-sm text-white">EN MOYENNE</span>
           </div>

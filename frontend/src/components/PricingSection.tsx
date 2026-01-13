@@ -23,10 +23,10 @@ const plans: PricingPlan[] = [
   {
     name: 'GRATUIT',
     price: '0€',
-    videos: '1 video',
-    description: 'Pour decouvrir',
+    videos: '1 vidéo',
+    description: 'Pour découvrir',
     features: [
-      '1 video HD offerte',
+      '1 vidéo HD offerte',
       'Templates basiques',
       'Watermark VintBoost',
       'Export rapide',
@@ -40,10 +40,10 @@ const plans: PricingPlan[] = [
     name: 'PRO',
     price: '3.99€',
     period: '/mois',
-    videos: '15 videos',
+    videos: '15 vidéos',
     description: 'Le plus populaire',
     features: [
-      '15 videos HD/mois',
+      '15 vidéos HD/mois',
       'Tous les templates',
       'Sans watermark',
       'Support prioritaire',
@@ -60,10 +60,10 @@ const plans: PricingPlan[] = [
     name: 'BUSINESS',
     price: '12.99€',
     period: '/mois',
-    videos: '50 videos',
+    videos: '50 vidéos',
     description: 'Pour les pros',
     features: [
-      '50 videos 4K/mois',
+      '50 vidéos 4K/mois',
       'Tous les templates',
       'Sans watermark',
       'Support 24/7',
@@ -159,9 +159,7 @@ export function PricingSection() {
                 plan.popular ? 'md:scale-105 mt-6 md:mt-0' : ''
               }`}
               style={{
-                backgroundColor: plan.popular ? '#1D3354' : '#FFFFFF',
-                borderColor: plan.popular ? '#D64045' : '#000000',
-                borderWidth: plan.popular ? '5px' : '4px'
+                backgroundColor: plan.popular ? '#1D3354' : '#FFFFFF'
               }}
             >
               {/* Badge populaire */}
@@ -263,7 +261,7 @@ export function PricingSection() {
                 <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-black" />
               </div>
               <div className="font-display font-bold text-lg sm:text-2xl lg:text-3xl mb-1 text-black">INSTANT</div>
-              <div className="font-body font-semibold text-xs sm:text-sm text-black/70">Generation rapide</div>
+              <div className="font-body font-semibold text-xs sm:text-sm text-black/70">Génération rapide</div>
             </div>
           </div>
 
@@ -275,7 +273,7 @@ export function PricingSection() {
                 <img src="https://js.stripe.com/v3/fingerprinted/img/mastercard-4d8844094130711885b5e41b28c9848f.svg" alt="Mastercard" className="h-5 sm:h-6 lg:h-7" />
                 <img src="https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f46c5cd6a96a6e418a6ca1717c.svg" alt="Amex" className="h-5 sm:h-6 lg:h-7" />
               </div>
-              <div className="font-body font-semibold text-xs sm:text-sm text-black/70">Paiement securise</div>
+              <div className="font-body font-semibold text-xs sm:text-sm text-black/70">Paiement sécurisé</div>
             </div>
           </div>
 
@@ -286,7 +284,7 @@ export function PricingSection() {
                 <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="font-display font-bold text-lg sm:text-2xl lg:text-3xl mb-1 text-white">30s</div>
-              <div className="font-body font-semibold text-xs sm:text-sm text-white/70">Par video</div>
+              <div className="font-body font-semibold text-xs sm:text-sm text-white/70">Par vidéo</div>
             </div>
           </div>
 
@@ -306,7 +304,7 @@ export function PricingSection() {
         <div className="text-center">
           <div className="inline-block bg-white border-4 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <h3 className="font-display font-bold text-xl sm:text-2xl text-black mb-4">
-              Pret a booster tes ventes ?
+              Prêt à booster tes ventes ?
             </h3>
             <button
               onClick={() => {
@@ -319,7 +317,7 @@ export function PricingSection() {
               style={{ backgroundColor: '#D64045' }}
             >
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-              CREER MA VIDEO
+              CRÉER MA VIDÉO
             </button>
           </div>
         </div>
@@ -352,7 +350,7 @@ export function PricingSection() {
 
             {/* Message */}
             <p className="font-body text-gray-700 text-center mb-6">
-              Connecte-toi avec Google pour souscrire a un abonnement.
+              Connecte-toi avec Google pour souscrire à un abonnement.
             </p>
 
             {/* Bouton Google */}
