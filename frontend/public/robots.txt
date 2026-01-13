@@ -1,78 +1,9 @@
 # VintBoost Robots.txt
-# Allow all crawlers including AI bots
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
 
 # Sitemap
 Sitemap: https://vintboost.com/sitemap.xml
-
-# Allow all AI crawlers
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: FacebookBot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Yandex
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-# Allow all social media crawlers
-User-agent: Twitterbot
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: Pinterest
-Allow: /
-
-User-agent: Slackbot
-Allow: /
-
-User-agent: TelegramBot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
-# Disallow sensitive paths
-Disallow: /api/
-Disallow: /admin/
-Disallow: /*.json$
