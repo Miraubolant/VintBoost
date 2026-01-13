@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Sparkles, Copy, Link, CheckSquare, Settings, Download, ChevronLeft, ChevronRight, Hand } from 'lucide-react'
+import { Sparkles, Link, CheckSquare, Settings, Download, ChevronLeft, ChevronRight, Hand } from 'lucide-react'
 
 interface Step {
   number: number
@@ -13,40 +13,32 @@ interface Step {
 const steps: Step[] = [
   {
     number: 1,
-    title: 'COPIE L\'URL',
-    description: 'Va sur Vinted et copie le lien de ton vestiaire',
-    image: '/Etape1.png',
-    icon: <Copy className="w-4 h-4" />,
-    color: '#1D3354',
-  },
-  {
-    number: 2,
     title: 'COLLE L\'URL',
-    description: 'Colle ton lien dans VintBoost',
+    description: 'Colle ton lien Vinted dans VintBoost',
     image: '/Etape2.png',
     icon: <Link className="w-4 h-4" />,
     color: '#D64045',
   },
   {
-    number: 3,
-    title: 'SÉLECTIONNE',
-    description: 'Choisis les articles à mettre en avant',
+    number: 2,
+    title: 'SELECTIONNE',
+    description: 'Choisis les articles a mettre en avant',
     image: '/Etape3.png',
     icon: <CheckSquare className="w-4 h-4" />,
     color: '#1D3354',
   },
   {
-    number: 4,
+    number: 3,
     title: 'PERSONNALISE',
-    description: 'Règle durée, musique et template',
+    description: 'Regle duree, musique et template',
     image: '/Etape4.png',
     icon: <Settings className="w-4 h-4" />,
     color: '#D64045',
   },
   {
-    number: 5,
-    title: 'TÉLÉCHARGE',
-    description: 'Ta vidéo est prête en 30 secondes !',
+    number: 4,
+    title: 'TELECHARGE',
+    description: 'Ta video est prete en 30 secondes !',
     image: '/Etape5.png',
     icon: <Download className="w-4 h-4" />,
     color: '#1D3354',
@@ -111,13 +103,35 @@ export function BeforeAfterSection() {
   }, [])
 
   return (
-    <section id="before-after" className="py-8 sm:py-12 lg:py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section id="before-after" className="py-8 sm:py-12 lg:py-16 px-4 relative overflow-hidden">
+      {/* Decorative elements - Desktop only */}
+      <div
+        className="hidden lg:block absolute -left-4 top-20 w-8 h-8 border-2 border-black transform rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute left-12 top-40 w-5 h-5 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute -right-4 top-32 w-10 h-10 border-2 border-black transform -rotate-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute right-16 bottom-24 w-6 h-6 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute left-24 bottom-16 w-7 h-7 border-2 border-black transform rotate-45 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+
+      <div className="max-w-6xl mx-auto relative">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#D64045' }}>
             <Sparkles className="w-4 h-4 text-white" />
-            <span className="font-display font-bold text-xs text-white">COMMENT ÇA MARCHE</span>
+            <span className="font-display font-bold text-xs text-white">COMMENT CA MARCHE</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
@@ -125,7 +139,7 @@ export function BeforeAfterSection() {
               <span
                 className="inline-block bg-white text-black border-2 border-black px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
               >
-                CRÉE TA VIDÉO
+                CREE TA VIDEO
               </span>
             </div>
             <div>
@@ -133,24 +147,24 @@ export function BeforeAfterSection() {
                 className="inline-block text-white border-2 border-black px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 style={{ backgroundColor: '#1D3354' }}
               >
-                EN 5 ÉTAPES
+                EN 4 ETAPES
               </span>
             </div>
           </h2>
           <p className="text-sm sm:text-base text-black/70 font-body max-w-lg mx-auto mt-4">
-            Pas de compétences requises. <span style={{ color: '#D64045' }} className="font-semibold">30 secondes</span> suffisent pour créer une vidéo pro !
+            Pas de competences requises. <span style={{ color: '#D64045' }} className="font-semibold">30 secondes</span> suffisent pour creer une video pro !
           </p>
         </div>
 
-        {/* Steps - Desktop: Horizontal, Tablet: Grid, Mobile: Full-width Carousel */}
+        {/* Steps - Desktop: Horizontal 4 columns, Tablet: 2x2 grid, Mobile: Carousel */}
         <div className="relative">
-          {/* Desktop Layout - 5 columns */}
-          <div className="hidden lg:grid lg:grid-cols-5 gap-4">
+          {/* Desktop Layout - 4 columns */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-5">
             {steps.map((step, index) => (
               <div key={step.number} className="relative">
                 {/* Connector Line */}
                 {index < steps.length - 1 && (
-                  <div className="absolute top-16 -right-2 w-4 h-0.5 bg-black z-10" />
+                  <div className="absolute top-16 -right-2.5 w-5 h-0.5 bg-black z-10" />
                 )}
 
                 <div
@@ -159,34 +173,34 @@ export function BeforeAfterSection() {
                 >
                   {/* Step Header */}
                   <div
-                    className="flex items-center justify-between px-3 py-2 border-b-3 border-black"
+                    className="flex items-center justify-between px-3 py-2.5 border-b-3 border-black"
                     style={{ backgroundColor: step.color }}
                   >
                     <div className="flex items-center gap-2">
                       <span
-                        className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs bg-white"
+                        className="w-7 h-7 flex items-center justify-center border-2 border-black font-display font-bold text-sm bg-white"
                       >
                         {step.number}
                       </span>
-                      <span className="font-display font-bold text-[10px] text-white">{step.title}</span>
+                      <span className="font-display font-bold text-xs text-white">{step.title}</span>
                     </div>
                     <div className="text-white">{step.icon}</div>
                   </div>
 
                   {/* Screenshot */}
-                  <div className="flex-1 p-2 flex items-center justify-center" style={{ backgroundColor: '#E8DFD5' }}>
+                  <div className="flex-1 p-3 flex items-center justify-center" style={{ backgroundColor: '#E8DFD5' }}>
                     <div className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden bg-white">
                       <img
                         src={step.image}
-                        alt={`Étape ${step.number}: ${step.title}`}
-                        className="w-full h-auto max-h-[280px] object-contain"
+                        alt={`Etape ${step.number}: ${step.title}`}
+                        className="w-full h-auto max-h-[300px] object-contain"
                       />
                     </div>
                   </div>
 
                   {/* Description */}
-                  <div className="px-3 py-2 border-t-2 border-black bg-white">
-                    <p className="text-[10px] font-body text-black/70 text-center leading-tight">
+                  <div className="px-3 py-2.5 border-t-2 border-black bg-white">
+                    <p className="text-xs font-body text-black/70 text-center leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -195,15 +209,10 @@ export function BeforeAfterSection() {
             ))}
           </div>
 
-          {/* Tablet Layout - Better 2-3-2 or 3-2 grid */}
+          {/* Tablet Layout - 2x2 grid */}
           <div className="hidden md:block lg:hidden">
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              {steps.slice(0, 3).map((step) => (
-                <StepCard key={step.number} step={step} />
-              ))}
-            </div>
-            <div className="grid grid-cols-2 gap-4 max-w-[66%] mx-auto">
-              {steps.slice(3).map((step) => (
+            <div className="grid grid-cols-2 gap-4">
+              {steps.map((step) => (
                 <StepCard key={step.number} step={step} />
               ))}
             </div>
@@ -309,7 +318,7 @@ export function BeforeAfterSection() {
             className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             style={{ backgroundColor: '#1D3354' }}
           >
-            <span className="font-display font-bold text-xs sm:text-sm text-white">RÉSULTAT :</span>
+            <span className="font-display font-bold text-xs sm:text-sm text-white">RESULTAT :</span>
             <span className="font-display font-bold text-base sm:text-lg" style={{ color: '#D64045' }}>+300% DE VUES</span>
             <span className="font-display font-bold text-xs sm:text-sm text-white">EN MOYENNE</span>
           </div>

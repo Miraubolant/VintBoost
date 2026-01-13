@@ -16,7 +16,7 @@ const testimonials: Testimonial[] = [
     username: '@marie_vinted',
     initials: 'ML',
     rating: 5,
-    text: "Incroyable ! J'ai doublé mes ventes depuis que j'utilise VintBoost. Les vidéos attirent vraiment plus d'acheteurs.",
+    text: "Incroyable ! J'ai double mes ventes depuis que j'utilise VintBoost. Les videos attirent vraiment plus d'acheteurs.",
     result: '+150%',
     resultLabel: 'de vues',
   },
@@ -25,7 +25,7 @@ const testimonials: Testimonial[] = [
     username: '@tom_vintage',
     initials: 'TB',
     rating: 5,
-    text: "Super facile à utiliser. En 30 secondes j'ai une vidéo pro pour mes articles. Je recommande à tous les vendeurs !",
+    text: "Super facile a utiliser. En 30 secondes j'ai une video pro pour mes articles. Je recommande a tous les vendeurs !",
     result: '+80',
     resultLabel: 'ventes/mois',
   },
@@ -34,7 +34,7 @@ const testimonials: Testimonial[] = [
     username: '@sophie_mode',
     initials: 'SM',
     rating: 5,
-    text: "Le plan Pro est parfait pour moi. Les templates premium font vraiment la différence sur TikTok et Instagram.",
+    text: "Le plan Pro est parfait pour moi. Les templates premium font vraiment la difference sur TikTok et Instagram.",
     result: '2K+',
     resultLabel: 'followers',
   },
@@ -43,25 +43,38 @@ const testimonials: Testimonial[] = [
     username: '@lucas_deals',
     initials: 'LD',
     rating: 5,
-    text: "Très bon outil ! Mes articles partent beaucoup plus vite depuis que je poste des vidéos sur mes réseaux.",
+    text: "Tres bon outil ! Mes articles partent beaucoup plus vite depuis que je poste des videos sur mes reseaux.",
     result: '+200%',
     resultLabel: 'de ventes',
-  },
-  {
-    name: 'Emma R.',
-    username: '@emma_vintage',
-    initials: 'ER',
-    rating: 5,
-    text: "J'étais sceptique au début mais les résultats parlent d'eux-mêmes. Mes vidéos font le buzz sur TikTok !",
-    result: '50K',
-    resultLabel: 'vues TikTok',
   },
 ]
 
 export function TestimonialsSection() {
   return (
-    <section id="testimonials" className="py-8 sm:py-12 lg:py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section id="testimonials" className="py-8 sm:py-12 lg:py-16 px-4 relative overflow-hidden">
+      {/* Decorative elements - Desktop only */}
+      <div
+        className="hidden lg:block absolute -left-6 top-16 w-10 h-10 border-2 border-black transform -rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute left-16 top-32 w-6 h-6 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute -right-6 top-24 w-8 h-8 border-2 border-black transform rotate-45 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute right-20 bottom-32 w-5 h-5 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute left-8 bottom-20 w-7 h-7 border-2 border-black transform rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+
+      <div className="max-w-5xl mx-auto relative">
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
@@ -73,12 +86,12 @@ export function TestimonialsSection() {
             </span>
           </h2>
           <p className="text-sm sm:text-base text-black/70 font-body max-w-lg mx-auto mt-4">
-            <span style={{ color: '#1D3354' }} className="font-semibold">+10 000 vendeurs</span> ont déjà boosté leurs ventes. Découvre leurs témoignages !
+            <span style={{ color: '#1D3354' }} className="font-semibold">+10 000 vendeurs</span> ont deja booste leurs ventes. Decouvre leurs temoignages !
           </p>
         </div>
 
-        {/* Testimonials Grid - 3 columns on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Testimonials Grid - 2x2 on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
@@ -136,7 +149,7 @@ export function TestimonialsSection() {
         {/* Bottom CTA */}
         <div className="text-center mt-10">
           <p className="font-body text-sm text-black/60 mb-3">
-            Tu veux les mêmes résultats ?
+            Tu veux les memes resultats ?
           </p>
           <button
             onClick={() => {

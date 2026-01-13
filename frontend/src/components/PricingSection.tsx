@@ -68,8 +68,34 @@ const plans: PricingPlan[] = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-8 sm:py-12 lg:py-16 px-4">
-      <div className="max-w-5xl mx-auto">
+    <section id="pricing" className="py-8 sm:py-12 lg:py-16 px-4 relative overflow-hidden">
+      {/* Decorative elements - Desktop only */}
+      <div
+        className="hidden lg:block absolute -left-4 top-24 w-9 h-9 border-2 border-black transform rotate-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute left-20 top-48 w-5 h-5 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute -right-4 top-20 w-7 h-7 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute right-24 top-64 w-6 h-6 border-2 border-black transform -rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute left-16 bottom-24 w-8 h-8 border-2 border-black transform rotate-45 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute right-12 bottom-16 w-5 h-5 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+
+      <div className="max-w-5xl mx-auto relative">
         {/* Section Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#9ED8DB' }}>

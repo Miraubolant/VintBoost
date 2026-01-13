@@ -42,8 +42,26 @@ export function FAQSection() {
   }
 
   return (
-    <section id="faq" className="py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <section id="faq" className="py-12 px-4 relative overflow-hidden">
+      {/* Decorative elements - Desktop only */}
+      <div
+        className="hidden lg:block absolute -left-4 top-16 w-7 h-7 border-2 border-black transform rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+      <div
+        className="hidden lg:block absolute left-20 top-36 w-5 h-5 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute -right-6 top-24 w-8 h-8 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#D64045' }}
+      />
+      <div
+        className="hidden lg:block absolute right-16 bottom-24 w-6 h-6 border-2 border-black transform -rotate-12 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+        style={{ backgroundColor: '#1D3354' }}
+      />
+
+      <div className="max-w-3xl mx-auto relative">
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
