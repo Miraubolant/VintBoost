@@ -113,18 +113,6 @@ export function Footer() {
               >
                 Mentions legales
               </Link>
-              <Link
-                to="/cgu"
-                className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
-              >
-                CGU
-              </Link>
-              <Link
-                to="/confidentialite"
-                className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
-              >
-                Confidentialite
-              </Link>
               <button
                 onClick={openCookieSettings}
                 className="text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-1"

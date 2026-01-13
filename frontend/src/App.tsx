@@ -15,8 +15,6 @@ import { BlogArticlePage } from './pages/BlogArticlePage'
 import { ResultatPage } from './pages/ResultatPage'
 import { AccountPage } from './pages/AccountPage'
 import { MentionsLegalesPage } from './pages/MentionsLegalesPage'
-import { CGUPage } from './pages/CGUPage'
-import { ConfidentialitePage } from './pages/ConfidentialitePage'
 import { ScrollToTop } from './components/ScrollToTop'
 import { CookieConsent } from './components/CookieConsent'
 import { WardrobeProvider } from './context/WardrobeContext'
@@ -53,8 +51,6 @@ function App() {
                   <Route path="/blog/:slug" element={<BlogArticlePage />} />
                   <Route path="/account" element={<AccountPage />} />
                   <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
-                  <Route path="/cgu" element={<CGUPage />} />
-                  <Route path="/confidentialite" element={<ConfidentialitePage />} />
                 </Routes>
               </main>
               <Footer />
