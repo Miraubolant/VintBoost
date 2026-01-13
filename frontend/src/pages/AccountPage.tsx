@@ -33,7 +33,7 @@ export function AccountPage() {
   const [activeTab, setActiveTab] = useState<TabType>('statistics')
   const [videos, setVideos] = useState<UserVideo[]>([])
   const [analytics, setAnalytics] = useState<UserAnalytics | null>(null)
-  const [loadingData, setLoadingData] = useState(true)
+  const [, setLoadingData] = useState(true)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deleting, setDeleting] = useState(false)
