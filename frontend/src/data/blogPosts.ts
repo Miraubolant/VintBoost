@@ -279,9 +279,8 @@ Tu connais deja [VintBoost](/) pour creer des **videos** de tes articles Vinted 
 ### Les offres disponibles
 
 [VintDress](https://vintdress.com) propose differentes formules selon tes besoins :
-- **Essai gratuit** : Teste le service
 - **Pack occasionnel** : Pour les petits volumes
-- **Abonnement** : Pour les vendeurs reguliers
+- **Abonnement** : Pour les vendeurs reguliers avec des tarifs degressifs
 
 ---
 
@@ -313,7 +312,7 @@ Les **photos portees** sont devenues un **standard** pour les vendeurs Vinted qu
 
 Les vendeurs qui utilisent VintDress voient leurs ventes **multiplier par 3**. Pourquoi pas toi ?
 
-**[Essaie VintDress gratuitement](https://vintdress.com)** et transforme tes annonces Vinted des aujourd'hui.
+**[Decouvre VintDress](https://vintdress.com)** et transforme tes annonces Vinted des aujourd'hui.
 
 ---
 

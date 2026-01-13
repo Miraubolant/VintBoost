@@ -46,6 +46,16 @@ export function ResultatPage() {
   // Watermark is forced for free plan
   const [hasWatermark, setHasWatermark] = useState(plan === 'free')
 
+  // Set default resolution based on plan
+  useEffect(() => {
+    if (plan === 'free') {
+      setResolution('720p')
+    } else {
+      // Pro and Business default to 1080p
+      setResolution('1080p')
+    }
+  }, [plan])
+
   // Calculate remaining credits
   const subscriptionCreditsRemaining = Math.max(0, (subscription?.videosLimit || 0) - (subscription?.videosUsed || 0))
   const totalCreditsRemaining = subscriptionCreditsRemaining + credits

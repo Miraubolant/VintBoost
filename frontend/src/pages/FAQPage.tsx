@@ -42,7 +42,7 @@ const faqItems: FAQItem[] = [
   {
     category: 'TARIFS',
     question: "Quel plan choisir ?",
-    answer: "Le plan Gratuit te permet de tester avec 1 video. Le plan Pro a 3,99 euros/mois est ideal pour les vendeurs reguliers avec 15 videos/mois. Le plan Business a 12,99 euros/mois convient aux vendeurs professionnels avec 50 videos 4K/mois."
+    answer: "Le plan Gratuit te permet de tester avec 1 video. Le plan Pro a 3,99 euros/mois est ideal pour les vendeurs reguliers avec 5 videos HD/mois. Le plan Business a 9,99 euros/mois convient aux vendeurs professionnels avec 15 videos 4K/mois."
   },
   {
     category: 'TARIFS',
