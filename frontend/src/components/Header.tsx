@@ -69,40 +69,40 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[9999] border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 sm:h-14">
+      <header className="fixed top-0 left-0 right-0 z-[9999] border-b-4 border-black" style={{ backgroundColor: '#E8DFD5' }}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
 
             {/* Logo Neo-Brutalism */}
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 group shrink-0"
+              className="flex items-center gap-2 group shrink-0"
             >
               <div
-                className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-black flex items-center justify-center transform -rotate-2 group-hover:rotate-0 transition-transform duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 border-3 border-black flex items-center justify-center transform -rotate-2 group-hover:rotate-0 transition-transform duration-300 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 style={{ backgroundColor: '#1D3354' }}
               >
-                <Sparkles className="text-white w-4 h-4 sm:w-5 sm:h-5" />
+                <Sparkles className="text-white w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
 
               {/* Title */}
-              <div className="flex items-center gap-0.5">
-                <span className="inline-block bg-white border-2 border-black px-1.5 sm:px-2 py-0.5 sm:py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-display font-bold text-xs sm:text-sm text-black transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+              <div className="flex items-center gap-0.5 sm:gap-1">
+                <span className="inline-block bg-white border-3 border-black px-1.5 sm:px-2 lg:px-2.5 py-0.5 sm:py-1 lg:py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-display font-bold text-xs sm:text-sm lg:text-base text-black transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
                   VINT
                 </span>
-                <span className="inline-block border-2 border-black px-1.5 sm:px-2 py-0.5 sm:py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-display font-bold text-xs sm:text-sm text-white transform rotate-1 group-hover:rotate-0 transition-transform duration-300" style={{ backgroundColor: '#1D3354' }}>
+                <span className="inline-block border-3 border-black px-1.5 sm:px-2 lg:px-2.5 py-0.5 sm:py-1 lg:py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-display font-bold text-xs sm:text-sm lg:text-base text-white transform rotate-1 group-hover:rotate-0 transition-transform duration-300" style={{ backgroundColor: '#1D3354' }}>
                   BOOST
                 </span>
               </div>
             </button>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-0.5">
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={link.action}
-                  className="px-2.5 py-1.5 font-display font-bold text-xs uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                  className="px-3 py-2.5 font-display font-bold text-sm uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D3354'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
@@ -112,7 +112,7 @@ export function Header() {
               {/* FAQ Link */}
               <Link
                 to="/faq"
-                className="px-2.5 py-1.5 font-display font-bold text-xs uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                className="px-3 py-2.5 font-display font-bold text-sm uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D3354'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
@@ -121,7 +121,7 @@ export function Header() {
               {/* AVIS Link */}
               <button
                 onClick={() => scrollToSection('testimonials')}
-                className="px-2.5 py-1.5 font-display font-bold text-xs uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                className="px-3 py-2.5 font-display font-bold text-sm uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D3354'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
@@ -129,7 +129,7 @@ export function Header() {
               </button>
               <button
                 onClick={() => scrollToSection('blog')}
-                className="px-2.5 py-1.5 font-display font-bold text-xs uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                className="px-3 py-2.5 font-display font-bold text-sm uppercase border-2 border-transparent hover:text-white hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D3354'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
@@ -138,13 +138,13 @@ export function Header() {
             </nav>
 
             {/* Auth Button */}
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2 sm:gap-3 shrink-0">
               {user ? (
                 <>
                   {/* Account button */}
                   <Link
                     to="/account"
-                    className="flex items-center gap-2 px-3 py-1.5 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                    className="flex items-center gap-2 px-3 py-2 font-display font-bold text-sm border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                     style={{ backgroundColor: '#1D3354', color: '#FFFFFF' }}
                   >
                     {user.avatarUrl ? (
@@ -154,10 +154,10 @@ export function Header() {
                     )}
                     MON COMPTE
                   </Link>
-                  {/* Logout button - Bigger */}
+                  {/* Logout button */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-3 py-1.5 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                    className="flex items-center gap-2 px-3 py-2 font-display font-bold text-sm border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                     style={{ backgroundColor: '#D64045' }}
                   >
                     <LogOut className="w-4 h-4 text-white" />
@@ -167,10 +167,10 @@ export function Header() {
               ) : (
                 <button
                   onClick={() => setAuthModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                  className="flex items-center gap-2 px-4 py-2 font-display font-bold text-sm border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                   style={{ backgroundColor: '#D64045', color: '#FFFFFF' }}
                 >
-                  <User className="w-3 h-3" />
+                  <User className="w-4 h-4" />
                   CONNEXION
                 </button>
               )}
@@ -181,13 +181,13 @@ export function Header() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               aria-expanded={mobileMenuOpen}
-              className="lg:hidden p-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+              className="lg:hidden p-2 sm:p-2.5 border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
               style={{ backgroundColor: '#1D3354' }}
             >
               {mobileMenuOpen ? (
-                <X className="w-4 h-4 text-white" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               ) : (
-                <Menu className="w-4 h-4 text-white" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               )}
             </button>
           </div>
