@@ -125,12 +125,66 @@ supabase db push  # Push migrations
 | Pro | 15 | 3.99€ | All templates, No watermark, 1080p |
 | Business | 50 | 12.99€ | All templates, No watermark, 4K |
 
-## Auth & Credits Protection
+## Credits & Subscription Logic
 
-### Scraping Protection
-- User must be logged in to scrape wardrobe (shows AuthModal if not)
-- User must have credits to scrape (shows NoCreditModal if no credits)
-- Protection implemented in `VintedScraperPage.tsx`
+### Plans Details
+| Plan | Videos/month | Articles/video | Duration | Resolution | Templates | Watermark |
+|------|--------------|----------------|----------|------------|-----------|-----------|
+| Free | 1 | 5 | 15s | 1080p | 1 (Classic) | Forced |
+| Pro | 15 | 10 | 15s/30s/60s | 1080p | 3 | Optional |
+| Business | 50 | 20 | 15s/30s/60s | 4K | 3 | Optional |
+
+### Database Tables
+
+#### `subscriptions`
+- `user_id` - UUID (unique per user)
+- `plan` - 'free' | 'pro' | 'business'
+- `status` - 'active' | 'cancelled' | 'expired' | 'past_due' | 'trialing'
+- `videos_limit` - Monthly limit (1, 15, or 50)
+- `videos_used` - Current month usage counter
+- `period_start` / `period_end` - Billing period
+
+#### `credits`
+- `user_id` - UUID
+- `amount` - Extra credits purchased (not monthly, persistent)
+
+#### `user_analytics`
+- `total_videos_generated` - Lifetime total
+- `total_articles_used` - Lifetime total
+- `last_generation_at` - Timestamp
+
+### Credit Verification Flow
+```
+1. VintedScraperPage.tsx - canGenerateVideo() check before scraping
+2. Shows AuthModal if not logged in
+3. Shows NoCreditModal if no credits available
+```
+
+### canGenerateVideo() Logic
+```typescript
+// Priority order:
+1. subscription.videosUsed < subscription.videosLimit → true
+2. credits.amount > 0 → true
+3. Otherwise → false
+```
+
+### consumeVideoCredit() Logic
+```typescript
+// Priority order:
+1. If videosUsed < videosLimit → increment subscription.videos_used
+2. Else if credits > 0 → decrement credits.amount
+3. Update user_analytics (total_videos_generated, total_articles_used)
+```
+
+### IMPORTANT: Credit Consumption
+**Credits must be consumed AFTER successful video generation, not before.**
+- Call `consumeVideoCredit()` in `useVideoGeneration.ts` after `generate()` success
+- This ensures users are only charged for successful generations
+
+### Monthly Reset
+- `videos_used` resets to 0 at the start of each billing period
+- Handled by Stripe webhook on subscription renewal
+- Extra `credits.amount` do NOT reset (persistent purchases)
 
 ### Watermark Logic
 - **Free plan**: Watermark forced ON, cannot be disabled

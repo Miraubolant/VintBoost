@@ -2,15 +2,15 @@ import { useState } from 'react'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, TouchSensor } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Music, Layout, Type, GripVertical, X, Play, Pause, Clock, Sparkles, Stamp, Lock } from 'lucide-react'
+import { Music, Layout, Type, GripVertical, X, Clock, Sparkles, Stamp, ChevronDown, ChevronUp, Crown } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
 
 interface VideoConfigPanelProps {
   selectedArticles: VintedItem[]
   onArticlesReorder: (articles: VintedItem[]) => void
   onRemoveArticle: (id: string) => void
-  videoDuration: 15 | 30 | 45 | 60
-  onDurationChange: (duration: 15 | 30 | 45 | 60) => void
+  videoDuration: 15 | 30 | 60
+  onDurationChange: (duration: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (track: string) => void
   template: string
@@ -26,21 +26,22 @@ interface VideoConfigPanelProps {
 }
 
 const musicTracks = [
-  { id: '', name: 'Aucune', icon: null },
-  { id: 'upbeat', name: 'Upbeat', icon: '🎵' },
-  { id: 'chill', name: 'Chill', icon: '🎶' },
-  { id: 'fashion', name: 'Fashion', icon: '💃' },
-  { id: 'trendy', name: 'Trendy', icon: '🔥' },
+  { id: '', name: 'Sans musique' },
+  { id: 'upbeat', name: 'Upbeat Energy' },
+  { id: 'chill', name: 'Chill Vibes' },
+  { id: 'fashion', name: 'Fashion Forward' },
+  { id: 'trendy', name: 'Trendy Beat' },
+  { id: 'summer', name: 'Summer Days' },
+  { id: 'elegant', name: 'Elegant Style' },
 ]
 
 const templates = [
   { id: 'classic', name: 'Classique', color: '#1D3354' },
   { id: 'modern', name: 'Moderne', color: '#9ED8DB' },
-  { id: 'bold', name: 'Bold', color: '#D64045' },
-  { id: 'minimal', name: 'Minimal', color: '#F5F5F5' },
+  { id: 'premium', name: 'Premium', color: '#D64045' },
 ]
 
-function SortableArticle({ item, index, onRemove, isMobile }: { item: VintedItem; index: number; onRemove: () => void; isMobile?: boolean }) {
+function SortableArticle({ item, index, onRemove }: { item: VintedItem; index: number; onRemove: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id })
 
   const style = {
@@ -53,31 +54,31 @@ function SortableArticle({ item, index, onRemove, isMobile }: { item: VintedItem
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-2 border-2 border-black mb-2 ${isMobile ? 'p-3' : 'p-2'}`}
+      className="flex items-center gap-2 border-2 border-black p-2"
       {...attributes}
     >
-      <button {...listeners} className="cursor-grab active:cursor-grabbing touch-none p-1">
-        <GripVertical className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'} text-black/40`} />
+      <button {...listeners} className="cursor-grab active:cursor-grabbing touch-none p-0.5">
+        <GripVertical className="w-4 h-4 text-black/40" />
       </button>
-      <div className={`${isMobile ? 'w-12 h-12' : 'w-8 h-8'} border-2 border-black overflow-hidden flex-shrink-0`}>
+      <div className="w-10 h-10 border-2 border-black overflow-hidden flex-shrink-0">
         <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`${isMobile ? 'text-xs' : 'text-[10px]'} font-bold truncate`}>{item.title}</p>
-        <p className={`${isMobile ? 'text-[11px]' : 'text-[9px]'} text-black/50`}>{item.price}€</p>
+        <p className="text-xs font-bold truncate">{item.title}</p>
+        <p className="text-[10px] text-black/50">{item.price}€</p>
       </div>
       <span
-        className={`${isMobile ? 'w-7 h-7 text-xs' : 'w-5 h-5 text-[10px]'} flex items-center justify-center font-bold border-2 border-black`}
+        className="w-6 h-6 text-[10px] flex items-center justify-center font-bold border-2 border-black"
         style={{ backgroundColor: '#9ED8DB' }}
       >
         {index + 1}
       </span>
       <button
         onClick={onRemove}
-        className={`${isMobile ? 'w-8 h-8' : 'w-5 h-5'} flex items-center justify-center border-2 border-black active:bg-red-100`}
+        className="w-6 h-6 flex items-center justify-center border-2 border-black active:bg-red-100"
         style={{ backgroundColor: '#FFFFFF' }}
       >
-        <X className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'}`} />
+        <X className="w-3 h-3" />
       </button>
     </div>
   )
@@ -100,10 +101,8 @@ export function VideoConfigPanel({
   canRemoveWatermark,
   onGenerate,
   loading,
-  isMobile = false,
 }: VideoConfigPanelProps) {
-  const [expandedSection, setExpandedSection] = useState<'articles' | 'music' | 'template' | 'text' | null>('articles')
-  const [previewMusic, setPreviewMusic] = useState<string | null>(null)
+  const [showArticles, setShowArticles] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -132,24 +131,20 @@ export function VideoConfigPanel({
     }
   }
 
-  const toggleSection = (section: 'articles' | 'music' | 'template' | 'text') => {
-    setExpandedSection(expandedSection === section ? null : section)
-  }
-
   return (
-    <div className={`space-y-${isMobile ? '4' : '3'}`}>
-      {/* Duration */}
-      <div>
-        <label className={`flex items-center gap-2 font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'} text-black mb-3`}>
-          <Clock className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-          DURÉE VIDÉO
+    <div className="space-y-4">
+      {/* Duration - Compact inline */}
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2 font-display font-bold text-xs text-black">
+          <Clock className="w-4 h-4" />
+          DUREE
         </label>
-        <div className="grid grid-cols-4 gap-2">
-          {[15, 30, 45, 60].map((d) => (
+        <div className="flex gap-1">
+          {([15, 30, 60] as const).map((d) => (
             <button
               key={d}
-              onClick={() => onDurationChange(d as 15 | 30 | 45 | 60)}
-              className={`${isMobile ? 'py-3 text-sm' : 'py-2 text-xs'} font-display font-bold border-2 border-black transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]`}
+              onClick={() => onDurationChange(d)}
+              className="px-3 py-1.5 font-display font-bold text-xs border-2 border-black"
               style={{ backgroundColor: videoDuration === d ? '#9ED8DB' : '#FFFFFF' }}
             >
               {d}s
@@ -158,21 +153,21 @@ export function VideoConfigPanel({
         </div>
       </div>
 
-      {/* Articles Order (Drag & Drop) */}
-      <div className="border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+      {/* Articles Order - Collapsible */}
+      <div className="border-2 border-black overflow-hidden">
         <button
-          onClick={() => toggleSection('articles')}
-          className={`w-full flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'} border-b-2 border-black`}
-          style={{ backgroundColor: expandedSection === 'articles' ? '#9ED8DB' : '#FFFFFF' }}
+          onClick={() => setShowArticles(!showArticles)}
+          className="w-full flex items-center justify-between px-3 py-2 font-display font-bold text-xs"
+          style={{ backgroundColor: showArticles ? '#9ED8DB' : '#FFFFFF' }}
         >
           <span className="flex items-center gap-2">
-            <GripVertical className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            ORDRE DES ARTICLES ({selectedArticles.length})
+            <GripVertical className="w-4 h-4" />
+            ORDRE ({selectedArticles.length} articles)
           </span>
-          <span className={`${isMobile ? 'text-lg' : 'text-base'}`}>{expandedSection === 'articles' ? '−' : '+'}</span>
+          {showArticles ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
-        {expandedSection === 'articles' && (
-          <div className={`${isMobile ? 'p-3 max-h-60' : 'p-2 max-h-48'} overflow-y-auto`} style={{ backgroundColor: '#FFFFFF' }}>
+        {showArticles && (
+          <div className="p-2 max-h-48 overflow-y-auto space-y-1.5" style={{ backgroundColor: '#FFFFFF' }}>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={selectedArticles.map((a) => a.id)} strategy={verticalListSortingStrategy}>
                 {selectedArticles.map((item, index) => (
@@ -181,198 +176,150 @@ export function VideoConfigPanel({
                     item={item}
                     index={index}
                     onRemove={() => onRemoveArticle(item.id)}
-                    isMobile={isMobile}
                   />
                 ))}
               </SortableContext>
             </DndContext>
             {selectedArticles.length === 0 && (
-              <p className={`${isMobile ? 'text-sm py-6' : 'text-xs py-4'} text-black/50 text-center`}>
-                Aucun article sélectionné
+              <p className="text-xs text-black/50 text-center py-4">
+                Aucun article
               </p>
             )}
           </div>
         )}
       </div>
 
-      {/* Music Selection */}
-      <div className="border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <button
-          onClick={() => toggleSection('music')}
-          className={`w-full flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'} border-b-2 border-black`}
-          style={{ backgroundColor: expandedSection === 'music' ? '#9ED8DB' : '#FFFFFF' }}
-        >
-          <span className="flex items-center gap-2">
-            <Music className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            MUSIQUE
-            {musicTrack && <span className={`${isMobile ? 'text-xs' : 'text-[10px]'} font-normal`}>({musicTracks.find(m => m.id === musicTrack)?.name})</span>}
-          </span>
-          <span className={`${isMobile ? 'text-lg' : 'text-base'}`}>{expandedSection === 'music' ? '−' : '+'}</span>
-        </button>
-        {expandedSection === 'music' && (
-          <div className={`${isMobile ? 'p-3 space-y-2' : 'p-2 space-y-1.5'}`} style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Template - Horizontal compact */}
+      <div>
+        <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+          <Layout className="w-4 h-4" />
+          TEMPLATE
+        </label>
+        <div className="flex gap-2">
+          {templates.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => onTemplateChange(t.id)}
+              className={`
+                flex-1 flex items-center justify-center gap-2 py-2 border-2 border-black
+                ${template === t.id ? 'ring-2 ring-[#1D3354]' : ''}
+              `}
+              style={{ backgroundColor: '#FFFFFF' }}
+            >
+              <div
+                className="w-4 h-4 border border-black"
+                style={{ backgroundColor: t.color }}
+              />
+              <span className="font-bold text-xs">{t.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Music - Dropdown */}
+      <div>
+        <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+          <Music className="w-4 h-4" />
+          MUSIQUE
+        </label>
+        <div className="relative">
+          <select
+            value={musicTrack}
+            onChange={(e) => onMusicChange(e.target.value)}
+            className="w-full px-3 py-2 border-2 border-black font-body text-sm appearance-none cursor-pointer pr-10"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
             {musicTracks.map((track) => (
-              <button
-                key={track.id}
-                onClick={() => onMusicChange(track.id)}
-                className={`w-full flex items-center justify-between ${isMobile ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} border-2 border-black font-bold transition-colors`}
-                style={{ backgroundColor: musicTrack === track.id ? '#9ED8DB' : '#FFFFFF' }}
-              >
-                <span className="flex items-center gap-2">
-                  {track.icon && <span className={isMobile ? 'text-lg' : 'text-base'}>{track.icon}</span>}
-                  {track.name}
-                </span>
-                {track.id && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setPreviewMusic(previewMusic === track.id ? null : track.id)
-                    }}
-                    className={`${isMobile ? 'w-8 h-8' : 'w-5 h-5'} flex items-center justify-center border-2 border-black`}
-                    style={{ backgroundColor: '#FFFFFF' }}
-                  >
-                    {previewMusic === track.id ? <Pause className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'}`} /> : <Play className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'}`} />}
-                  </button>
-                )}
-              </button>
+              <option key={track.id} value={track.id}>
+                {track.name}
+              </option>
             ))}
-          </div>
-        )}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+        </div>
       </div>
 
-      {/* Template Selection */}
-      <div className="border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <button
-          onClick={() => toggleSection('template')}
-          className={`w-full flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'} border-b-2 border-black`}
-          style={{ backgroundColor: expandedSection === 'template' ? '#9ED8DB' : '#FFFFFF' }}
-        >
-          <span className="flex items-center gap-2">
-            <Layout className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            TEMPLATE
-            {template && <span className={`${isMobile ? 'text-xs' : 'text-[10px]'} font-normal`}>({templates.find(t => t.id === template)?.name})</span>}
-          </span>
-          <span className={`${isMobile ? 'text-lg' : 'text-base'}`}>{expandedSection === 'template' ? '−' : '+'}</span>
-        </button>
-        {expandedSection === 'template' && (
-          <div className={`${isMobile ? 'p-3' : 'p-2'} grid grid-cols-2 gap-2`} style={{ backgroundColor: '#FFFFFF' }}>
-            {templates.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => onTemplateChange(t.id)}
-                className={`relative ${isMobile ? 'p-4 text-sm' : 'p-3 text-xs'} border-2 border-black font-bold transition-all ${
-                  template === t.id ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''
-                }`}
-                style={{ backgroundColor: t.color, color: t.color === '#F5F5F5' || t.color === '#9ED8DB' ? '#000' : '#FFF' }}
-              >
-                {t.name}
-                {template === t.id && (
-                  <span className={`absolute -top-1 -right-1 ${isMobile ? 'w-5 h-5 text-[10px]' : 'w-4 h-4 text-[8px]'} flex items-center justify-center border-2 border-black`} style={{ backgroundColor: '#9ED8DB' }}>
-                    ✓
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+      {/* Custom Text - Compact */}
+      <div>
+        <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">
+          <Type className="w-4 h-4" />
+          ACCROCHE
+        </label>
+        <input
+          type="text"
+          value={customText}
+          onChange={(e) => onCustomTextChange(e.target.value)}
+          placeholder="SOLDES -50%, LIVRAISON OFFERTE..."
+          maxLength={50}
+          className="w-full px-3 py-2 border-2 border-black font-body text-sm placeholder:text-black/40"
+          style={{ backgroundColor: '#FFFFFF' }}
+        />
       </div>
 
-      {/* Custom Text */}
-      <div className="border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <button
-          onClick={() => toggleSection('text')}
-          className={`w-full flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'} border-b-2 border-black`}
-          style={{ backgroundColor: expandedSection === 'text' ? '#9ED8DB' : '#FFFFFF' }}
-        >
-          <span className="flex items-center gap-2">
-            <Type className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            TEXTE PERSONNALISÉ
-            {customText && <span className={`${isMobile ? 'text-xs' : 'text-[10px]'} font-normal`}>(actif)</span>}
-          </span>
-          <span className={`${isMobile ? 'text-lg' : 'text-base'}`}>{expandedSection === 'text' ? '−' : '+'}</span>
-        </button>
-        {expandedSection === 'text' && (
-          <div className={`${isMobile ? 'p-3' : 'p-2'}`} style={{ backgroundColor: '#FFFFFF' }}>
-            <input
-              type="text"
-              value={customText}
-              onChange={(e) => onCustomTextChange(e.target.value)}
-              placeholder="Ex: @monpseudo - Soldes -50%"
-              maxLength={50}
-              className={`w-full ${isMobile ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} border-2 border-black font-body placeholder:text-black/40`}
-            />
-            <p className={`${isMobile ? 'text-xs' : 'text-[10px]'} text-black/50 mt-2`}>{customText.length}/50 caractères</p>
-          </div>
-        )}
-      </div>
-
-      {/* Watermark Option */}
+      {/* Premium Options Row */}
       <div
-        className={`flex items-center justify-between ${isMobile ? 'px-4 py-3' : 'px-3 py-2'} border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
-        style={{ backgroundColor: '#FFFFFF' }}
+        className="flex items-center justify-between p-3 border-2 border-black"
+        style={{ backgroundColor: canRemoveWatermark ? '#FFFFFF' : '#F5F5F5' }}
       >
         <div className="flex items-center gap-2">
-          <Stamp className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-          <span className={`font-display font-bold ${isMobile ? 'text-sm' : 'text-xs'}`}>WATERMARK</span>
-          {!canRemoveWatermark && (
-            <span
-              className={`flex items-center gap-1 ${isMobile ? 'text-[10px]' : 'text-[9px]'} font-body px-1.5 py-0.5 border border-black`}
-              style={{ backgroundColor: '#9ED8DB' }}
-            >
-              <Lock className="w-2.5 h-2.5" />
-              PRO/BUSINESS
-            </span>
-          )}
-        </div>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={hasWatermark}
-            onChange={(e) => canRemoveWatermark && onWatermarkChange(e.target.checked)}
-            disabled={!canRemoveWatermark}
-            className="sr-only peer"
-          />
-          <div
-            className={`${isMobile ? 'w-11 h-6' : 'w-9 h-5'} border-2 border-black peer-checked:after:translate-x-full after:content-[''] after:absolute ${isMobile ? 'after:top-[2px] after:left-[2px] after:h-4 after:w-4' : 'after:top-[1px] after:left-[1px] after:h-3.5 after:w-3.5'} after:border-2 after:border-black after:transition-all ${!canRemoveWatermark ? 'opacity-50 cursor-not-allowed' : ''}`}
-            style={{
-              backgroundColor: hasWatermark ? '#1D3354' : '#FFFFFF',
-            }}
-          >
-            <span
-              className={`absolute ${isMobile ? 'top-[2px] left-[2px] w-4 h-4' : 'top-[1px] left-[1px] w-3.5 h-3.5'} border-2 border-black transition-transform ${hasWatermark ? (isMobile ? 'translate-x-5' : 'translate-x-4') : ''}`}
-              style={{ backgroundColor: '#FFFFFF' }}
+          <Stamp className="w-4 h-4" />
+          <span className="font-bold text-xs">Watermark</span>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasWatermark}
+              onChange={(e) => canRemoveWatermark && onWatermarkChange(e.target.checked)}
+              disabled={!canRemoveWatermark}
+              className="sr-only"
             />
-          </div>
-        </label>
+            <div
+              className={`
+                w-8 h-5 border-2 border-black relative
+                ${!canRemoveWatermark ? 'opacity-50' : ''}
+              `}
+              style={{ backgroundColor: hasWatermark ? '#1D3354' : '#FFFFFF' }}
+            >
+              <span
+                className={`
+                  absolute top-[1px] left-[1px] w-3 h-3 border border-black transition-transform
+                  ${hasWatermark ? 'translate-x-3' : ''}
+                `}
+                style={{ backgroundColor: '#FFFFFF' }}
+              />
+            </div>
+          </label>
+        </div>
+
+        {!canRemoveWatermark && (
+          <a href="#pricing" className="flex items-center gap-1 text-[10px] font-bold" style={{ color: '#1D3354' }}>
+            <Crown className="w-3 h-3" />
+            PRO
+          </a>
+        )}
       </div>
-      {!canRemoveWatermark && (
-        <p className={`${isMobile ? 'text-[10px]' : 'text-[9px]'} text-black/50 font-body text-center -mt-1`}>
-          Passe a Pro ou Business pour retirer le watermark
-        </p>
-      )}
 
       {/* Generate Button */}
       <button
         onClick={onGenerate}
         disabled={loading || selectedArticles.length === 0}
-        className={`w-full ${isMobile ? 'px-6 py-4 text-base' : 'px-4 py-3 text-sm'} border-3 border-black font-display font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}
+        className="w-full px-6 py-4 border-3 border-black font-display font-bold text-base text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
         style={{ backgroundColor: '#D64045' }}
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
-            <div className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'} border-2 border-white border-t-transparent rounded-full animate-spin`}></div>
-            GÉNÉRATION EN COURS...
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            GENERATION EN COURS...
           </span>
         ) : (
           <span className="flex items-center justify-center gap-2">
-            <Sparkles className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            GÉNÉRER LA VIDÉO
+            <Sparkles className="w-5 h-5" />
+            GENERER LA VIDEO
           </span>
         )}
       </button>
 
       {loading && (
-        <p className={`${isMobile ? 'text-xs' : 'text-[10px]'} font-bold text-black/50 text-center`}>
+        <p className="text-xs font-bold text-black/50 text-center">
           Environ 1-2 minutes
         </p>
       )}

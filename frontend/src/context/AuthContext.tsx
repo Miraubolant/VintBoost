@@ -31,7 +31,7 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<SignUpResult>
   signOut: () => Promise<void>
   canGenerateVideo: () => boolean
-  consumeVideoCredit: () => Promise<boolean>
+  consumeVideoCredit: (articlesCount?: number) => Promise<boolean>
   refreshUserData: () => Promise<void>
 }
 
@@ -360,8 +360,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   // Consume a video credit
-  const consumeVideoCredit = async (): Promise<boolean> => {
+  const consumeVideoCredit = async (articlesCount: number = 1): Promise<boolean> => {
     if (!user || !subscription) return false
+
+    // Helper function to update analytics
+    const updateAnalytics = async () => {
+      try {
+        // First get current analytics
+        const { data: currentAnalytics } = await supabase
+          .from('user_analytics')
+          .select('total_videos_generated, total_articles_used')
+          .eq('user_id', user.id)
+          .single()
+
+        const currentVideos = currentAnalytics?.total_videos_generated ?? 0
+        const currentArticles = currentAnalytics?.total_articles_used ?? 0
+
+        // Update with incremented values
+        await supabase
+          .from('user_analytics')
+          .upsert({
+            user_id: user.id,
+            total_videos_generated: currentVideos + 1,
+            total_articles_used: currentArticles + articlesCount,
+            last_generation_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'user_id' })
+      } catch (err) {
+        console.error('Failed to update analytics:', err)
+      }
+    }
 
     // Try subscription first
     if (subscription.videosUsed < subscription.videosLimit) {
@@ -377,13 +405,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
 
         // Update analytics
-        await supabase
-          .from('user_analytics')
-          .update({
-            total_videos_generated: (await supabase.from('user_analytics').select('total_videos_generated').eq('user_id', user.id).single()).data?.total_videos_generated ?? 0 + 1,
-            last_generation_at: new Date().toISOString()
-          })
-          .eq('user_id', user.id)
+        await updateAnalytics()
 
         return true
       }
@@ -398,6 +420,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (!error) {
         setCredits(credits - 1)
+
+        // Update analytics for extra credits too
+        await updateAnalytics()
+
         return true
       }
     }
