@@ -171,16 +171,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true
 
-    // Get initial session
+    // Get initial session - use getSession first, then listen for changes
     const initSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        // First try to get existing session from storage
+        const { data: { session }, error } = await supabase.auth.getSession()
+
+        if (error) {
+          console.error('Session error:', error)
+        }
 
         if (session?.user && mounted) {
+          // Immediately set user from session to avoid flash
+          setUser({
+            id: session.user.id,
+            email: session.user.email || '',
+            fullName: session.user.user_metadata?.full_name || session.user.user_metadata?.name || null,
+            avatarUrl: session.user.user_metadata?.avatar_url || null,
+          })
+          // Then fetch full data
           await fetchUserData(session.user.id, session.user.email || undefined)
         }
-      } catch {
-        // Silently handle session initialization errors
+      } catch (err) {
+        console.error('Init session error:', err)
       } finally {
         if (mounted) {
           setLoading(false)
@@ -193,9 +206,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') && session?.user) {
-          if (mounted) {
-            await fetchUserData(session.user.id, session.user.email || undefined)
+        console.log('Auth event:', event, session?.user?.email)
+
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') {
+          if (session?.user && mounted) {
+            // Immediately set user from session
+            setUser({
+              id: session.user.id,
+              email: session.user.email || '',
+              fullName: session.user.user_metadata?.full_name || session.user.user_metadata?.name || null,
+              avatarUrl: session.user.user_metadata?.avatar_url || null,
+            })
+            // Then fetch full data in background
+            fetchUserData(session.user.id, session.user.email || undefined).catch(console.error)
           }
         } else if (event === 'SIGNED_OUT') {
           if (mounted) {
