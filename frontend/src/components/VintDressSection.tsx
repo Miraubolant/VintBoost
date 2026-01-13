@@ -18,19 +18,14 @@ export function VintDressSection() {
             <span className="font-display font-bold text-xs text-white">PHOTOS IA</span>
           </div>
 
-          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-3">
-            <div className="mb-1.5">
-              <span
-                className="inline-block bg-white text-black border-2 border-black px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-              >
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
+            <div className="text-black transform -rotate-2 mb-4 relative">
+              <span className="inline-block bg-white border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 BESOIN DE PHOTOS
               </span>
             </div>
-            <div>
-              <span
-                className="inline-block text-white border-2 border-black px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                style={{ backgroundColor: VINTDRESS_COLORS.primary }}
-              >
+            <div className="text-white transform rotate-2 relative">
+              <span className="inline-block border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: VINTDRESS_COLORS.primary }}>
                 PORTÉES ?
               </span>
             </div>
