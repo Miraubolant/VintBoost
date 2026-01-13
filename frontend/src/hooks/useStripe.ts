@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// Stripe Price IDs - You need to create these in Stripe Dashboard
+// Stripe Price IDs
 export const STRIPE_PRICES = {
-  pro: import.meta.env.VITE_STRIPE_PRICE_PRO || 'price_pro',
-  business: import.meta.env.VITE_STRIPE_PRICE_BUSINESS || 'price_business',
+  pro: 'price_1Sow53K7Yon7d585HdHNbLgS',
+  business: 'price_1Sow6DK7Yon7d585RsV1cflP',
 }
 
 export function useStripe() {
