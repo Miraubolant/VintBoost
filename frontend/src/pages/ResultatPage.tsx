@@ -5,8 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle } from '../types/vinted'
-import { Video, Grid, Layers, ThumbsUp, MapPin, ArrowLeft, X, Sparkles, Download, RefreshCw } from 'lucide-react'
-import { PhotoCarousel } from '../components/PhotoCarousel'
+import { Video, ThumbsUp, MapPin, ArrowLeft, X, Sparkles, Download, RefreshCw, Loader2 } from 'lucide-react'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
 
 export function ResultatPage() {
@@ -18,9 +17,8 @@ export function ResultatPage() {
   // Video generation states
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
   const [orderedArticles, setOrderedArticles] = useState<VintedItem[]>([])
-  const [showVideoPanel, setShowVideoPanel] = useState(false) // Hidden by default on mobile
+  const [showVideoPanel, setShowVideoPanel] = useState(true) // Visible by default
   const [videoDuration, setVideoDuration] = useState<15 | 30 | 45 | 60>(30)
-  const [viewMode, setViewMode] = useState<'carousel' | 'grid'>('grid')
   const [musicTrack, setMusicTrack] = useState('')
   const [template, setTemplate] = useState('classic')
   const [customText, setCustomText] = useState('')
@@ -134,9 +132,9 @@ export function ResultatPage() {
     navigate('/')
   }
 
-  // Loading state with animated messages
+  // Loading state - Modal style
   if (scraping || (!wardrobeData && pendingUrl)) {
-    return <ScrapingLoader />
+    return <ScrapingLoaderModal />
   }
 
   // Error state
@@ -167,15 +165,15 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Fixed Header - Compact on Mobile */}
-      <div className="sticky top-12 sm:top-14 z-50 border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
-          {/* Row 1: User Info - Mobile Optimized */}
-          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+      {/* Header - User Info (Not fixed on desktop) */}
+      <div className="border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          {/* Row 1: User Info */}
+          <div className="flex items-center gap-3 mb-3">
             {/* Back Button */}
             <button
               onClick={handleBack}
-              className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all flex-shrink-0"
+              className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all flex-shrink-0"
               style={{ backgroundColor: '#FFFFFF' }}
             >
               <ArrowLeft className="w-5 h-5" />
@@ -183,7 +181,7 @@ export function ResultatPage() {
 
             {/* Profile Picture */}
             {data.userInfo?.profilePicture ? (
-              <div className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex-shrink-0">
+              <div className="w-12 h-12 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex-shrink-0">
                 <img
                   src={data.userInfo.profilePicture}
                   alt={data.username}
@@ -192,10 +190,10 @@ export function ResultatPage() {
               </div>
             ) : (
               <div
-                className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center flex-shrink-0"
+                className="w-12 h-12 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center flex-shrink-0"
                 style={{ backgroundColor: '#9ED8DB' }}
               >
-                <span className="font-display font-bold text-base text-black">
+                <span className="font-display font-bold text-lg text-black">
                   {(data.username || 'U')[0].toUpperCase()}
                 </span>
               </div>
@@ -203,11 +201,11 @@ export function ResultatPage() {
 
             {/* User Name + City */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm sm:text-base font-display font-bold text-black truncate">
+              <h3 className="text-base sm:text-lg font-display font-bold text-black truncate">
                 @{data.username || 'Utilisateur'}
               </h3>
               {data.userInfo?.city && (
-                <p className="text-[10px] sm:text-xs text-black/50 flex items-center gap-0.5">
+                <p className="text-xs text-black/50 flex items-center gap-1">
                   <MapPin className="w-3 h-3" />
                   {data.userInfo.city}
                 </p>
@@ -217,96 +215,80 @@ export function ResultatPage() {
             {/* Desktop: Video Panel Toggle */}
             <button
               onClick={() => setShowVideoPanel(!showVideoPanel)}
-              className="hidden lg:flex px-3 py-1.5 border-2 border-black font-display font-bold text-xs items-center gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="hidden lg:flex px-4 py-2 border-2 border-black font-display font-bold text-sm items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
               style={{ backgroundColor: showVideoPanel ? '#9ED8DB' : '#FFFFFF' }}
             >
               <Video className="w-4 h-4" />
-              {showVideoPanel ? 'MASQUER' : 'VIDEO'}
+              {showVideoPanel ? 'MASQUER OPTIONS' : 'OPTIONS VIDEO'}
             </button>
           </div>
 
-          {/* Stats Row - Horizontal Scroll on Mobile */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-3 px-3 scrollbar-hide">
-            <div className="text-center px-3 py-1.5 border-2 border-black flex-shrink-0" style={{ backgroundColor: '#FFFFFF' }}>
-              <p className="text-base sm:text-lg font-display font-bold" style={{ color: '#1D3354' }}>
+          {/* Stats Row - Horizontal */}
+          <div className="flex gap-2 flex-wrap">
+            <div className="text-center px-4 py-2 border-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+              <p className="text-lg font-display font-bold" style={{ color: '#1D3354' }}>
                 {data.items.length}
               </p>
-              <p className="text-[8px] sm:text-[9px] font-bold text-black/50 whitespace-nowrap">ARTICLES</p>
+              <p className="text-[10px] font-bold text-black/50">ARTICLES</p>
             </div>
             {data.userInfo && (
               <>
-                <div className="text-center px-3 py-1.5 border-2 border-black flex-shrink-0" style={{ backgroundColor: '#FFFFFF' }}>
-                  <p className="text-base sm:text-lg font-display font-bold" style={{ color: '#D64045' }}>
+                <div className="text-center px-4 py-2 border-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+                  <p className="text-lg font-display font-bold" style={{ color: '#D64045' }}>
                     {data.userInfo.soldItemsCount}
                   </p>
-                  <p className="text-[8px] sm:text-[9px] font-bold text-black/50 whitespace-nowrap">VENDUS</p>
+                  <p className="text-[10px] font-bold text-black/50">VENDUS</p>
                 </div>
-                <div className="text-center px-3 py-1.5 border-2 border-black flex-shrink-0" style={{ backgroundColor: '#FFFFFF' }}>
-                  <p className="text-base sm:text-lg font-display font-bold" style={{ color: '#9ED8DB' }}>
+                <div className="text-center px-4 py-2 border-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+                  <p className="text-lg font-display font-bold" style={{ color: '#9ED8DB' }}>
                     {data.userInfo.followersCount}
                   </p>
-                  <p className="text-[8px] sm:text-[9px] font-bold text-black/50 whitespace-nowrap">ABONNÉS</p>
+                  <p className="text-[10px] font-bold text-black/50">ABONNES</p>
                 </div>
                 {data.userInfo.feedbackCount > 0 && (
-                  <div className="text-center px-3 py-1.5 border-2 border-black flex-shrink-0" style={{ backgroundColor: '#FFFFFF' }}>
-                    <p className="text-base sm:text-lg font-display font-bold flex items-center justify-center gap-1" style={{ color: '#1D3354' }}>
+                  <div className="text-center px-4 py-2 border-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+                    <p className="text-lg font-display font-bold flex items-center justify-center gap-1" style={{ color: '#1D3354' }}>
                       {data.userInfo.positiveFeedbackCount}
                       <ThumbsUp className="w-3 h-3" />
                     </p>
-                    <p className="text-[8px] sm:text-[9px] font-bold text-black/50 whitespace-nowrap">AVIS</p>
+                    <p className="text-[10px] font-bold text-black/50">AVIS</p>
                   </div>
                 )}
               </>
             )}
-            <div className="text-center px-3 py-1.5 border-2 border-black flex-shrink-0" style={{ backgroundColor: '#1D3354' }}>
-              <p className="text-base sm:text-lg font-display font-bold text-white">
+            <div className="text-center px-4 py-2 border-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+              <p className="text-lg font-display font-bold text-white">
                 {data.items.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0).toFixed(0)}€
               </p>
-              <p className="text-[8px] sm:text-[9px] font-bold text-white/70 whitespace-nowrap">VALEUR</p>
+              <p className="text-[10px] font-bold text-white/70">VALEUR</p>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Row 3: Selection Controls */}
-          <div className="flex items-center justify-between gap-2 pt-2 border-t border-black/10">
+      {/* Selection Controls - Sticky */}
+      <div className="sticky top-12 sm:top-14 z-40 border-b-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5">
-                <span className="text-lg sm:text-xl font-display font-bold" style={{ color: '#1D3354' }}>{selectedItems.size}</span>
-                <span className="text-sm text-black/40 font-display">/10</span>
+                <span className="text-xl font-display font-bold" style={{ color: '#1D3354' }}>{selectedItems.size}</span>
+                <span className="text-sm text-black/40 font-display">/10 selectionnes</span>
               </div>
-              {viewMode === 'grid' && (
-                <div className="flex gap-2">
-                  <button
-                    onClick={selectAll}
-                    className="text-xs font-bold font-display px-2 py-1 border border-black/20 rounded active:bg-black/5"
-                    style={{ color: '#1D3354' }}
-                  >
-                    TOUT
-                  </button>
-                  <button
-                    onClick={deselectAll}
-                    className="text-xs font-bold text-black/50 font-display px-2 py-1 border border-black/20 rounded active:bg-black/5"
-                  >
-                    AUCUN
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              {/* View Toggle */}
-              <div className="flex border-2 border-black">
+              <div className="flex gap-2">
                 <button
-                  onClick={() => setViewMode('carousel')}
-                  className="w-9 h-9 flex items-center justify-center transition-colors"
-                  style={{ backgroundColor: viewMode === 'carousel' ? '#9ED8DB' : '#FFFFFF' }}
+                  onClick={selectAll}
+                  className="text-xs font-bold font-display px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  style={{ backgroundColor: '#9ED8DB' }}
                 >
-                  <Layers className="w-4 h-4" />
+                  TOUT
                 </button>
                 <button
-                  onClick={() => setViewMode('grid')}
-                  className="w-9 h-9 flex items-center justify-center border-l-2 border-black transition-colors"
-                  style={{ backgroundColor: viewMode === 'grid' ? '#9ED8DB' : '#FFFFFF' }}
+                  onClick={deselectAll}
+                  className="text-xs font-bold text-black/70 font-display px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  style={{ backgroundColor: '#FFFFFF' }}
                 >
-                  <Grid className="w-4 h-4" />
+                  AUCUN
                 </button>
               </div>
             </div>
@@ -316,105 +298,104 @@ export function ResultatPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4">
-        <div className="flex gap-4 flex-col lg:flex-row">
-          {/* Main Content - Articles Grid */}
+        <div className="flex gap-6 flex-col lg:flex-row">
+          {/* Articles Grid */}
           <div className="flex-1">
-            {viewMode === 'carousel' ? (
-              <PhotoCarousel
-                items={data.items}
-                selectedItems={selectedItems}
-                onToggle={toggleItemSelection}
-                maxSelection={10}
-              />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-                {data.items.map((item) => (
-                  <ItemCard
-                    key={item.id}
-                    item={item}
-                    isSelected={selectedItems.has(item.id)}
-                    onToggle={() => toggleItemSelection(item.id)}
-                    selectionDisabled={!selectedItems.has(item.id) && selectedItems.size >= 10}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+              {data.items.map((item) => (
+                <ItemCard
+                  key={item.id}
+                  item={item}
+                  isSelected={selectedItems.has(item.id)}
+                  onToggle={() => toggleItemSelection(item.id)}
+                  selectionDisabled={!selectedItems.has(item.id) && selectedItems.size >= 10}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Desktop Video Panel */}
+          {/* Desktop Video Panel - Not fixed */}
           {showVideoPanel && (
             <div className="hidden lg:block w-80 xl:w-96 flex-shrink-0">
-              <div className="border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4 sticky top-40" style={{ backgroundColor: '#FFFFFF' }}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-display font-bold text-black">CRÉER MA VIDÉO</h3>
+              <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+                {/* Panel Header */}
+                <div className="flex items-center justify-between px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+                  <div className="flex items-center gap-2">
+                    <Video className="w-5 h-5 text-white" />
+                    <h3 className="text-sm font-display font-bold text-white">CREER MA VIDEO</h3>
+                  </div>
                   <button
                     onClick={() => setShowVideoPanel(false)}
-                    className="w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    className="w-7 h-7 border-2 border-black flex items-center justify-center font-bold text-xs hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                     style={{ backgroundColor: '#D64045', color: '#FFFFFF' }}
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Video Result */}
-                {videoResult && (
-                  <div className="mb-4">
-                    <div className="border-2 border-black p-2 mb-3" style={{ backgroundColor: '#9ED8DB' }}>
-                      <p className="font-bold text-black text-xs">VIDÉO GÉNÉRÉE !</p>
+                <div className="p-4">
+                  {/* Video Result */}
+                  {videoResult && (
+                    <div className="mb-4">
+                      <div className="border-2 border-black p-3 mb-3 flex items-center gap-2" style={{ backgroundColor: '#9ED8DB' }}>
+                        <Sparkles className="w-4 h-4" />
+                        <p className="font-bold text-black text-sm">VIDEO GENEREE !</p>
+                      </div>
+                      <video
+                        src={videoResult.videoUrl}
+                        controls
+                        className="w-full border-2 border-black mb-3"
+                        poster={videoResult.thumbnailUrl}
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => downloadVideo(videoResult.videoId)}
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 border-2 border-black font-display font-bold text-xs text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+                          style={{ backgroundColor: '#D64045' }}
+                        >
+                          <Download className="w-4 h-4" />
+                          TELECHARGER
+                        </button>
+                        <button
+                          onClick={resetVideo}
+                          className="px-3 py-2.5 border-2 border-black font-display font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+                          style={{ backgroundColor: '#FFFFFF' }}
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <video
-                      src={videoResult.videoUrl}
-                      controls
-                      className="w-full border-2 border-black mb-3"
-                      poster={videoResult.thumbnailUrl}
+                  )}
+
+                  {/* Video Error */}
+                  {videoError && (
+                    <div className="mb-4 border-2 border-black p-3" style={{ backgroundColor: '#D64045' }}>
+                      <p className="font-bold text-white text-xs">{videoError}</p>
+                    </div>
+                  )}
+
+                  {/* Video Config Panel */}
+                  {!videoResult && (
+                    <VideoConfigPanel
+                      selectedArticles={selectedArticles}
+                      onArticlesReorder={handleArticlesReorder}
+                      onRemoveArticle={handleRemoveArticle}
+                      videoDuration={videoDuration}
+                      onDurationChange={setVideoDuration}
+                      musicTrack={musicTrack}
+                      onMusicChange={setMusicTrack}
+                      template={template}
+                      onTemplateChange={setTemplate}
+                      customText={customText}
+                      onCustomTextChange={setCustomText}
+                      hasWatermark={hasWatermark}
+                      onWatermarkChange={setHasWatermark}
+                      canRemoveWatermark={canRemoveWatermark}
+                      onGenerate={handleGenerateVideo}
+                      loading={videoLoading}
                     />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => downloadVideo(videoResult.videoId)}
-                        className="flex-1 px-3 py-2 border-2 border-black font-display font-bold text-xs text-white hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                        style={{ backgroundColor: '#D64045' }}
-                      >
-                        TÉLÉCHARGER
-                      </button>
-                      <button
-                        onClick={resetVideo}
-                        className="px-3 py-2 border-2 border-black font-display font-bold text-xs hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                        style={{ backgroundColor: '#FFFFFF' }}
-                      >
-                        NEW
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Video Error */}
-                {videoError && (
-                  <div className="mb-4 border-2 border-black p-2" style={{ backgroundColor: '#D64045' }}>
-                    <p className="font-bold text-white text-xs">{videoError}</p>
-                  </div>
-                )}
-
-                {/* Video Config Panel */}
-                {!videoResult && (
-                  <VideoConfigPanel
-                    selectedArticles={selectedArticles}
-                    onArticlesReorder={handleArticlesReorder}
-                    onRemoveArticle={handleRemoveArticle}
-                    videoDuration={videoDuration}
-                    onDurationChange={setVideoDuration}
-                    musicTrack={musicTrack}
-                    onMusicChange={setMusicTrack}
-                    template={template}
-                    onTemplateChange={setTemplate}
-                    customText={customText}
-                    onCustomTextChange={setCustomText}
-                    hasWatermark={hasWatermark}
-                    onWatermarkChange={setHasWatermark}
-                    canRemoveWatermark={canRemoveWatermark}
-                    onGenerate={handleGenerateVideo}
-                    loading={videoLoading}
-                  />
-                )}
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -430,7 +411,7 @@ export function ResultatPage() {
           style={{ backgroundColor: selectedItems.size > 0 ? '#D64045' : '#888' }}
         >
           <Video className="w-6 h-6" />
-          <span>CRÉER LA VIDÉO ({selectedItems.size} articles)</span>
+          <span>CREER LA VIDEO ({selectedItems.size} articles)</span>
         </button>
       </div>
 
@@ -461,8 +442,8 @@ export function ResultatPage() {
                     <Video className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-display font-bold text-lg">Créer ma vidéo</h3>
-                    <p className="text-xs text-black/50">{selectedItems.size} articles sélectionnés</p>
+                    <h3 className="font-display font-bold text-lg">Creer ma video</h3>
+                    <p className="text-xs text-black/50">{selectedItems.size} articles selectionnes</p>
                   </div>
                 </div>
                 <button
@@ -480,11 +461,9 @@ export function ResultatPage() {
               {/* Video Result */}
               {videoResult && (
                 <div className="mb-4">
-                  <div className="border-2 border-black p-3 mb-4" style={{ backgroundColor: '#9ED8DB' }}>
-                    <p className="font-display font-bold text-black text-sm flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      VIDÉO GÉNÉRÉE AVEC SUCCÈS !
-                    </p>
+                  <div className="border-2 border-black p-3 mb-4 flex items-center gap-2" style={{ backgroundColor: '#9ED8DB' }}>
+                    <Sparkles className="w-4 h-4" />
+                    <p className="font-display font-bold text-black text-sm">VIDEO GENEREE AVEC SUCCES !</p>
                   </div>
                   <video
                     src={videoResult.videoUrl}
@@ -499,7 +478,7 @@ export function ResultatPage() {
                       style={{ backgroundColor: '#D64045' }}
                     >
                       <Download className="w-5 h-5" />
-                      TÉLÉCHARGER
+                      TELECHARGER
                     </button>
                     <button
                       onClick={resetVideo}
@@ -511,7 +490,7 @@ export function ResultatPage() {
                     </button>
                   </div>
                   <p className="text-xs font-bold text-black/50 mt-3 text-center">
-                    {videoResult.duration}s • {videoResult.fileSize}
+                    {videoResult.duration}s - {videoResult.fileSize}
                   </p>
                 </div>
               )}
@@ -589,9 +568,9 @@ function ItemCard({
           </div>
         )}
 
-        {/* Selection indicator - Larger on mobile */}
+        {/* Selection indicator */}
         <div
-          className="absolute top-1.5 right-1.5 w-7 h-7 sm:w-6 sm:h-6 border-2 border-black flex items-center justify-center font-bold text-xs transition-colors shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+          className="absolute top-1.5 right-1.5 w-7 h-7 border-2 border-black flex items-center justify-center font-bold text-xs transition-colors shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
           style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
         >
           {isSelected ? '✓' : '+'}
@@ -621,119 +600,62 @@ function ItemCard({
   )
 }
 
-// Scraping Loader Component with animated messages
-function ScrapingLoader() {
+// Simple Modal Loader
+function ScrapingLoaderModal() {
   const [messageIndex, setMessageIndex] = useState(0)
-  const [dots, setDots] = useState('')
 
   const messages = [
-    'Connexion a Vinted',
-    'Recuperation du vestiaire',
-    'Analyse des articles',
-    'Chargement des images',
-    'Preparation des donnees',
-    'Presque termine',
+    'Connexion a Vinted...',
+    'Recuperation du vestiaire...',
+    'Analyse des articles...',
+    'Chargement des images...',
+    'Presque termine...',
   ]
 
   useEffect(() => {
-    // Rotate messages every 2.5 seconds
-    const messageInterval = setInterval(() => {
+    const interval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % messages.length)
-    }, 2500)
-
-    // Animate dots
-    const dotsInterval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'))
-    }, 400)
-
-    return () => {
-      clearInterval(messageInterval)
-      clearInterval(dotsInterval)
-    }
+    }, 2000)
+    return () => clearInterval(interval)
   }, [])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#E8DFD5' }}>
-      <div className="text-center max-w-sm w-full">
-        {/* Main loader card */}
-        <div
-          className="border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 sm:p-8 mb-6"
-          style={{ backgroundColor: '#FFFFFF' }}
-        >
-          {/* Animated icon */}
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            {/* Outer spinning ring */}
-            <div
-              className="absolute inset-0 border-4 border-black rounded-sm animate-spin"
-              style={{ borderTopColor: '#1D3354', borderRightColor: '#9ED8DB', animationDuration: '1.5s' }}
-            />
-            {/* Inner pulsing square */}
-            <div
-              className="absolute inset-3 border-3 border-black flex items-center justify-center animate-pulse"
-              style={{ backgroundColor: '#9ED8DB' }}
-            >
-              <Sparkles className="w-6 h-6 text-black" />
-            </div>
-          </div>
-
-          {/* Current message with animation */}
-          <div className="h-12 flex flex-col items-center justify-center">
-            <div
-              key={messageIndex}
-              className="animate-fade-in"
-            >
-              <p className="font-display font-bold text-lg text-black">
-                {messages[messageIndex]}
-                <span className="inline-block w-8 text-left">{dots}</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Step indicator */}
-          <div className="flex justify-center gap-1.5 mt-4">
-            {messages.map((_, idx) => (
-              <div
-                key={idx}
-                className="w-2 h-2 border border-black transition-colors"
-                style={{ backgroundColor: idx <= messageIndex ? '#1D3354' : '#FFFFFF' }}
-              />
-            ))}
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+      <div
+        className="w-full max-w-sm border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6"
+        style={{ backgroundColor: '#FFFFFF' }}
+      >
+        {/* Loader Icon */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 border-3 border-black flex items-center justify-center" style={{ backgroundColor: '#1D3354' }}>
+            <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="border-2 border-black overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-          <div
-            className="h-3 animate-progress"
-            style={{ backgroundColor: '#1D3354' }}
-          />
+        {/* Title */}
+        <h3 className="font-display font-bold text-lg text-center mb-2">CHARGEMENT</h3>
+
+        {/* Message */}
+        <p className="font-body text-sm text-center text-black/70 mb-4">
+          {messages[messageIndex]}
+        </p>
+
+        {/* Progress dots */}
+        <div className="flex justify-center gap-2">
+          {messages.map((_, idx) => (
+            <div
+              key={idx}
+              className="w-2.5 h-2.5 border border-black transition-colors"
+              style={{ backgroundColor: idx <= messageIndex ? '#1D3354' : '#E8DFD5' }}
+            />
+          ))}
         </div>
 
         {/* Tip */}
-        <div className="mt-6 px-4">
-          <p className="text-xs text-black/50 font-body">
-            Les videos augmentent tes ventes jusqu'a +300%
-          </p>
-        </div>
+        <p className="text-[10px] text-black/40 text-center mt-4 font-body">
+          Les videos augmentent tes ventes jusqu'a +300%
+        </p>
       </div>
-
-      {/* CSS for animations */}
-      <style>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.4s ease-out;
-        }
-        @keyframes progress {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
-        .animate-progress {
-          animation: progress 15s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   )
 }

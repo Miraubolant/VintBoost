@@ -165,50 +165,33 @@ export function Header() {
               >
                 BLOG
               </button>
-              {/* VintDress Link */}
-              <a
-                href="https://vintdress.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1.5 font-display font-bold text-xs uppercase border-2 border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
-                style={{ backgroundColor: '#D64045' }}
-              >
-                VINTDRESS
-              </a>
             </nav>
 
             {/* Auth Button */}
-            <div className="hidden lg:flex items-center gap-1.5">
+            <div className="hidden lg:flex items-center gap-2">
               {user ? (
                 <>
-                  {/* Credits display */}
-                  <div
-                    className="flex items-center gap-1.5 px-2.5 py-1 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                    style={{ backgroundColor: '#9ED8DB' }}
-                  >
-                    <Zap className="w-3 h-3" />
-                    {remainingVideos} vidéo{remainingVideos !== 1 ? 's' : ''}
-                  </div>
                   {/* Account button */}
                   <Link
                     to="/account"
-                    className="flex items-center gap-1.5 px-2.5 py-1 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                    className="flex items-center gap-2 px-3 py-1.5 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                     style={{ backgroundColor: '#1D3354', color: '#FFFFFF' }}
                   >
                     {user.avatarUrl ? (
                       <img src={user.avatarUrl} alt="" className="w-5 h-5 rounded-full border border-white" />
                     ) : (
-                      <User className="w-3 h-3" />
+                      <User className="w-4 h-4" />
                     )}
                     MON COMPTE
                   </Link>
-                  {/* Logout button */}
+                  {/* Logout button - Bigger */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-1.5 px-2.5 py-1 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                    className="flex items-center gap-2 px-3 py-1.5 font-display font-bold text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                     style={{ backgroundColor: '#D64045' }}
                   >
-                    <LogOut className="w-3 h-3 text-white" />
+                    <LogOut className="w-4 h-4 text-white" />
+                    <span className="text-white">DECONNEXION</span>
                   </button>
                 </>
               ) : (

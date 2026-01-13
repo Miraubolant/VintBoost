@@ -26,8 +26,7 @@ export function useVideoGeneration() {
       if (data.success && data.tracks) {
         setMusicTracks(data.tracks)
       }
-    } catch (err) {
-      console.error('Erreur lors du chargement des musiques:', err)
+    } catch {
       // Musiques par défaut si l'API échoue
       setMusicTracks([
         { id: 'default', name: 'Musique par défaut', filename: 'default.mp3' }
@@ -114,8 +113,7 @@ export function useVideoGeneration() {
           template: config.template || 'classic',
           articles_count: config.articles.length,
         })
-      } catch (uploadErr) {
-        console.error('Erreur lors de l\'upload vers Supabase:', uploadErr)
+      } catch {
         // Continue with API URLs if Supabase upload fails
       }
 
@@ -131,7 +129,14 @@ export function useVideoGeneration() {
       setResult(videoResult)
       return videoResult
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      let message = 'Erreur inconnue'
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          message = 'Erreur de connexion au serveur. Verifiez votre connexion internet.'
+        } else {
+          message = err.message
+        }
+      }
       setError(message)
       return null
     } finally {
@@ -148,8 +153,8 @@ export function useVideoGeneration() {
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-    } catch (err) {
-      console.error('Erreur lors du téléchargement:', err)
+    } catch {
+      // Download error - silently fail
     }
   }, [])
 
