@@ -1,4 +1,4 @@
-import { Sparkles, Mail, MapPin, FileText, Shield, Scale } from 'lucide-react'
+import { Sparkles, Mail, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 // TikTok icon
@@ -46,7 +46,7 @@ export function Footer() {
               {/* Made in France badge */}
               <div className="flex items-center gap-1 bg-white border-2 border-black px-1.5 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 <MapPin className="w-2.5 h-2.5" style={{ color: '#1D3354' }} />
-                <span className="font-body font-semibold text-[9px] sm:text-[10px] text-black">Made in France</span>
+                <span className="font-body font-semibold text-[9px] sm:text-[10px] text-black">Fait en France</span>
               </div>
             </div>
 
@@ -58,7 +58,14 @@ export function Footer() {
                   className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                   style={{ backgroundColor: '#1D3354' }}
                 >
-                  GÉNÉRER
+                  ACCUEIL
+                </button>
+                <button
+                  onClick={() => scrollToSection('before-after')}
+                  className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                  style={{ backgroundColor: '#1D3354' }}
+                >
+                  AVANT/APRES
                 </button>
                 <button
                   onClick={() => scrollToSection('pricing')}
@@ -75,52 +82,14 @@ export function Footer() {
                   AVIS
                 </button>
                 <button
-                  onClick={() => scrollToSection('faq')}
+                  onClick={() => scrollToSection('blog')}
                   className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                   style={{ backgroundColor: '#1D3354' }}
                 >
-                  FAQ
+                  BLOG
                 </button>
-                <a
-                  href="https://vintdress.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white font-display font-bold text-[9px] sm:text-[10px] uppercase px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
-                  style={{ backgroundColor: '#D64045' }}
-                >
-                  VINTDRESS
-                </a>
               </div>
             </nav>
-          </div>
-        </div>
-
-        {/* Legal Links */}
-        <div className="border-t-4 border-black py-3 sm:py-4">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            <Link
-              to="/mentions-legales"
-              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
-            >
-              <Scale className="w-2.5 h-2.5" />
-              Mentions legales
-            </Link>
-            <span className="text-black/30">|</span>
-            <Link
-              to="/cgu"
-              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
-            >
-              <FileText className="w-2.5 h-2.5" />
-              CGU
-            </Link>
-            <span className="text-black/30">|</span>
-            <Link
-              to="/confidentialite"
-              className="flex items-center gap-1 text-black/70 hover:text-black font-body text-[9px] sm:text-[10px] transition-colors"
-            >
-              <Shield className="w-2.5 h-2.5" />
-              Confidentialite
-            </Link>
           </div>
         </div>
 
@@ -137,6 +106,14 @@ export function Footer() {
 
             {/* Actions */}
             <div className="flex flex-wrap items-center justify-center gap-1.5">
+              {/* Mentions légales */}
+              <Link
+                to="/mentions-legales"
+                className="bg-white text-black font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+              >
+                Mentions légales
+              </Link>
+
               {/* Contact Link */}
               <a
                 href="mailto:contact@vintboost.com"
@@ -144,12 +121,12 @@ export function Footer() {
                 style={{ backgroundColor: '#1D3354' }}
               >
                 <Mail className="w-2.5 h-2.5" />
-                CONTACT
+                Contact
               </a>
 
               {/* TikTok Link */}
               <a
-                href="https://www.tiktok.com/@vintdress.com"
+                href="https://www.tiktok.com/@vintboost"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-black text-white font-display font-bold text-[9px] sm:text-[10px] px-1.5 py-1 sm:px-2 sm:py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:text-black hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-1"
