@@ -587,7 +587,7 @@ Applique ces 10 astuces et tu verras la difference des cette semaine. Et pour pa
     category: 'CONSEILS',
     tags: ['vinted', 'vente', 'astuces', 'e-commerce', 'seconde main', 'conseils vinted', 'vendre vetements'],
     readTime: '12 min',
-    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop',
     author: 'VintBoost',
     publishedAt: '2025-01-10',
     metaDescription: 'Decouvre 10 astuces de pro pour vendre plus vite sur Vinted en 2025. Photos, descriptions, prix, videos : tous les secrets des top vendeurs reveles.',

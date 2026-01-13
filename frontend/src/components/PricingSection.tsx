@@ -125,11 +125,6 @@ export function PricingSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Neo-Brutalism */}
         <div className="text-center mb-12 lg:mb-16">
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#9ED8DB' }}>
-            <Sparkles className="w-5 h-5" />
-            <span className="font-display font-bold text-sm">PRIX IMBATTABLES</span>
-          </div>
-
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
             <div className="text-black transform -rotate-2 mb-4 relative">
               <span className="inline-block bg-white border-4 border-black px-6 sm:px-8 py-3 sm:py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">

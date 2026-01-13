@@ -142,6 +142,23 @@ supabase db push  # Push migrations
 - `/cgu` - Terms of service (CGU)
 - `/confidentialite` - Privacy policy (GDPR compliant)
 
+## Blog System
+- **Blog Page**: `/blog` - List of all articles
+- **Article Page**: `/blog/:slug` - Individual article with VintDress-inspired design
+- **Data**: `src/data/blogPosts.ts` - 6 SEO-optimized articles
+- **Components**:
+  - `src/components/BlogSection.tsx` - Homepage blog preview (4 articles)
+  - `src/pages/BlogPage.tsx` - Full blog listing
+  - `src/pages/BlogArticlePage.tsx` - Article detail with hero, FAQ accordions, CTA
+
+## SEO & Analytics
+- **Sitemap**: `public/sitemap.xml` - 12 URLs indexed
+- **Robots**: `public/robots.txt` - Crawling rules
+- **Google Tag Manager**: GTM-KJJ7364T
+- **Google Analytics 4**: G-JCXWT2EF12
+- **Microsoft Clarity**: v0qbq57yke
+- **JSON-LD**: WebApplication and Organization schemas in index.html
+
 ## Video Storage
 Videos are uploaded to Supabase Storage bucket `videos`:
 - Path: `{user_id}/{video_id}.mp4`

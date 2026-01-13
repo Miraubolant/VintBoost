@@ -53,7 +53,7 @@ export function VintedScraperPage() {
   }
 
   return (
-    <div className="pt-20 sm:pt-24 lg:pt-28 pb-6 px-4" id="hero">
+    <div className="pt-8 sm:pt-16 lg:pt-20 pb-6 px-4" id="hero">
       <div className="max-w-7xl mx-auto relative">
         {/* Decorative elements - like VintDress */}
         <div

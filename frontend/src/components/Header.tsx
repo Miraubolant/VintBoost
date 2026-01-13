@@ -209,9 +209,8 @@ export function Header() {
             className="absolute bottom-0 left-0 right-0 bg-white border-t-3 border-black rounded-t-2xl transform transition-transform duration-300 ease-out animate-slide-up"
             style={{ maxHeight: '80vh' }}
           >
-            {/* Handle bar + Close */}
-            <div className="flex items-center justify-between px-4 pt-2 pb-1">
-              <div className="w-10 h-1 bg-gray-300 rounded-full" />
+            {/* Close button */}
+            <div className="flex items-center justify-end px-4 pt-2 pb-1">
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"

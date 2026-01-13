@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { blogPosts } from '../data/blogPosts'
 
 export function BlogSection() {
-  // Show only first 3 posts on homepage
-  const displayPosts = blogPosts.slice(0, 3)
+  // Show only first 4 posts on homepage
+  const displayPosts = blogPosts.slice(0, 4)
 
   return (
     <section id="blog" className="py-16 px-4 relative overflow-hidden">
@@ -51,7 +51,7 @@ export function BlogSection() {
         </div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayPosts.map((post) => (
             <article
               key={post.id}
