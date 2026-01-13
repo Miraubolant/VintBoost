@@ -40,10 +40,10 @@ const plans: PricingPlan[] = [
     name: 'PRO',
     price: '3.99€',
     period: '/mois',
-    videos: '15 vidéos',
+    videos: '5 vidéos',
     description: 'Le plus populaire',
     features: [
-      '15 vidéos HD/mois',
+      '5 vidéos HD/mois',
       'Tous les templates',
       'Sans watermark',
       'Support prioritaire',
@@ -58,12 +58,12 @@ const plans: PricingPlan[] = [
   },
   {
     name: 'BUSINESS',
-    price: '12.99€',
+    price: '9.99€',
     period: '/mois',
-    videos: '50 vidéos',
+    videos: '15 vidéos',
     description: 'Pour les pros',
     features: [
-      '50 vidéos 4K/mois',
+      '15 vidéos 4K/mois',
       'Tous les templates',
       'Sans watermark',
       'Support 24/7',

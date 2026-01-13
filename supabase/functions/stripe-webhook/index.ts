@@ -11,8 +11,8 @@ const cryptoProvider = Stripe.createSubtleCryptoProvider()
 
 // Plan configuration
 const PLAN_CONFIG: Record<string, { videosLimit: number }> = {
-  'pro': { videosLimit: 15 },
-  'business': { videosLimit: 50 },
+  'pro': { videosLimit: 5 },
+  'business': { videosLimit: 15 },
   'free': { videosLimit: 1 },
 }
 

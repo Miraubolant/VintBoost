@@ -270,11 +270,11 @@ function CGUContent() {
           </div>
           <div className="flex items-center gap-2 p-2 border border-black/10" style={{ backgroundColor: '#9ED8DB20' }}>
             <CheckCircle className="w-4 h-4 text-green-600" />
-            <span><strong>Pro (9.99€/mois)</strong> : 15 videos HD sans watermark</span>
+            <span><strong>Pro (3.99€/mois)</strong> : 5 videos HD sans watermark</span>
           </div>
           <div className="flex items-center gap-2 p-2 border border-black/10" style={{ backgroundColor: '#D6404520' }}>
             <CheckCircle className="w-4 h-4 text-green-600" />
-            <span><strong>Business (24.99€/mois)</strong> : 50 videos 4K sans watermark</span>
+            <span><strong>Business (9.99€/mois)</strong> : 15 videos 4K sans watermark</span>
           </div>
         </div>
         <p className="mt-2 text-xs">

@@ -13,9 +13,9 @@ const plans = [
     name: 'PRO',
     price: '3.99€',
     period: '/mois',
-    videos: '15 videos',
+    videos: '5 videos',
     features: [
-      '15 videos HD/mois',
+      '5 videos HD/mois',
       '10 articles/video',
       'Sans watermark',
       'Tous les templates',
@@ -28,11 +28,11 @@ const plans = [
   },
   {
     name: 'BUSINESS',
-    price: '12.99€',
+    price: '9.99€',
     period: '/mois',
-    videos: '50 videos',
+    videos: '15 videos',
     features: [
-      '50 videos 4K/mois',
+      '15 videos 4K/mois',
       '20 articles/video',
       'Sans watermark',
       'Support 24/7',

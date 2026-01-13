@@ -61,9 +61,7 @@ VintBoost is a video generator for Vinted sellers. Users paste their wardrobe UR
 - `src/pages/ResultatPage.tsx` - Video generation
 - `src/pages/AccountPage.tsx` - User account and videos history
 - `src/pages/FAQPage.tsx` - Frequently asked questions
-- `src/pages/MentionsLegalesPage.tsx` - Legal mentions
-- `src/pages/CGUPage.tsx` - Terms of service
-- `src/pages/ConfidentialitePage.tsx` - Privacy policy
+- `src/pages/MentionsLegalesPage.tsx` - Legal mentions (includes CGU and Privacy tabs)
 - `src/hooks/useVideoGeneration.ts` - Video generation hook with Supabase upload
 - `src/lib/supabase.ts` - Supabase client and storage helpers
 
@@ -122,8 +120,8 @@ supabase db push  # Push migrations
 | Plan | Videos/month | Price | Features |
 |------|--------------|-------|----------|
 | Free | 1 | 0€ | Basic templates, Watermark |
-| Pro | 15 | 3.99€ | All templates, No watermark, 1080p |
-| Business | 50 | 12.99€ | All templates, No watermark, 4K |
+| Pro | 5 | 3.99€ | All templates, No watermark, 1080p |
+| Business | 15 | 9.99€ | All templates, No watermark, 4K |
 
 ## Credits & Subscription Logic
 
@@ -131,8 +129,8 @@ supabase db push  # Push migrations
 | Plan | Videos/month | Articles/video | Duration | Resolution | Templates | Watermark |
 |------|--------------|----------------|----------|------------|-----------|-----------|
 | Free | 1 | 5 | 15s | 1080p | 1 (Classic) | Forced |
-| Pro | 15 | 10 | 15s/30s/60s | 1080p | 3 | Optional |
-| Business | 50 | 20 | 15s/30s/60s | 4K | 3 | Optional |
+| Pro | 5 | 10 | 15s/30s/60s | 1080p | 3 | Optional |
+| Business | 15 | 20 | 15s/30s/60s | 4K | 3 | Optional |
 
 ### Database Tables
 
@@ -140,7 +138,7 @@ supabase db push  # Push migrations
 - `user_id` - UUID (unique per user)
 - `plan` - 'free' | 'pro' | 'business'
 - `status` - 'active' | 'cancelled' | 'expired' | 'past_due' | 'trialing'
-- `videos_limit` - Monthly limit (1, 15, or 50)
+- `videos_limit` - Monthly limit (1, 5, or 15)
 - `videos_used` - Current month usage counter
 - `period_start` / `period_end` - Billing period
 
@@ -192,9 +190,9 @@ supabase db push  # Push migrations
 - Checkbox in `VideoConfigPanel.tsx` disabled for free users
 
 ## Legal Pages
-- `/mentions-legales` - Legal mentions
-- `/cgu` - Terms of service (CGU)
-- `/confidentialite` - Privacy policy (GDPR compliant)
+- `/mentions-legales` - Legal mentions with tabs (Mentions, CGU, Privacy)
+- `/mentions-legales?tab=cgu` - Terms of service
+- `/mentions-legales?tab=confidentialite` - Privacy policy (GDPR compliant)
 
 ## Blog System
 - **Blog Page**: `/blog` - List of all articles
@@ -228,8 +226,8 @@ Videos are uploaded to Supabase Storage bucket `videos`:
 - `customer-portal` - Opens Stripe customer portal for subscription management
 
 ### Stripe Configuration
-- **Pro Plan**: `price_1Sow53K7Yon7d585HdHNbLgS` (3.99€/month)
-- **Business Plan**: `price_1Sow6DK7Yon7d585RsV1cflP` (12.99€/month)
+- **Pro Plan**: `price_1Sow53K7Yon7d585HdHNbLgS` (3.99€/month, 5 videos)
+- **Business Plan**: `price_1Sow6DK7Yon7d585RsV1cflP` (9.99€/month, 15 videos)
 - **Webhook URL**: `https://mkzhgzvtvsezqlpesdgc.supabase.co/functions/v1/stripe-webhook`
 
 ### Supabase Secrets
