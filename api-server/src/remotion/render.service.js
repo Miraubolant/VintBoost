@@ -50,10 +50,11 @@ async function ensureBundle() {
 /**
  * Calculer la durée totale en frames
  */
-function calculateTotalFrames(articlesCount, clipDuration, fps = 30) {
+function calculateTotalFrames(articlesCount, clipDuration, fps = 30, hasProfileScreenshot = false) {
+  const profileDuration = hasProfileScreenshot ? 3 : 0; // 3 seconds si screenshot
   const introDuration = 2.5;
   const outroDuration = 2;
-  const totalSeconds = introDuration + outroDuration + articlesCount * clipDuration;
+  const totalSeconds = profileDuration + introDuration + outroDuration + articlesCount * clipDuration;
   return Math.round(totalSeconds * fps);
 }
 
@@ -110,15 +111,17 @@ async function renderVideo(config) {
     hasWatermark = true,
     resolution = '1080p',
     aspectRatio = '9:16',
+    profileScreenshot = null, // Screenshot mobile du profil Vinted (base64 ou URL)
   } = config;
 
   const fps = 30;
-  const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps);
+  const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps, !!profileScreenshot);
   const { width, height } = calculateDimensions(resolution, aspectRatio);
 
   console.log(`[REMOTION] Starting render: ${articles.length} articles, ${clipDuration}s each`);
   console.log(`[REMOTION] Resolution: ${width}x${height} (${resolution} ${aspectRatio})`);
   console.log(`[REMOTION] Template: ${template}, Watermark: ${hasWatermark}`);
+  console.log(`[REMOTION] Profile screenshot: ${profileScreenshot ? 'Yes' : 'No'}`);
   console.log(`[REMOTION] Total duration: ${totalFrames / fps}s (${totalFrames} frames)`);
 
   try {
@@ -132,6 +135,7 @@ async function renderVideo(config) {
       template,
       customText,
       hasWatermark,
+      profileScreenshot,
       articles: articles.map((article) => {
         const imgUrl = article.localImagePath || article.imageUrl;
         console.log(`[REMOTION] Article ${article.id} image: ${imgUrl}`);
@@ -139,6 +143,7 @@ async function renderVideo(config) {
           id: article.id,
           title: article.title || '',
           brand: article.brand || '',
+          size: article.size || '',
           price: article.price,
           imageUrl: article.imageUrl,
           localImagePath: imgUrl,

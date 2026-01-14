@@ -406,6 +406,13 @@ class ScraperService {
       return await this.scrapeViaHTML(url)
     }
   }
+
+  /**
+   * Capture un screenshot mobile du profil Vinted
+   */
+  async captureProfileScreenshot(url) {
+    return puppeteerService.captureProfileScreenshot(url)
+  }
 }
 
 module.exports = new ScraperService()

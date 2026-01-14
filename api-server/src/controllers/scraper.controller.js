@@ -43,6 +43,34 @@ class ScraperController {
       })
     }
   }
+
+  /**
+   * Capture un screenshot mobile du profil Vinted
+   */
+  async captureProfileScreenshot(req, res) {
+    const { wardrobeUrl } = req.body
+
+    // Validation
+    if (!wardrobeUrl?.includes('vinted') || !wardrobeUrl.includes('/member')) {
+      return res.status(400).json({
+        success: false,
+        error: 'URL invalide'
+      })
+    }
+
+    try {
+      console.log(`[API] Screenshot request for ${wardrobeUrl}`)
+      const result = await scraperService.captureProfileScreenshot(wardrobeUrl)
+      console.log(`[API] Screenshot captured successfully`)
+      res.json(result)
+    } catch (error) {
+      console.error('[API] Screenshot error:', error)
+      res.status(500).json({
+        success: false,
+        error: error.message
+      })
+    }
+  }
 }
 
 module.exports = new ScraperController()

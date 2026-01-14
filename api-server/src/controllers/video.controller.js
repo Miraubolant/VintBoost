@@ -23,7 +23,8 @@ class VideoController {
       template = 'classic',
       customText = '',
       resolution = '1080p',
-      aspectRatio = '9:16'
+      aspectRatio = '9:16',
+      profileScreenshot = null, // Screenshot mobile du profil Vinted (base64 data URL)
     } = req.body
 
     // Validation basique
@@ -95,7 +96,8 @@ class VideoController {
         template,
         customText,
         resolution,
-        aspectRatio
+        aspectRatio,
+        profileScreenshot
       })
 
       console.log(`[API] Video generated successfully: ${result.videoId}`)

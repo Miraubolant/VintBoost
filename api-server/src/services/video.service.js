@@ -40,7 +40,8 @@ class VideoService {
       template = 'classic',
       customText = '',
       resolution = '1080p',
-      aspectRatio = '9:16'
+      aspectRatio = '9:16',
+      profileScreenshot = null, // Screenshot mobile du profil Vinted (base64 data URL)
     } = config
 
     // Validation
@@ -55,6 +56,7 @@ class VideoService {
     const jobId = uuidv4()
     console.log(`[VIDEO] Starting Remotion generation job ${jobId}`)
     console.log(`[VIDEO] Config: ${articles.length} articles, ${duration}s target, watermark=${hasWatermark}, template=${template}, ${resolution} ${aspectRatio}`)
+    console.log(`[VIDEO] Profile screenshot: ${profileScreenshot ? 'Yes' : 'No'}`)
 
     let tempDirs = null
 
@@ -122,6 +124,7 @@ class VideoService {
         hasWatermark,
         resolution,
         aspectRatio,
+        profileScreenshot,
         onProgress: (percent) => {
           // Optionnel: callback de progression
         },
