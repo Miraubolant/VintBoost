@@ -65,6 +65,7 @@ export interface VideoConfig {
   resolution: VideoResolution
   aspectRatio: VideoAspectRatio
   username?: string
+  profileScreenshot?: string | null // base64 data URL du screenshot mobile
 }
 
 export interface VideoArticle {
