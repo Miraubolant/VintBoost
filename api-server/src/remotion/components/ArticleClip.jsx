@@ -118,7 +118,20 @@ export const ArticleClip = ({ article, index, imageUrl, template = 'classic' }) 
         {String(index + 1).padStart(2, '0')}
       </div>
 
-      {/* Info panel at bottom - Neo-Brutalism style */}
+      {/* Gradient overlay for text readability */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '50%',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%)',
+          opacity: exitOpacity,
+        }}
+      />
+
+      {/* Info panel at bottom - No card, direct on image */}
       <div
         style={{
           position: 'absolute',
@@ -130,92 +143,85 @@ export const ArticleClip = ({ article, index, imageUrl, template = 'classic' }) 
           opacity: exitOpacity,
         }}
       >
-        {/* Info card with Neo-Brutalism border */}
-        <div
-          style={{
-            backgroundColor: config.overlayBg,
-            padding: '20px 24px',
-            border: `${config.borderWidth}px solid ${config.borderColor}`,
-            boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
-          }}
-        >
-          {/* Brand + Size row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-            {/* Brand tag */}
-            {article.brand && (
-              <div
-                style={{
-                  backgroundColor: config.brandBg,
-                  color: config.brandColor,
-                  fontSize: 18,
-                  fontWeight: 700,
-                  fontFamily: 'Inter, Arial, sans-serif',
-                  padding: '6px 14px',
-                  border: `2px solid ${config.borderColor}`,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                }}
-              >
-                {article.brand}
-              </div>
-            )}
-
-            {/* Size tag */}
-            {article.size && (
-              <div
-                style={{
-                  backgroundColor: 'transparent',
-                  color: config.sizeColor,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  fontFamily: 'Inter, Arial, sans-serif',
-                  padding: '6px 12px',
-                  border: `2px solid ${config.sizeColor}`,
-                  textTransform: 'uppercase',
-                }}
-              >
-                Taille {article.size}
-              </div>
-            )}
-          </div>
-
-          {/* Title - smaller for Neo-Brutalism */}
-          {article.title && (
-            <p
+        {/* Brand + Size row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+          {/* Brand tag */}
+          {article.brand && (
+            <div
               style={{
-                fontSize: 20,
-                fontWeight: 500,
-                color: config.titleColor,
+                backgroundColor: config.brandBg,
+                color: config.brandColor,
+                fontSize: 16,
+                fontWeight: 700,
                 fontFamily: 'Inter, Arial, sans-serif',
-                margin: 0,
-                marginBottom: 16,
-                lineHeight: 1.3,
-                maxWidth: '90%',
+                padding: '5px 12px',
+                border: `2px solid ${config.borderColor}`,
+                boxShadow: '2px 2px 0px 0px rgba(0,0,0,1)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
               }}
             >
-              {article.title.length > 45
-                ? article.title.substring(0, 42) + '...'
-                : article.title}
-            </p>
+              {article.brand}
+            </div>
           )}
 
-          {/* Price - Neo-Brutalism style */}
-          <div
+          {/* Size tag */}
+          {article.size && (
+            <div
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                color: '#000000',
+                fontSize: 14,
+                fontWeight: 600,
+                fontFamily: 'Inter, Arial, sans-serif',
+                padding: '5px 10px',
+                border: '2px solid #000000',
+                boxShadow: '2px 2px 0px 0px rgba(0,0,0,1)',
+                textTransform: 'uppercase',
+              }}
+            >
+              {article.size}
+            </div>
+          )}
+        </div>
+
+        {/* Title */}
+        {article.title && (
+          <p
             style={{
-              display: 'inline-block',
-              backgroundColor: config.priceBg,
-              color: config.priceColor,
-              fontSize: 32,
-              fontWeight: 800,
+              fontSize: 18,
+              fontWeight: 600,
+              color: '#FFFFFF',
               fontFamily: 'Inter, Arial, sans-serif',
-              padding: '12px 28px',
-              border: `${config.borderWidth}px solid ${config.borderColor}`,
-              boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)',
-              transform: `scale(${Math.max(0, priceScale)})`,
+              margin: 0,
+              marginBottom: 14,
+              lineHeight: 1.3,
+              maxWidth: '90%',
+              textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
             }}
           >
-            {article.price} €
-          </div>
+            {article.title.length > 40
+              ? article.title.substring(0, 37) + '...'
+              : article.title}
+          </p>
+        )}
+
+        {/* Price - Neo-Brutalism style */}
+        <div
+          style={{
+            display: 'inline-block',
+            backgroundColor: config.priceBg,
+            color: config.priceColor,
+            fontSize: 28,
+            fontWeight: 800,
+            fontFamily: 'Inter, Arial, sans-serif',
+            padding: '10px 24px',
+            border: `${config.borderWidth}px solid ${config.borderColor}`,
+            boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)',
+            transform: `scale(${Math.max(0, priceScale)})`,
+          }}
+        >
+          {article.price} €
         </div>
       </div>
 
