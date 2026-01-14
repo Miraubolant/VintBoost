@@ -229,14 +229,19 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Page Title - Desktop only */}
-      <div className="hidden lg:block text-center pt-6 pb-4">
+      {/* Page Title & Tutorial - Desktop */}
+      <div className="hidden lg:block text-center pt-8 pb-6">
         <h1
-          className="inline-block font-display font-bold text-2xl lg:text-3xl text-white border-3 border-black px-5 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+          className="inline-block font-display font-bold text-3xl lg:text-4xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] mb-4"
           style={{ backgroundColor: '#1D3354' }}
         >
-          CONFIGURE TA VIDEO !
+          CREE TA VIDEO VINTED
         </h1>
+        <p className="font-body text-sm text-black/70 max-w-2xl mx-auto mt-4 leading-relaxed">
+          <span className="font-bold" style={{ color: '#1D3354' }}>1.</span> Selectionne tes articles &nbsp;→&nbsp;
+          <span className="font-bold" style={{ color: '#1D3354' }}>2.</span> Configure ta video &nbsp;→&nbsp;
+          <span className="font-bold" style={{ color: '#1D3354' }}>3.</span> Genere et telecharge !
+        </p>
       </div>
 
       {/* Main Content - 2 Columns + Sticky Sidebar Desktop */}
@@ -337,23 +342,40 @@ export function ResultatPage() {
 
         {/* Mobile Layout */}
         <div className="lg:hidden">
-          {/* Mobile Header with back button */}
-          <div className="flex items-center gap-3 mb-4 px-1">
-            <button
-              onClick={handleBack}
-              className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all flex-shrink-0"
-              style={{ backgroundColor: '#FFFFFF' }}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <div className="flex-1">
-              <h2 className="font-display font-bold text-base" style={{ color: '#1D3354' }}>
-                Selection des articles
-              </h2>
-              <p className="text-xs text-black/50 font-body">
-                {selectedItems.size}/{articleLimit} selectionnes
-              </p>
+          {/* Mobile Title & Tutorial */}
+          <div className="text-center mb-4">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <button
+                onClick={handleBack}
+                className="w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                style={{ backgroundColor: '#FFFFFF' }}
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <h1
+                className="font-display font-bold text-lg text-white border-2 border-black px-4 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                style={{ backgroundColor: '#1D3354' }}
+              >
+                CREE TA VIDEO
+              </h1>
             </div>
+            <div className="flex items-center justify-center gap-1 text-[10px] text-black/60 font-body">
+              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">1. Selectionne</span>
+              <span>→</span>
+              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">2. Configure</span>
+              <span>→</span>
+              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">3. Genere</span>
+            </div>
+          </div>
+
+          {/* Mobile Selection Header */}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>
+              SELECTION ({selectedItems.size}/{articleLimit})
+            </h2>
+            <p className="text-xs text-black/50 font-body">
+              Choisis tes articles
+            </p>
           </div>
 
           {/* Mobile Articles Grid - WITH Screenshot Preview */}
@@ -454,7 +476,7 @@ export function ResultatPage() {
           result={videoResult}
           onDownload={() => downloadVideo(videoResult.videoId)}
           onReset={handleReset}
-          onClose={() => {}} // Keep modal open, user must interact
+          onClose={resetVideo}
         />
       )}
     </div>

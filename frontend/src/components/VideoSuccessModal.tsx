@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Download, Share2, RefreshCw, Play, X, Video, CheckCircle } from 'lucide-react'
+import { Download, History, RefreshCw, Play, X, Video, CheckCircle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import type { VideoGenerationResult } from '../types/vinted'
 import { VideoPlayerModal } from './VideoPlayerModal'
 
@@ -17,21 +18,11 @@ export function VideoSuccessModal({
   onClose,
 }: VideoSuccessModalProps) {
   const [showPlayer, setShowPlayer] = useState(false)
+  const navigate = useNavigate()
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Ma video VintBoost',
-          text: 'Decouvre ma video promotionnelle Vinted !',
-          url: result.videoUrl,
-        })
-      } catch {
-        // User cancelled or error
-      }
-    } else {
-      navigator.clipboard.writeText(result.videoUrl)
-    }
+  const handleHistory = () => {
+    onClose()
+    navigate('/compte')
   }
 
   const handleNewVideo = () => {
@@ -55,9 +46,9 @@ export function VideoSuccessModal({
           <button
             onClick={onClose}
             className="absolute top-3 right-3 w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all z-10"
-            style={{ backgroundColor: '#FFFFFF' }}
+            style={{ backgroundColor: '#D64045' }}
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 text-white" />
           </button>
 
           {/* Success Header */}
@@ -145,12 +136,12 @@ export function VideoSuccessModal({
               {/* Secondary actions */}
               <div className="grid grid-cols-2 gap-3">
                 <button
-                  onClick={handleShare}
+                  onClick={handleHistory}
                   className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-black font-display font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                   style={{ backgroundColor: '#9ED8DB' }}
                 >
-                  <Share2 className="w-4 h-4" />
-                  PARTAGER
+                  <History className="w-4 h-4" />
+                  HISTORIQUE
                 </button>
 
                 <button
