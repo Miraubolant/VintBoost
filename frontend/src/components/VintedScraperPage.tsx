@@ -178,7 +178,7 @@ export function VintedScraperPage() {
           {/* Counter */}
           <div className="flex flex-col items-center">
             <span className="font-display font-bold text-lg sm:text-3xl text-black">+10 000</span>
-            <span className="font-body text-[10px] sm:text-xs text-black/60 uppercase tracking-wide">VIDEOS GENEREES</span>
+            <span className="font-body text-[10px] sm:text-xs text-black/60 uppercase tracking-wide">VIDÉOS GÉNÉRÉES</span>
           </div>
 
           {/* Divider */}
@@ -187,7 +187,7 @@ export function VintedScraperPage() {
           {/* HD Badge */}
           <div className="flex flex-col items-center">
             <span className="font-display font-bold text-lg sm:text-3xl text-black">HD</span>
-            <span className="font-body text-[10px] sm:text-xs text-black/60 uppercase tracking-wide">QUALITE VIDEO</span>
+            <span className="font-body text-[10px] sm:text-xs text-black/60 uppercase tracking-wide">QUALITÉ VIDÉO</span>
           </div>
         </div>
       </div>

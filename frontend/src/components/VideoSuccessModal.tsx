@@ -65,10 +65,10 @@ export function VideoSuccessModal({
               </div>
               <div>
                 <h2 className="font-display font-bold text-xl" style={{ color: '#1D3354' }}>
-                  VIDEO GENEREE !
+                  VIDÉO GÉNÉRÉE !
                 </h2>
                 <p className="font-body text-xs text-black/60">
-                  Ta video est prete a etre telechargee
+                  Ta vidéo est prête à être téléchargée
                 </p>
               </div>
             </div>
@@ -130,7 +130,7 @@ export function VideoSuccessModal({
                 style={{ backgroundColor: '#D64045' }}
               >
                 <Download className="w-5 h-5" />
-                TELECHARGER LA VIDEO
+                TÉLÉCHARGER LA VIDÉO
               </button>
 
               {/* Secondary actions */}
@@ -157,7 +157,7 @@ export function VideoSuccessModal({
 
             {/* Tip */}
             <p className="text-[10px] text-black/40 text-center mt-4 font-body">
-              Partage ta video sur TikTok, Instagram ou YouTube pour booster tes ventes !
+              Partage ta vidéo sur TikTok, Instagram ou YouTube pour booster tes ventes !
             </p>
           </div>
         </div>
@@ -168,7 +168,7 @@ export function VideoSuccessModal({
         isOpen={showPlayer}
         onClose={() => setShowPlayer(false)}
         videoUrl={result.videoUrl}
-        title="Ma video VintBoost"
+        title="Ma vidéo VintBoost"
         thumbnailUrl={result.thumbnailUrl}
       />
 

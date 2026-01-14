@@ -256,7 +256,7 @@ export function AccountPage() {
             style={{ backgroundColor: activeTab === 'history' ? '#1D3354' : '#FFFFFF', color: activeTab === 'history' ? '#FFFFFF' : '#000000' }}
           >
             <Image className="w-4 h-4" />
-            MES VIDEOS ({videos.length})
+            MES VIDÉOS ({videos.length})
           </button>
         </div>
 
@@ -488,7 +488,7 @@ export function AccountPage() {
                   <Video className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="font-display font-bold text-lg">MES VIDEOS</h2>
+                  <h2 className="font-display font-bold text-lg">MES VIDÉOS</h2>
                   <p className="font-body text-xs text-black/60">
                     {videos.length} video{videos.length > 1 ? 's' : ''} generee{videos.length > 1 ? 's' : ''}
                   </p>
@@ -552,7 +552,7 @@ export function AccountPage() {
                     className="px-6 py-3 border-3 border-black font-display font-bold text-sm text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
                     style={{ backgroundColor: '#D64045' }}
                   >
-                    CREER MA PREMIERE VIDEO
+                    CRÉER MA PREMIÈRE VIDÉO
                   </button>
                 </div>
               </div>
@@ -728,7 +728,7 @@ export function AccountPage() {
                               style={{ backgroundColor: '#1D3354' }}
                             >
                               <Download className="w-3 h-3" />
-                              <span className="hidden sm:inline">TELECHARGER</span>
+                              <span className="hidden sm:inline">TÉLÉCHARGER</span>
                             </a>
                           )}
                           <button

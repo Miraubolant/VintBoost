@@ -264,7 +264,7 @@ export function VideoPlayerModal({ isOpen, onClose, videoUrl, title, thumbnailUr
                 className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-white font-display font-bold text-xs text-white hover:bg-white/10 transition-colors"
               >
                 <Download className="w-3 h-3" />
-                <span className="hidden sm:inline">TELECHARGER</span>
+                <span className="hidden sm:inline">TÉLÉCHARGER</span>
               </a>
 
               {/* Fullscreen */}
@@ -288,7 +288,7 @@ export function VideoPlayerModal({ isOpen, onClose, videoUrl, title, thumbnailUr
           style={{ backgroundColor: '#1D3354' }}
         >
           <Download className="w-4 h-4" />
-          TELECHARGER
+          TÉLÉCHARGER
         </a>
         <a
           href={videoUrl}

@@ -235,12 +235,12 @@ export function ResultatPage() {
           className="inline-block font-display font-bold text-3xl lg:text-4xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] mb-4"
           style={{ backgroundColor: '#1D3354' }}
         >
-          CREE TA VIDEO VINTED
+          CRÉE TA VIDÉO VINTED
         </h1>
         <p className="font-body text-sm text-black/70 max-w-2xl mx-auto mt-4 leading-relaxed">
-          <span className="font-bold" style={{ color: '#1D3354' }}>1.</span> Selectionne tes articles &nbsp;→&nbsp;
-          <span className="font-bold" style={{ color: '#1D3354' }}>2.</span> Configure ta video &nbsp;→&nbsp;
-          <span className="font-bold" style={{ color: '#1D3354' }}>3.</span> Genere et telecharge !
+          <span className="font-bold" style={{ color: '#1D3354' }}>1.</span> Sélectionne tes articles &nbsp;→&nbsp;
+          <span className="font-bold" style={{ color: '#1D3354' }}>2.</span> Configure ta vidéo &nbsp;→&nbsp;
+          <span className="font-bold" style={{ color: '#1D3354' }}>3.</span> Génère et télécharge !
         </p>
       </div>
 
@@ -259,7 +259,7 @@ export function ResultatPage() {
                 >
                   <ArrowLeft className="w-3.5 h-3.5 text-white" />
                 </button>
-                <h3 className="font-display font-bold text-white text-xs">SELECTION DES ARTICLES</h3>
+                <h3 className="font-display font-bold text-white text-xs">SÉLECTION DES ARTICLES</h3>
               </div>
               <div className="p-3">
                 <ArticleSelector
@@ -278,7 +278,7 @@ export function ResultatPage() {
             {/* Configuration Section - Compact 2-column layout */}
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
               <div className="px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
-                <h3 className="font-display font-bold text-white text-xs">CONFIGURATION VIDEO</h3>
+                <h3 className="font-display font-bold text-white text-xs">CONFIGURATION VIDÉO</h3>
               </div>
               <div className="p-3">
                 <div className="space-y-3">
@@ -356,22 +356,22 @@ export function ResultatPage() {
                 className="font-display font-bold text-lg text-white border-2 border-black px-4 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 style={{ backgroundColor: '#1D3354' }}
               >
-                CREE TA VIDEO
+                CRÉE TA VIDÉO
               </h1>
             </div>
             <div className="flex items-center justify-center gap-1 text-[10px] text-black/60 font-body">
-              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">1. Selectionne</span>
+              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">1. Sélectionne</span>
               <span>→</span>
               <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">2. Configure</span>
               <span>→</span>
-              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">3. Genere</span>
+              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">3. Génère</span>
             </div>
           </div>
 
           {/* Mobile Selection Header */}
           <div className="flex items-center justify-between mb-3 px-1">
             <h2 className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>
-              SELECTION ({selectedItems.size}/{articleLimit})
+              SÉLECTION ({selectedItems.size}/{articleLimit})
             </h2>
             <p className="text-xs text-black/50 font-body">
               Choisis tes articles
@@ -528,7 +528,7 @@ function DesktopIntroSection({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <Smartphone className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
-          <span className="font-display font-bold text-xs">INTRO VIDEO</span>
+          <span className="font-display font-bold text-xs">INTRO VIDÉO</span>
           {username && (
             <span className="text-[10px] text-black/50">@{username}</span>
           )}
@@ -915,7 +915,7 @@ function MobileIntroSection({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <Smartphone className="w-4 h-4" style={{ color: '#1D3354' }} />
-          <span className="font-display font-bold text-sm">INTRO VIDEO</span>
+          <span className="font-display font-bold text-sm">INTRO VIDÉO</span>
         </div>
         {username && (
           <p className="text-xs text-black/50">Profil @{username}</p>

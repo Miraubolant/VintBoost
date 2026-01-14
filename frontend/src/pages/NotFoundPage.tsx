@@ -140,7 +140,7 @@ export function NotFoundPage() {
                 style={{ backgroundColor: '#1D3354', color: '#FFFFFF' }}
               >
                 <Sparkles className="w-4 h-4" />
-                CREER MA VIDEO
+                CRÉER MA VIDÉO
               </Link>
             </div>
           </div>

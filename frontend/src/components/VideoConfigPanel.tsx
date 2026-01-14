@@ -295,12 +295,12 @@ export function VideoConfigPanel({
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            GENERATION EN COURS...
+            GÉNÉRATION EN COURS...
           </span>
         ) : (
           <span className="flex items-center justify-center gap-2">
             <Sparkles className="w-5 h-5" />
-            GENERER LA VIDEO
+            GÉNÉRER LA VIDÉO
           </span>
         )}
       </button>

@@ -62,8 +62,8 @@ export function Header() {
     : 0
 
   const navLinks = [
-    { label: 'GENERER', action: () => scrollToSection('hero') },
-    { label: 'AVANT/APRES', action: () => scrollToSection('before-after') },
+    { label: 'GÉNÉRER', action: () => scrollToSection('hero') },
+    { label: 'AVANT/APRÈS', action: () => scrollToSection('before-after') },
     { label: 'TARIFS', action: () => scrollToSection('pricing') },
   ]
 
@@ -161,7 +161,7 @@ export function Header() {
                     style={{ backgroundColor: '#D64045' }}
                   >
                     <LogOut className="w-4 h-4 text-white" />
-                    <span className="text-white">DECONNEXION</span>
+                    <span className="text-white">DÉCONNEXION</span>
                   </button>
                 </>
               ) : (

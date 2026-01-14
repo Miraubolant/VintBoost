@@ -262,12 +262,12 @@ export function VideoPreviewSummary({
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              GENERATION...
+              GÉNÉRATION...
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4" />
-              GENERER MA VIDEO
+              GÉNÉRER MA VIDÉO
             </span>
           )}
         </button>

@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Loader2, ExternalLink, Camera, Sparkles, Zap, TrendingUp } from 'lucide-react'
 
 const messages = [
-  'Connexion a Vinted...',
-  'Recuperation du vestiaire...',
+  'Connexion à Vinted...',
+  'Récupération du vestiaire...',
   'Analyse des articles...',
   'Chargement des images...',
-  'Presque termine...',
+  'Presque terminé...',
 ]
 
 // VintDress Color Palette
@@ -79,7 +79,7 @@ export function ScrapingLoaderModal() {
             <div className="flex items-center gap-2">
               <Camera className="w-3.5 h-3.5" style={{ color: VINTDRESS_COLORS.primary }} />
               <span className="font-display font-bold text-[10px]" style={{ color: VINTDRESS_COLORS.primary }}>
-                SPONSORISE PAR VINTDRESS.COM
+                SPONSORISÉ PAR VINTDRESS.COM
               </span>
             </div>
             <div
@@ -135,7 +135,7 @@ export function ScrapingLoaderModal() {
 
             {/* Description */}
             <p className="text-[11px] text-black/70 font-body mb-3 text-center">
-              Photos de vetements portes par <span className="font-semibold" style={{ color: VINTDRESS_COLORS.primary }}>mannequins IA</span> en 30s !
+              Photos de vêtements portés par <span className="font-semibold" style={{ color: VINTDRESS_COLORS.primary }}>mannequins IA</span> en 30s !
             </p>
 
             {/* Features inline */}
@@ -163,7 +163,7 @@ export function ScrapingLoaderModal() {
               style={{ backgroundColor: VINTDRESS_COLORS.primary }}
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              DECOUVRIR VINTDRESS.COM
+              DÉCOUVRIR VINTDRESS.COM
             </a>
           </div>
         </div>

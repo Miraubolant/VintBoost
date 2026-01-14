@@ -45,7 +45,7 @@ export function VideoResultDisplay({
         >
           <Sparkles className="w-4 h-4" />
           <p className="font-display font-bold text-black text-xs">
-            VIDEO GENEREE !
+            VIDÉO GÉNÉRÉE !
           </p>
         </div>
 
