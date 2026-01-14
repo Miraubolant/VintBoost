@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Loader2, ExternalLink, Camera, Sparkles } from 'lucide-react'
+import { Loader2, ExternalLink, Camera, Sparkles, Zap, TrendingUp } from 'lucide-react'
 
 const messages = [
   'Connexion a Vinted...',
@@ -79,7 +79,7 @@ export function ScrapingLoaderModal() {
             <div className="flex items-center gap-2">
               <Camera className="w-3.5 h-3.5" style={{ color: VINTDRESS_COLORS.primary }} />
               <span className="font-display font-bold text-[10px]" style={{ color: VINTDRESS_COLORS.primary }}>
-                SPONSORISE PAR VINTDRESS
+                SPONSORISE PAR VINTDRESS.COM
               </span>
             </div>
             <div
@@ -145,11 +145,11 @@ export function ScrapingLoaderModal() {
                 <span>HD</span>
               </div>
               <div className="flex items-center gap-1 text-[9px] font-bold">
-                <span>⚡</span>
+                <Zap className="w-3 h-3" style={{ color: VINTDRESS_COLORS.primary }} />
                 <span>30s</span>
               </div>
               <div className="flex items-center gap-1 text-[9px] font-bold">
-                <span>📈</span>
+                <TrendingUp className="w-3 h-3" style={{ color: VINTDRESS_COLORS.primary }} />
                 <span>+300%</span>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function ScrapingLoaderModal() {
               style={{ backgroundColor: VINTDRESS_COLORS.primary }}
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              DECOUVRIR VINTDRESS
+              DECOUVRIR VINTDRESS.COM
             </a>
           </div>
         </div>
