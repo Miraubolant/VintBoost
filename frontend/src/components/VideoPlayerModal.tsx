@@ -140,10 +140,10 @@ export function VideoPlayerModal({ isOpen, onClose, videoUrl, title, thumbnailUr
         <X className="w-5 h-5 text-white" />
       </button>
 
-      {/* Video container */}
+      {/* Video container - Adapted for vertical videos (9:16) */}
       <div
         id="video-container"
-        className="relative w-full max-w-4xl aspect-video bg-black border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+        className="relative bg-black border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] aspect-[9/16]"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => isPlaying && setShowControls(false)}
       >

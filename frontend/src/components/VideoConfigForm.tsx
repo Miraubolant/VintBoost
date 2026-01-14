@@ -40,7 +40,7 @@ export const PLAN_FEATURES = {
   free: {
     durations: [15] as const,
     templates: ['classic'] as VideoTemplate[],
-    resolutions: ['720p'] as VideoResolution[],
+    resolutions: ['1080p'] as VideoResolution[],
     aspectRatios: ['9:16'] as VideoAspectRatio[],
     canUploadMusic: false,
     canRemoveWatermark: false,
