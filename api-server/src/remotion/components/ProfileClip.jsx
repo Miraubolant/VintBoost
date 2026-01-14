@@ -5,8 +5,9 @@ import { getTemplate } from '../config/templates';
 /**
  * ProfileClip - Affiche le screenshot mobile du profil Vinted
  * Style Neo-Brutalism avec animation d'apparition
+ * Affiche aussi le customText (accroche) si fourni
  */
-export const ProfileClip = ({ screenshotUrl, username, template = 'classic' }) => {
+export const ProfileClip = ({ screenshotUrl, username, template = 'classic', customText = '' }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -206,6 +207,39 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic' }) =
           @{username || 'VINTED'}
         </div>
       </div>
+
+      {/* Custom text / Accroche - Neo-Brutalism (si fourni) */}
+      {customText && customText.trim() !== '' && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 50,
+            left: 20,
+            right: 20,
+            display: 'flex',
+            justifyContent: 'center',
+            transform: `translateY(${textY}px)`,
+            opacity: Math.max(0, textSlide) * exitOpacity,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: config.accentColor,
+              color: config.textColor,
+              fontSize: 20,
+              fontWeight: 700,
+              fontFamily: 'Inter, Arial, sans-serif',
+              padding: '12px 24px',
+              border: `${config.borderWidth}px solid ${config.borderColor}`,
+              boxShadow: '5px 5px 0px 0px rgba(0,0,0,1)',
+              maxWidth: '90%',
+              textAlign: 'center',
+            }}
+          >
+            {customText}
+          </div>
+        </div>
+      )}
 
       {/* Top accent bar */}
       <div

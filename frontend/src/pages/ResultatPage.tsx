@@ -15,6 +15,7 @@ import { VideoPreviewSummary } from '../components/VideoPreviewSummary'
 import { VideoResultDisplay } from '../components/VideoResultDisplay'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
 import { PricingModal } from '../components/PricingModal'
+import { VideoSuccessModal } from '../components/VideoSuccessModal'
 
 export function ResultatPage() {
   const navigate = useNavigate()
@@ -269,50 +270,43 @@ export function ResultatPage() {
               </div>
             </div>
 
-            {/* Configuration Section - Compact with Intro Video integrated */}
+            {/* Configuration Section - Compact 2-column layout */}
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
               <div className="px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
                 <h3 className="font-display font-bold text-white text-xs">CONFIGURATION VIDEO</h3>
               </div>
               <div className="p-3">
-                {videoResult ? (
-                  <VideoResultDisplay
-                    result={videoResult}
-                    onDownload={() => downloadVideo(videoResult.videoId)}
-                    onReset={handleReset}
-                  />
-                ) : (
-                  <div className="space-y-3">
-                    {/* Intro Video Section - Integrated */}
-                    {profileScreenshotUrl && (
-                      <DesktopIntroSection
-                        screenshotUrl={profileScreenshotUrl}
-                        username={wardrobeData.username}
-                        isIncluded={includeProfileScreenshot}
-                        onToggle={handleToggleProfileScreenshot}
-                        onPreview={() => setShowScreenshotModal(true)}
-                      />
-                    )}
-
-                    <VideoConfigForm
-                      musicTrack={musicTrack}
-                      onMusicChange={setMusicTrack}
-                      template={template}
-                      onTemplateChange={setTemplate}
-                      customText={customText}
-                      onCustomTextChange={setCustomText}
-                      hasWatermark={hasWatermark}
-                      onWatermarkChange={setHasWatermark}
-                      resolution={resolution}
-                      onResolutionChange={setResolution}
-                      aspectRatio={aspectRatio}
-                      onAspectRatioChange={setAspectRatio}
-                      plan={plan}
+                <div className="space-y-3">
+                  {/* Intro Video Section - Integrated */}
+                  {profileScreenshotUrl && (
+                    <DesktopIntroSection
+                      screenshotUrl={profileScreenshotUrl}
                       username={wardrobeData.username}
-                      onUpgradeClick={() => setShowPricingModal(true)}
+                      isIncluded={includeProfileScreenshot}
+                      onToggle={handleToggleProfileScreenshot}
+                      onPreview={() => setShowScreenshotModal(true)}
                     />
-                  </div>
-                )}
+                  )}
+
+                  <VideoConfigForm
+                    musicTrack={musicTrack}
+                    onMusicChange={setMusicTrack}
+                    template={template}
+                    onTemplateChange={setTemplate}
+                    customText={customText}
+                    onCustomTextChange={setCustomText}
+                    hasWatermark={hasWatermark}
+                    onWatermarkChange={setHasWatermark}
+                    resolution={resolution}
+                    onResolutionChange={setResolution}
+                    aspectRatio={aspectRatio}
+                    onAspectRatioChange={setAspectRatio}
+                    plan={plan}
+                    username={wardrobeData.username}
+                    onUpgradeClick={() => setShowPricingModal(true)}
+                    compact
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -453,6 +447,16 @@ export function ResultatPage() {
         isOpen={showPricingModal}
         onClose={() => setShowPricingModal(false)}
       />
+
+      {/* Video Success Modal */}
+      {videoResult && (
+        <VideoSuccessModal
+          result={videoResult}
+          onDownload={() => downloadVideo(videoResult.videoId)}
+          onReset={handleReset}
+          onClose={() => {}} // Keep modal open, user must interact
+        />
+      )}
     </div>
   )
 }

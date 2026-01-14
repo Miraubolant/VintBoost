@@ -30,6 +30,7 @@ interface VideoConfigFormProps {
   plan: 'free' | 'pro' | 'business'
   username?: string
   onUpgradeClick?: () => void
+  compact?: boolean // For desktop 2-column layout
 }
 
 // Plan-based restrictions
@@ -58,15 +59,15 @@ export const PLAN_FEATURES = {
 } as const
 
 const aspectRatioOptions = [
-  { id: '9:16' as VideoAspectRatio, name: 'Vertical', icon: Smartphone, description: 'TikTok, Reels' },
+  { id: '9:16' as VideoAspectRatio, name: 'Vertical', icon: Smartphone, description: 'TikTok' },
   { id: '16:9' as VideoAspectRatio, name: 'Horizontal', icon: Monitor, description: 'YouTube' },
   { id: '1:1' as VideoAspectRatio, name: 'Carre', icon: Square, description: 'Instagram' },
 ]
 
 const resolutionOptions = [
-  { id: '720p' as VideoResolution, name: '720p', description: 'HD' },
-  { id: '1080p' as VideoResolution, name: '1080p', description: 'Full HD' },
-  { id: '4K' as VideoResolution, name: '4K', description: 'Ultra HD' },
+  { id: '720p' as VideoResolution, name: '720p' },
+  { id: '1080p' as VideoResolution, name: '1080p' },
+  { id: '4K' as VideoResolution, name: '4K' },
 ]
 
 const musicTracks = [
@@ -101,11 +102,213 @@ export function VideoConfigForm({
   plan,
   username,
   onUpgradeClick,
+  compact = false,
 }: VideoConfigFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const features = PLAN_FEATURES[plan]
   const isPremium = plan === 'pro' || plan === 'business'
 
+  // Compact 2-column layout for desktop
+  if (compact) {
+    return (
+      <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+        {/* Left Column */}
+        <div className="space-y-3">
+          {/* Template */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              <Layout className="w-3 h-3" />
+              TEMPLATE
+            </label>
+            <div className="flex gap-1">
+              {templates.map((t) => {
+                const isAvailable = (features.templates as readonly string[]).includes(t.id)
+                const isSelected = template === t.id
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => isAvailable && onTemplateChange(t.id)}
+                    disabled={!isAvailable}
+                    className={`
+                      relative flex-1 flex items-center justify-center gap-1 py-1.5 border-2 border-black
+                      ${isSelected ? 'ring-1 ring-[#1D3354]' : ''}
+                      ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                    `}
+                    style={{ backgroundColor: '#FFFFFF' }}
+                  >
+                    <div
+                      className="w-3 h-3 border border-black"
+                      style={{ backgroundColor: t.color }}
+                    />
+                    <span className="font-bold text-[9px]">{t.name}</span>
+                    {t.premium && !isAvailable && (
+                      <Lock className="w-2 h-2 text-black/40" />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Music */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              <Music className="w-3 h-3" />
+              MUSIQUE
+            </label>
+            <div className="relative">
+              <select
+                value={musicTrack}
+                onChange={(e) => onMusicChange(e.target.value)}
+                className="w-full px-2 py-1.5 border-2 border-black font-body text-xs appearance-none cursor-pointer pr-8"
+                style={{ backgroundColor: '#FFFFFF' }}
+              >
+                {musicTracks.map((track) => (
+                  <option key={track.id} value={track.id}>
+                    {track.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Custom Text */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              <Type className="w-3 h-3" />
+              ACCROCHE
+              {username && (
+                <span className="font-normal text-black/50 text-[9px]">(@{username})</span>
+              )}
+            </label>
+            <input
+              type="text"
+              value={customText}
+              onChange={(e) => onCustomTextChange(e.target.value)}
+              placeholder="SOLDES -50%..."
+              maxLength={50}
+              className="w-full px-2 py-1.5 border-2 border-black font-body text-xs placeholder:text-black/40"
+              style={{ backgroundColor: '#FFFFFF' }}
+            />
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-3">
+          {/* Aspect Ratio */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              <Monitor className="w-3 h-3" />
+              FORMAT
+            </label>
+            <div className="flex gap-1">
+              {aspectRatioOptions.map((opt) => {
+                const isAvailable = features.aspectRatios.includes(opt.id)
+                const isSelected = aspectRatio === opt.id
+                const Icon = opt.icon
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => isAvailable && onAspectRatioChange(opt.id)}
+                    disabled={!isAvailable}
+                    className={`
+                      relative flex-1 flex flex-col items-center py-1.5 border-2 border-black
+                      ${isSelected ? 'ring-1 ring-[#1D3354]' : ''}
+                      ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                    `}
+                    style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
+                  >
+                    <Icon className="w-3 h-3" />
+                    <span className="font-bold text-[8px]">{opt.name}</span>
+                    {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2 h-2" />}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Resolution */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              RESOLUTION
+            </label>
+            <div className="flex gap-1">
+              {resolutionOptions.map((opt) => {
+                const isAvailable = features.resolutions.includes(opt.id)
+                const isSelected = resolution === opt.id
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => isAvailable && onResolutionChange(opt.id)}
+                    disabled={!isAvailable}
+                    className={`
+                      relative flex-1 py-1.5 border-2 border-black font-display font-bold text-[9px]
+                      ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                    `}
+                    style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
+                  >
+                    {opt.name}
+                    {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2 h-2" />}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Watermark */}
+          <div>
+            <label className="flex items-center gap-1.5 font-display font-bold text-[10px] text-black mb-1.5">
+              WATERMARK
+            </label>
+            <div
+              className="flex items-center gap-2 px-2 py-1.5 border-2 border-black"
+              style={{ backgroundColor: isPremium ? '#FFFFFF' : '#F5F5F5' }}
+            >
+              <Stamp className="w-3 h-3" />
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={hasWatermark}
+                  onChange={(e) => features.canRemoveWatermark && onWatermarkChange(e.target.checked)}
+                  disabled={!features.canRemoveWatermark}
+                  className="sr-only"
+                />
+                <div
+                  className={`
+                    w-7 h-4 border-2 border-black relative
+                    ${!features.canRemoveWatermark ? 'opacity-50' : ''}
+                  `}
+                  style={{ backgroundColor: hasWatermark ? '#1D3354' : '#FFFFFF' }}
+                >
+                  <span
+                    className={`
+                      absolute top-[1px] left-[1px] w-2.5 h-2.5 border border-black transition-transform
+                      ${hasWatermark ? 'translate-x-2.5' : ''}
+                    `}
+                    style={{ backgroundColor: '#FFFFFF' }}
+                  />
+                </div>
+              </label>
+              <span className="text-[9px] font-bold">{hasWatermark ? 'ON' : 'OFF'}</span>
+              {!features.canRemoveWatermark && (
+                <button
+                  onClick={onUpgradeClick}
+                  className="flex items-center gap-0.5 text-[9px] font-bold hover:opacity-80 transition-opacity ml-auto"
+                  style={{ color: '#1D3354' }}
+                >
+                  <Crown className="w-2.5 h-2.5" />
+                  PRO
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Standard vertical layout (for mobile)
   return (
     <div className="space-y-4">
       {/* Template - Compact horizontal */}

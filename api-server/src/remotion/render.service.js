@@ -49,12 +49,14 @@ async function ensureBundle() {
 
 /**
  * Calculer la durée totale en frames
+ * Si screenshot profil inclus: ProfileClip (3.5s) remplace IntroClip
+ * Sinon: IntroClip classique (2.5s)
  */
 function calculateTotalFrames(articlesCount, clipDuration, fps = 30, hasProfileScreenshot = false) {
-  const profileDuration = hasProfileScreenshot ? 3 : 0; // 3 seconds si screenshot
-  const introDuration = 2.5;
+  // Intro: soit ProfileClip (3.5s) soit IntroClip classique (2.5s)
+  const introDuration = hasProfileScreenshot ? 3.5 : 2.5;
   const outroDuration = 2;
-  const totalSeconds = profileDuration + introDuration + outroDuration + articlesCount * clipDuration;
+  const totalSeconds = introDuration + outroDuration + articlesCount * clipDuration;
   return Math.round(totalSeconds * fps);
 }
 

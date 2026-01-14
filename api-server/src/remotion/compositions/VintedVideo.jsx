@@ -17,8 +17,10 @@ export const VintedVideo = ({
 }) => {
   const { fps } = useVideoConfig();
 
-  const profileFrames = profileScreenshotUrl ? Math.round(3 * fps) : 0; // 3 seconds si screenshot
-  const introFrames = Math.round(2.5 * fps); // 2.5 seconds
+  // Si screenshot profil inclus: ProfileClip avec customText (remplace l'intro classique)
+  // Sinon: IntroClip classique
+  const hasProfileIntro = !!profileScreenshotUrl;
+  const introFrames = hasProfileIntro ? Math.round(3.5 * fps) : Math.round(2.5 * fps); // 3.5s pour profile, 2.5s pour classique
   const outroFrames = Math.round(2 * fps);   // 2 seconds
   const articleFrames = Math.round(clipDuration * fps);
 
@@ -26,26 +28,27 @@ export const VintedVideo = ({
 
   return (
     <AbsoluteFill>
-      {/* Profile Screenshot (optionnel) */}
-      {profileScreenshotUrl && (
+      {/* Intro: soit ProfileClip avec customText, soit IntroClip classique */}
+      {hasProfileIntro ? (
         <>
-          <Sequence from={currentFrame} durationInFrames={profileFrames}>
+          <Sequence from={currentFrame} durationInFrames={introFrames}>
             <ProfileClip
               screenshotUrl={profileScreenshotUrl}
               username={username}
               template={template}
+              customText={customText}
             />
           </Sequence>
-          {currentFrame += profileFrames}
+          {currentFrame += introFrames}
+        </>
+      ) : (
+        <>
+          <Sequence from={currentFrame} durationInFrames={introFrames}>
+            <IntroClip username={username} template={template} customText={customText} />
+          </Sequence>
+          {currentFrame += introFrames}
         </>
       )}
-
-      {/* Intro */}
-      <Sequence from={currentFrame} durationInFrames={introFrames}>
-        <IntroClip username={username} template={template} customText={customText} />
-      </Sequence>
-
-      {currentFrame += introFrames}
 
       {/* Article clips */}
       {articles.map((article, index) => {
