@@ -66,7 +66,7 @@ export function useVideoGeneration() {
           resolution: config.resolution || '1080p',
           aspectRatio: config.aspectRatio || '9:16',
           username: config.username || '',
-          profileScreenshot: config.profileScreenshot || null,
+          wardrobeUrl: config.wardrobeUrl || null,
         }),
       })
 

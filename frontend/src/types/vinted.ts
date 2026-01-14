@@ -65,7 +65,7 @@ export interface VideoConfig {
   resolution: VideoResolution
   aspectRatio: VideoAspectRatio
   username?: string
-  profileScreenshot?: string | null // base64 data URL du screenshot mobile
+  wardrobeUrl?: string | null // URL du profil Vinted pour capture screenshot côté backend
 }
 
 export interface VideoArticle {

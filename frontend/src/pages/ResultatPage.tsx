@@ -152,7 +152,7 @@ export function ResultatPage() {
       resolution: resolution,
       aspectRatio: aspectRatio,
       username: wardrobeData?.username || '',
-      profileScreenshot: includeProfilePicture ? profilePictureUrl : null, // Envoie l'URL, pas le base64
+      wardrobeUrl: includeProfilePicture ? (pendingUrl || `https://www.vinted.fr/member/${wardrobeData?.userId}`) : null,
     })
 
     // Consume credit only after successful video generation
