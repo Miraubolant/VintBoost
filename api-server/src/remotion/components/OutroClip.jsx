@@ -1,162 +1,140 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { getTemplate } from '../config/templates';
 
-// Template configurations for outro
-const TEMPLATE_COLORS = {
-  classic: {
-    background: 'linear-gradient(135deg, #EC4899 0%, #A855F7 100%)',
-    cardBg: '#FFFFFF',
-    textColor: '#1a1a2e',
-    ctaGradient: 'linear-gradient(135deg, #4ECDC4 0%, #FF6B6B 100%)',
-    ctaTextColor: '#FFFFFF',
-    usernameColor: '#A855F7',
-    decorColor1: '#FFFFFF',
-    decorColor2: '#FFE66D',
-    barGradient: 'linear-gradient(90deg, #FFE66D, #4ECDC4, #FF6B6B)',
-  },
-  modern: {
-    background: 'linear-gradient(180deg, #467599 0%, #1D3354 100%)',
-    cardBg: '#FFFFFF',
-    textColor: '#1D3354',
-    ctaGradient: 'linear-gradient(135deg, #D64045 0%, #FF6B6B 100%)',
-    ctaTextColor: '#FFFFFF',
-    usernameColor: '#1D3354',
-    decorColor1: 'rgba(255,255,255,0.2)',
-    decorColor2: '#9ED8DB',
-    barGradient: 'linear-gradient(90deg, #9ED8DB, #1D3354, #D64045)',
-  },
-  premium: {
-    background: 'linear-gradient(135deg, #1a1a1a 0%, #0D0D0D 100%)',
-    cardBg: 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)',
-    textColor: '#D4AF37',
-    ctaGradient: 'linear-gradient(135deg, #D4AF37 0%, #F4E4BA 50%, #D4AF37 100%)',
-    ctaTextColor: '#0D0D0D',
-    usernameColor: '#F4E4BA',
-    decorColor1: 'rgba(212,175,55,0.2)',
-    decorColor2: 'rgba(212,175,55,0.3)',
-    barGradient: 'linear-gradient(90deg, #D4AF37, #F4E4BA, #D4AF37)',
-  },
-};
-
+/**
+ * OutroClip - Neo-Brutalism Style
+ * - Bordures noires épaisses
+ * - Pas de coins arrondis
+ * - Ombres décalées
+ * - CTA "Disponible sur Vinted"
+ */
 export const OutroClip = ({ username, template = 'classic' }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const colors = TEMPLATE_COLORS[template] || TEMPLATE_COLORS.classic;
+  const config = getTemplate(template).outro;
 
+  // Card animation
   const cardScale = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 100 },
+    config: { damping: 15, stiffness: 100 },
   });
 
-  const textOpacity = interpolate(frame, [0, 15], [0, 1], {
+  const cardY = interpolate(frame, [0, 15], [60, 0], {
     extrapolateRight: 'clamp',
   });
 
-  const badgeScale = spring({
-    frame: frame - 20,
-    fps,
-    config: { damping: 10, stiffness: 80 },
+  const opacity = interpolate(frame, [0, 10], [0, 1], {
+    extrapolateRight: 'clamp',
   });
 
-  const pulseScale = interpolate(
-    frame % 30,
-    [0, 15, 30],
-    [1, 1.05, 1],
-    { extrapolateRight: 'clamp' }
-  );
+  // CTA button animation
+  const ctaScale = spring({
+    frame: frame - 15,
+    fps,
+    config: { damping: 12, stiffness: 120 },
+  });
+
+  // Decorative elements
+  const decorScale = spring({
+    frame: frame - 8,
+    fps,
+    config: { damping: 10, stiffness: 100 },
+  });
 
   return (
     <AbsoluteFill
       style={{
-        background: colors.background,
+        backgroundColor: config.background,
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: 'Inter, Arial, sans-serif',
       }}
     >
-      {/* Animated background circles */}
+      {/* Decorative squares - Neo-Brutalism */}
       <div
         style={{
           position: 'absolute',
-          top: '20%',
-          left: '10%',
-          width: 200,
-          height: 200,
-          borderRadius: '50%',
-          backgroundColor: colors.decorColor1,
-          opacity: 0.1,
-          transform: `scale(${pulseScale})`,
+          top: 100,
+          right: 60,
+          width: 70,
+          height: 70,
+          backgroundColor: config.cardBg,
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          transform: `scale(${decorScale}) rotate(-10deg)`,
+          boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)',
         }}
       />
       <div
         style={{
           position: 'absolute',
-          bottom: '25%',
-          right: '15%',
-          width: 150,
-          height: 150,
-          borderRadius: '50%',
-          backgroundColor: colors.decorColor2,
-          opacity: 0.2,
-          transform: `scale(${pulseScale})`,
+          bottom: 140,
+          left: 50,
+          width: 50,
+          height: 50,
+          backgroundColor: config.ctaBg,
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          transform: `scale(${decorScale}) rotate(15deg)`,
+          boxShadow: '3px 3px 0px 0px rgba(0,0,0,1)',
         }}
       />
 
-      {/* Main card */}
+      {/* Main card - Neo-Brutalism */}
       <div
         style={{
-          background: colors.cardBg,
-          borderRadius: 24,
-          padding: '50px 70px',
-          boxShadow: '0 30px 100px rgba(0,0,0,0.4)',
-          transform: `scale(${cardScale})`,
+          backgroundColor: config.cardBg,
+          padding: '45px 60px',
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          boxShadow: '10px 10px 0px 0px rgba(0,0,0,1)',
+          transform: `translateY(${cardY}px) scale(${cardScale})`,
           textAlign: 'center',
-          maxWidth: 850,
+          maxWidth: 750,
+          opacity,
         }}
       >
         {/* Main text */}
         <h1
           style={{
-            fontSize: 52,
-            fontWeight: 700,
-            color: colors.textColor,
+            fontSize: 42,
+            fontWeight: 800,
+            color: config.textColor,
             margin: 0,
-            marginBottom: 20,
-            opacity: textOpacity,
+            marginBottom: 24,
+            textTransform: 'uppercase',
           }}
         >
-          RETROUVE-MOI
+          DISPONIBLE
         </h1>
 
-        {/* CTA Badge */}
+        {/* CTA Button - Neo-Brutalism */}
         <div
           style={{
             display: 'inline-block',
-            background: colors.ctaGradient,
-            color: colors.ctaTextColor,
-            fontSize: 44,
+            backgroundColor: config.ctaBg,
+            color: config.ctaTextColor,
+            fontSize: 36,
             fontWeight: 800,
-            padding: '22px 50px',
-            borderRadius: 16,
-            transform: `scale(${Math.max(0, badgeScale)})`,
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.3)',
+            padding: '16px 44px',
+            border: `${config.borderWidth}px solid ${config.borderColor}`,
+            boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
+            transform: `scale(${Math.max(0, ctaScale)})`,
           }}
         >
-          SUR VINTED!
+          SUR VINTED !
         </div>
 
-        {/* Username if available */}
+        {/* Username */}
         {username && (
           <p
             style={{
-              fontSize: 32,
-              color: colors.usernameColor,
-              marginTop: 30,
+              fontSize: 28,
+              color: config.textColor,
+              marginTop: 28,
               marginBottom: 0,
-              fontWeight: 600,
-              opacity: textOpacity,
+              fontWeight: 700,
+              opacity,
             }}
           >
             @{username}
@@ -164,15 +142,27 @@ export const OutroClip = ({ username, template = 'classic' }) => {
         )}
       </div>
 
-      {/* Bottom gradient bar */}
+      {/* Top accent bar */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 6,
+          backgroundColor: config.ctaBg,
+        }}
+      />
+
+      {/* Bottom accent bar */}
       <div
         style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: 8,
-          background: colors.barGradient,
+          height: 6,
+          backgroundColor: config.ctaBg,
         }}
       />
     </AbsoluteFill>

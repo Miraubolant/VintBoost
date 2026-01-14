@@ -1,201 +1,173 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { getTemplate } from '../config/templates';
 
-// Template configurations
-const TEMPLATE_COLORS = {
-  classic: {
-    background: 'linear-gradient(135deg, #FFE66D 0%, #FF6B6B 100%)',
-    cardBg: '#FFFFFF',
-    textColor: '#1a1a2e',
-    badgeBg: '#4ECDC4',
-    badgeTextColor: '#1a1a2e',
-    decorColor1: '#FFFFFF',
-    decorColor2: '#A855F7',
-    barGradient: 'linear-gradient(90deg, #FF6B6B, #A855F7, #4ECDC4)',
-    customTextBg: 'rgba(255,255,255,0.95)',
-    customTextColor: '#1a1a2e',
-    customTextBorder: '#FF6B6B',
-  },
-  modern: {
-    background: 'linear-gradient(180deg, #1D3354 0%, #467599 100%)',
-    cardBg: '#FFFFFF',
-    textColor: '#1D3354',
-    badgeBg: '#D64045',
-    badgeTextColor: '#FFFFFF',
-    decorColor1: 'rgba(255,255,255,0.2)',
-    decorColor2: '#9ED8DB',
-    barGradient: 'linear-gradient(90deg, #D64045, #1D3354, #9ED8DB)',
-    customTextBg: 'rgba(29,51,84,0.95)',
-    customTextColor: '#FFFFFF',
-    customTextBorder: '#D64045',
-  },
-  premium: {
-    background: 'linear-gradient(135deg, #0D0D0D 0%, #1a1a1a 50%, #2d2d2d 100%)',
-    cardBg: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-    textColor: '#D4AF37',
-    badgeBg: 'linear-gradient(135deg, #D4AF37 0%, #F4E4BA 50%, #D4AF37 100%)',
-    badgeTextColor: '#0D0D0D',
-    decorColor1: 'rgba(212,175,55,0.3)',
-    decorColor2: 'rgba(212,175,55,0.2)',
-    barGradient: 'linear-gradient(90deg, #D4AF37, #F4E4BA, #D4AF37)',
-    customTextBg: 'rgba(0,0,0,0.95)',
-    customTextColor: '#D4AF37',
-    customTextBorder: '#D4AF37',
-  },
-};
-
+/**
+ * IntroClip - Neo-Brutalism Style
+ * - Bordures noires épaisses
+ * - Pas de coins arrondis
+ * - Ombres décalées
+ * - Texte personnalisé mis en avant
+ */
 export const IntroClip = ({ username, template = 'classic', customText = '' }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const colors = TEMPLATE_COLORS[template] || TEMPLATE_COLORS.classic;
+  const config = getTemplate(template).intro;
 
   // Animations
-  const titleScale = spring({
+  const cardScale = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 100 },
+    config: { damping: 15, stiffness: 100 },
   });
 
-  const titleY = interpolate(frame, [0, 20], [100, 0], {
+  const cardY = interpolate(frame, [0, 15], [80, 0], {
     extrapolateRight: 'clamp',
-  });
-
-  const badgeScale = spring({
-    frame: frame - 15,
-    fps,
-    config: { damping: 10, stiffness: 80 },
   });
 
   const opacity = interpolate(frame, [0, 10], [0, 1], {
     extrapolateRight: 'clamp',
   });
 
-  // Decorative elements animation
-  const decorScale = spring({
-    frame: frame - 25,
-    fps,
-    config: { damping: 8, stiffness: 100 },
-  });
-
-  // Custom text animation
+  // Custom text slide from bottom
   const customTextSlide = spring({
-    frame: frame - 35,
+    frame: frame - 20,
     fps,
     config: { damping: 12, stiffness: 80 },
   });
 
-  const displayName = username ? `@${username}` : 'MON VESTIAIRE';
+  const customTextY = interpolate(customTextSlide, [0, 1], [60, 0]);
+
+  // Decorative elements
+  const decorScale = spring({
+    frame: frame - 10,
+    fps,
+    config: { damping: 10, stiffness: 120 },
+  });
+
+  const displayName = username ? `@${username}` : 'MON DRESSING';
 
   return (
     <AbsoluteFill
       style={{
-        background: colors.background,
+        backgroundColor: config.background,
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: 'Inter, Arial, sans-serif',
       }}
     >
-      {/* Decorative circles */}
+      {/* Decorative squares - Neo-Brutalism */}
       <div
         style={{
           position: 'absolute',
-          top: 100,
-          left: 80,
-          width: 120,
-          height: 120,
-          borderRadius: '50%',
-          backgroundColor: colors.decorColor1,
-          opacity: 0.2,
-          transform: `scale(${decorScale})`,
+          top: 80,
+          left: 40,
+          width: 60,
+          height: 60,
+          backgroundColor: config.accentColor,
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          transform: `scale(${decorScale}) rotate(12deg)`,
+          boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)',
         }}
       />
       <div
         style={{
           position: 'absolute',
-          bottom: 150,
-          right: 60,
-          width: 180,
-          height: 180,
-          borderRadius: '50%',
-          backgroundColor: colors.decorColor2,
-          opacity: 0.3,
-          transform: `scale(${decorScale})`,
+          bottom: 120,
+          right: 50,
+          width: 80,
+          height: 80,
+          backgroundColor: config.cardBg,
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          transform: `scale(${decorScale}) rotate(-8deg)`,
+          boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 200,
+          right: 80,
+          width: 40,
+          height: 40,
+          backgroundColor: config.accentColor,
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          transform: `scale(${decorScale}) rotate(20deg)`,
+          boxShadow: '3px 3px 0px 0px rgba(0,0,0,1)',
         }}
       />
 
-      {/* Main content card */}
+      {/* Main content card - Neo-Brutalism */}
       <div
         style={{
-          background: colors.cardBg,
-          borderRadius: 24,
-          padding: '60px 80px',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.3)',
+          backgroundColor: config.cardBg,
+          padding: '50px 70px',
+          border: `${config.borderWidth}px solid ${config.borderColor}`,
+          boxShadow: '10px 10px 0px 0px rgba(0,0,0,1)',
           opacity,
-          transform: `translateY(${titleY}px) scale(${titleScale})`,
+          transform: `translateY(${cardY}px) scale(${cardScale})`,
           textAlign: 'center',
-          maxWidth: 900,
+          maxWidth: 800,
         }}
       >
         {/* Username */}
         <h1
           style={{
-            fontSize: 72,
+            fontSize: 52,
             fontWeight: 800,
-            color: colors.textColor,
+            color: config.textColor,
             margin: 0,
-            marginBottom: 30,
+            marginBottom: 24,
             textTransform: 'uppercase',
-            letterSpacing: '-2px',
+            letterSpacing: '-1px',
           }}
         >
           {displayName}
         </h1>
 
-        {/* VINTED badge */}
+        {/* VINTED badge - Neo-Brutalism */}
         <div
           style={{
             display: 'inline-block',
-            background: colors.badgeBg,
-            color: colors.badgeTextColor,
-            fontSize: 48,
-            fontWeight: 700,
-            padding: '20px 50px',
-            borderRadius: 12,
-            transform: `scale(${Math.max(0, badgeScale)})`,
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.3)',
+            backgroundColor: config.accentColor,
+            color: config.textColor,
+            fontSize: 36,
+            fontWeight: 800,
+            padding: '14px 40px',
+            border: `${config.borderWidth}px solid ${config.borderColor}`,
+            boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
           }}
         >
           VINTED
         </div>
       </div>
 
-      {/* Custom text / Accroche */}
+      {/* Custom text / Accroche - Neo-Brutalism */}
       {customText && customText.trim() !== '' && (
         <div
           style={{
             position: 'absolute',
-            bottom: 80,
-            left: 0,
-            right: 0,
+            bottom: 60,
+            left: 30,
+            right: 30,
             display: 'flex',
             justifyContent: 'center',
-            transform: `translateY(${(1 - Math.max(0, customTextSlide)) * 50}px)`,
+            transform: `translateY(${customTextY}px)`,
             opacity: Math.max(0, customTextSlide),
           }}
         >
           <div
             style={{
-              background: colors.customTextBg,
-              color: colors.customTextColor,
-              fontSize: 28,
+              backgroundColor: config.cardBg,
+              color: config.textColor,
+              fontSize: 24,
               fontWeight: 700,
-              padding: '16px 40px',
-              borderRadius: 12,
-              borderLeft: `4px solid ${colors.customTextBorder}`,
-              maxWidth: '80%',
+              padding: '16px 32px',
+              border: `${config.borderWidth}px solid ${config.borderColor}`,
+              boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
+              maxWidth: '85%',
               textAlign: 'center',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
             }}
           >
             {customText}
@@ -203,15 +175,15 @@ export const IntroClip = ({ username, template = 'classic', customText = '' }) =
         </div>
       )}
 
-      {/* Bottom decorative bar */}
+      {/* Top accent bar */}
       <div
         style={{
           position: 'absolute',
-          bottom: 0,
+          top: 0,
           left: 0,
           right: 0,
-          height: 8,
-          background: colors.barGradient,
+          height: 6,
+          backgroundColor: config.accentColor,
         }}
       />
     </AbsoluteFill>

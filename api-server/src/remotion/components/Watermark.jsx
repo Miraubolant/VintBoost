@@ -1,33 +1,21 @@
 import React from 'react';
 import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
+import { getTemplate } from '../config/templates';
 
+/**
+ * Watermark - Neo-Brutalism Style
+ */
 export const Watermark = ({ template = 'classic' }) => {
   const frame = useCurrentFrame();
   const { durationInFrames, fps } = useVideoConfig();
 
-  // Configuration du watermark selon le template
-  const watermarkStyles = {
-    classic: {
-      bg: 'rgba(0,0,0,0.6)',
-      textColor: '#FFFFFF',
-    },
-    modern: {
-      bg: 'rgba(29,51,84,0.8)',
-      textColor: '#FFFFFF',
-    },
-    premium: {
-      bg: 'rgba(212,175,55,0.9)',
-      textColor: '#0D0D0D',
-    },
-  };
-
-  const style = watermarkStyles[template] || watermarkStyles.classic;
+  const config = getTemplate(template).watermark;
 
   // Animation subtile du watermark
   const opacity = interpolate(
     frame,
     [0, fps * 0.5, durationInFrames - fps * 0.5, durationInFrames],
-    [0, 0.9, 0.9, 0],
+    [0, 1, 1, 0],
     { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
   );
 
@@ -35,15 +23,16 @@ export const Watermark = ({ template = 'classic' }) => {
     <div
       style={{
         position: 'absolute',
-        bottom: 20,
-        right: 20,
-        backgroundColor: style.bg,
-        color: style.textColor,
-        fontSize: 14,
+        bottom: 16,
+        right: 16,
+        backgroundColor: config.bg,
+        color: config.textColor,
+        fontSize: 12,
         fontWeight: 700,
         fontFamily: 'Inter, Arial, sans-serif',
-        padding: '8px 16px',
-        borderRadius: 6,
+        padding: '6px 12px',
+        border: `2px solid ${config.borderColor}`,
+        boxShadow: '2px 2px 0px 0px rgba(0,0,0,1)',
         opacity,
         zIndex: 1000,
         letterSpacing: '0.5px',
