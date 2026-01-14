@@ -75,17 +75,69 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
     <AbsoluteFill
       style={{
         backgroundColor: config.background,
-        justifyContent: 'center',
-        alignItems: 'center',
         fontFamily: 'Inter, Arial, sans-serif',
       }}
     >
+      {/* Screenshot en plein écran */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          transform: `translateY(${phoneY}px)`,
+          opacity: phoneOpacity * exitOpacity,
+        }}
+      >
+        {imageLoaded && screenshotUrl ? (
+          <Img
+            src={screenshotUrl}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'top',
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#F5F5F5',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 20,
+            }}
+          >
+            <span style={{ fontSize: 80 }}>📱</span>
+            <span style={{ fontSize: 24, color: '#666', fontWeight: 600 }}>Vinted</span>
+          </div>
+        )}
+      </div>
+
+      {/* Overlay gradient pour meilleure lisibilité du texte */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%)',
+          opacity: phoneOpacity * exitOpacity,
+        }}
+      />
+
       {/* Decorative squares - Neo-Brutalism */}
       <div
         style={{
           position: 'absolute',
-          top: 60,
-          right: 40,
+          top: 80,
+          right: 30,
           width: 50,
           height: 50,
           backgroundColor: config.accentColor,
@@ -98,8 +150,8 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
       <div
         style={{
           position: 'absolute',
-          bottom: 100,
-          left: 30,
+          top: 150,
+          left: 25,
           width: 40,
           height: 40,
           backgroundColor: config.cardBg,
@@ -110,110 +162,42 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
         }}
       />
 
-      {/* Phone mockup with screenshot */}
+      {/* Username label - En haut */}
       <div
         style={{
+          position: 'absolute',
+          top: 60,
+          left: 0,
+          right: 0,
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 20,
-          transform: `translateY(${phoneY}px)`,
-          opacity: phoneOpacity * exitOpacity,
+          justifyContent: 'center',
+          transform: `translateY(${textY}px)`,
+          opacity: Math.max(0, textSlide) * exitOpacity,
         }}
       >
-        {/* Phone frame - Neo-Brutalism style */}
-        <div
-          style={{
-            position: 'relative',
-            width: 220,
-            height: 450,
-            backgroundColor: '#000000',
-            border: `${config.borderWidth}px solid ${config.borderColor}`,
-            boxShadow: '8px 8px 0px 0px rgba(0,0,0,1)',
-            padding: 8,
-            overflow: 'hidden',
-          }}
-        >
-          {/* Phone notch */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 8,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: 80,
-              height: 20,
-              backgroundColor: '#000000',
-              borderRadius: 10,
-              zIndex: 10,
-            }}
-          />
-
-          {/* Screenshot content */}
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#FFFFFF',
-              overflow: 'hidden',
-            }}
-          >
-            {imageLoaded && screenshotUrl ? (
-              <Img
-                src={screenshotUrl}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'top',
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: '#F5F5F5',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 10,
-                }}
-              >
-                <span style={{ fontSize: 40 }}>📱</span>
-                <span style={{ fontSize: 12, color: '#666' }}>Vinted</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Username label */}
         <div
           style={{
             backgroundColor: config.cardBg,
             color: config.textColor,
-            fontSize: 28,
+            fontSize: 32,
             fontWeight: 800,
             fontFamily: 'Inter, Arial, sans-serif',
-            padding: '12px 32px',
+            padding: '14px 40px',
             border: `${config.borderWidth}px solid ${config.borderColor}`,
-            boxShadow: '5px 5px 0px 0px rgba(0,0,0,1)',
+            boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
             textTransform: 'uppercase',
-            transform: `translateY(${textY}px)`,
-            opacity: Math.max(0, textSlide),
           }}
         >
           @{username || 'VINTED'}
         </div>
       </div>
 
-      {/* Custom text / Accroche - Neo-Brutalism (si fourni) */}
+      {/* Custom text / Accroche - Neo-Brutalism en bas (si fourni) */}
       {customText && customText.trim() !== '' && (
         <div
           style={{
             position: 'absolute',
-            bottom: 50,
+            bottom: 80,
             left: 20,
             right: 20,
             display: 'flex',
@@ -226,12 +210,12 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
             style={{
               backgroundColor: config.accentColor,
               color: config.textColor,
-              fontSize: 20,
+              fontSize: 24,
               fontWeight: 700,
               fontFamily: 'Inter, Arial, sans-serif',
-              padding: '12px 24px',
+              padding: '16px 32px',
               border: `${config.borderWidth}px solid ${config.borderColor}`,
-              boxShadow: '5px 5px 0px 0px rgba(0,0,0,1)',
+              boxShadow: '6px 6px 0px 0px rgba(0,0,0,1)',
               maxWidth: '90%',
               textAlign: 'center',
             }}
@@ -248,7 +232,7 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
           top: 0,
           left: 0,
           right: 0,
-          height: 6,
+          height: 8,
           backgroundColor: config.accentColor,
           opacity: exitOpacity,
         }}
@@ -261,7 +245,7 @@ export const ProfileClip = ({ screenshotUrl, username, template = 'classic', cus
           bottom: 0,
           left: 0,
           right: 0,
-          height: 6,
+          height: 8,
           backgroundColor: config.accentColor,
           opacity: exitOpacity,
         }}
