@@ -41,6 +41,9 @@ export function AccountPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [selectedVideo, setSelectedVideo] = useState<UserVideo | null>(null)
   const [showVideoPlayer, setShowVideoPlayer] = useState(false)
+  const [videoToDelete, setVideoToDelete] = useState<UserVideo | null>(null)
+  const [showDeleteVideoModal, setShowDeleteVideoModal] = useState(false)
+  const [deletingVideo, setDeletingVideo] = useState(false)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -126,6 +129,52 @@ export function AccountPage() {
       navigate('/')
     } finally {
       setDeleting(false)
+    }
+  }
+
+  const handleDeleteVideo = async () => {
+    if (!videoToDelete || !user) return
+
+    setDeletingVideo(true)
+    try {
+      // Delete from Supabase Storage if video_url exists
+      if (videoToDelete.video_url) {
+        // Extract the path from the URL
+        const urlParts = videoToDelete.video_url.split('/storage/v1/object/public/videos/')
+        if (urlParts.length > 1) {
+          const filePath = urlParts[1]
+          await supabase.storage.from('videos').remove([filePath])
+        }
+      }
+
+      // Delete thumbnail from storage if it exists
+      if (videoToDelete.thumbnail_url) {
+        const thumbParts = videoToDelete.thumbnail_url.split('/storage/v1/object/public/videos/')
+        if (thumbParts.length > 1) {
+          const thumbPath = thumbParts[1]
+          await supabase.storage.from('videos').remove([thumbPath])
+        }
+      }
+
+      // Delete from database
+      const { error } = await supabase
+        .from('user_videos')
+        .delete()
+        .eq('id', videoToDelete.id)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+
+      // Update local state
+      setVideos(videos.filter(v => v.id !== videoToDelete.id))
+
+      // Close modal
+      setShowDeleteVideoModal(false)
+      setVideoToDelete(null)
+    } catch (error) {
+      console.error('Error deleting video:', error)
+    } finally {
+      setDeletingVideo(false)
     }
   }
 
@@ -550,6 +599,19 @@ export function AccountPage() {
                           {formatDuration(video.duration)}
                         </div>
                       )}
+
+                      {/* Delete button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setVideoToDelete(video)
+                          setShowDeleteVideoModal(true)
+                        }}
+                        className="absolute top-2 right-2 w-7 h-7 border-2 border-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                        style={{ backgroundColor: '#D64045' }}
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-white" />
+                      </button>
                     </div>
 
                     {/* Info */}
@@ -669,6 +731,17 @@ export function AccountPage() {
                               <span className="hidden sm:inline">TELECHARGER</span>
                             </a>
                           )}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setVideoToDelete(video)
+                              setShowDeleteVideoModal(true)
+                            }}
+                            className="flex items-center gap-1 px-2 py-1.5 border-2 border-black font-display font-bold text-[10px] text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
+                            style={{ backgroundColor: '#D64045' }}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -730,6 +803,71 @@ export function AccountPage() {
                   style={{ backgroundColor: '#D64045' }}
                 >
                   {deleting ? 'SUPPRESSION...' : 'CONFIRMER'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Video Modal */}
+        {showDeleteVideoModal && videoToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/50" onClick={() => {
+              setShowDeleteVideoModal(false)
+              setVideoToDelete(null)
+            }} />
+            <div
+              className="relative border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 max-w-md w-full"
+              style={{ backgroundColor: '#FFFFFF' }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-10 h-10 border-2 border-black flex items-center justify-center"
+                  style={{ backgroundColor: '#D64045' }}
+                >
+                  <Trash2 className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-display font-bold text-lg">Supprimer la video</h3>
+              </div>
+
+              <p className="font-body text-sm text-black/70 mb-2">
+                Es-tu sur de vouloir supprimer cette video ?
+              </p>
+              <p className="font-display font-bold text-sm mb-4 truncate">
+                "{videoToDelete.title || 'Video sans titre'}"
+              </p>
+              <p className="font-body text-xs text-black/50 mb-6">
+                Cette action est irreversible. La video et sa miniature seront definitivement supprimees.
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowDeleteVideoModal(false)
+                    setVideoToDelete(null)
+                  }}
+                  className="flex-1 px-4 py-2.5 border-2 border-black font-display font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
+                  style={{ backgroundColor: '#FFFFFF' }}
+                >
+                  ANNULER
+                </button>
+                <button
+                  onClick={handleDeleteVideo}
+                  disabled={deletingVideo}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-black font-display font-bold text-sm text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all disabled:opacity-50"
+                  style={{ backgroundColor: '#D64045' }}
+                >
+                  {deletingVideo ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      SUPPRESSION...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      SUPPRIMER
+                    </>
+                  )}
                 </button>
               </div>
             </div>
