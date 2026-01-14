@@ -46,6 +46,7 @@ export interface WardrobeData {
   totalItems: number
   scrapedAt: string
   items: VintedItem[]
+  profileScreenshot?: string // Screenshot mobile du profil (base64)
   error?: string
 }
 
@@ -65,7 +66,7 @@ export interface VideoConfig {
   resolution: VideoResolution
   aspectRatio: VideoAspectRatio
   username?: string
-  wardrobeUrl?: string | null // URL du profil Vinted pour capture screenshot côté backend
+  profileScreenshot?: string | null // Screenshot mobile du profil (base64)
 }
 
 export interface VideoArticle {

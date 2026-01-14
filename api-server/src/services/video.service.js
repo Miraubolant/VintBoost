@@ -9,7 +9,6 @@ const fs = require('fs')
 const fileUtils = require('../utils/file.utils')
 const remotionService = require('../remotion/render.service')
 const audioService = require('./audio.service')
-const puppeteerService = require('./puppeteer.service')
 const appConfig = require('../config')
 
 class VideoService {
@@ -42,7 +41,7 @@ class VideoService {
       customText = '',
       resolution = '1080p',
       aspectRatio = '9:16',
-      wardrobeUrl = null, // URL du profil Vinted pour capture screenshot
+      profileScreenshot = null, // Screenshot mobile du profil Vinted (base64)
     } = config
 
     // Validation
@@ -57,7 +56,7 @@ class VideoService {
     const jobId = uuidv4()
     console.log(`[VIDEO] Starting Remotion generation job ${jobId}`)
     console.log(`[VIDEO] Config: ${articles.length} articles, ${duration}s target, watermark=${hasWatermark}, template=${template}, ${resolution} ${aspectRatio}`)
-    console.log(`[VIDEO] Wardrobe URL for screenshot: ${wardrobeUrl ? 'Yes' : 'No'}`)
+    console.log(`[VIDEO] Profile screenshot: ${profileScreenshot ? 'Yes' : 'No'}`)
 
     let tempDirs = null
 
@@ -103,25 +102,7 @@ class VideoService {
         }
       })
 
-      // 5. Capturer le screenshot du profil Vinted si wardrobeUrl est fourni
-      let profileScreenshot = null
-      if (wardrobeUrl) {
-        console.log(`[VIDEO] Capturing profile screenshot from ${wardrobeUrl}...`)
-        try {
-          const screenshotResult = await puppeteerService.captureProfileScreenshot(wardrobeUrl)
-          if (screenshotResult.success) {
-            profileScreenshot = screenshotResult.screenshot
-            console.log(`[VIDEO] Profile screenshot captured successfully`)
-          } else {
-            console.warn(`[VIDEO] Failed to capture screenshot: ${screenshotResult.error}`)
-          }
-        } catch (screenshotError) {
-          console.warn(`[VIDEO] Screenshot capture error: ${screenshotError.message}`)
-          // Continue sans screenshot
-        }
-      }
-
-      // 6. Chemins de sortie
+      // 5. Chemins de sortie
       const outputDir = path.join(__dirname, '../../output')
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true })
@@ -130,7 +111,7 @@ class VideoService {
       const outputPath = path.join(outputDir, `${jobId}.mp4`)
       const thumbnailPath = path.join(outputDir, `${jobId}-thumb.jpg`)
 
-      // 7. Rendre la vidéo avec Remotion
+      // 6. Rendre la vidéo avec Remotion
       console.log(`[VIDEO] Rendering video with Remotion...`)
 
       const renderResult = await remotionService.renderVideo({
@@ -149,7 +130,7 @@ class VideoService {
         },
       })
 
-      // 8. Ajouter la musique si sélectionnée
+      // 7. Ajouter la musique si sélectionnée
       if (musicTrack && musicTrack !== '' && musicTrack !== 'none') {
         console.log(`[VIDEO] Adding music track: ${musicTrack}`)
         try {

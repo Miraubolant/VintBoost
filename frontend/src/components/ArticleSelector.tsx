@@ -1,4 +1,4 @@
-import { Check, Plus, GripVertical, X, User } from 'lucide-react'
+import { Check, Plus, GripVertical, X, Smartphone } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
 
 interface ArticleSelectorProps {
@@ -10,10 +10,10 @@ interface ArticleSelectorProps {
   maxItems: number
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick?: () => void
-  // Profile picture props
-  profilePictureUrl?: string
-  includeProfilePicture?: boolean
-  onToggleProfilePicture?: () => void
+  // Profile screenshot props
+  profileScreenshot?: string // Screenshot mobile du profil (base64)
+  includeProfileScreenshot?: boolean
+  onToggleProfileScreenshot?: () => void
   username?: string
 }
 
@@ -33,9 +33,9 @@ export function ArticleSelector({
   maxItems,
   plan,
   onUpgradeClick,
-  profilePictureUrl,
-  includeProfilePicture = false,
-  onToggleProfilePicture,
+  profileScreenshot,
+  includeProfileScreenshot = false,
+  onToggleProfileScreenshot,
   username,
 }: ArticleSelectorProps) {
   const planLimit = ARTICLE_LIMITS[plan]
@@ -103,13 +103,13 @@ export function ArticleSelector({
       {/* Articles Grid */}
       <div className="flex-1 overflow-y-auto max-h-[400px]">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {/* Profile Picture Card - First position */}
-          {profilePictureUrl && onToggleProfilePicture && (
-            <ProfilePictureCard
-              imageUrl={profilePictureUrl}
+          {/* Profile Screenshot Card - First position */}
+          {profileScreenshot && onToggleProfileScreenshot && (
+            <ProfileScreenshotCard
+              screenshot={profileScreenshot}
               username={username}
-              isSelected={includeProfilePicture}
-              onToggle={onToggleProfilePicture}
+              isSelected={includeProfileScreenshot}
+              onToggle={onToggleProfileScreenshot}
             />
           )}
 
@@ -133,15 +133,15 @@ export function ArticleSelector({
   )
 }
 
-// Profile Picture Card Component
-interface ProfilePictureCardProps {
-  imageUrl: string
+// Profile Screenshot Card Component
+interface ProfileScreenshotCardProps {
+  screenshot: string
   username?: string
   isSelected: boolean
   onToggle: () => void
 }
 
-function ProfilePictureCard({ imageUrl, username, isSelected, onToggle }: ProfilePictureCardProps) {
+function ProfileScreenshotCard({ screenshot, username, isSelected, onToggle }: ProfileScreenshotCardProps) {
   return (
     <div
       className={`
@@ -151,21 +151,21 @@ function ProfilePictureCard({ imageUrl, username, isSelected, onToggle }: Profil
         ${isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
         hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
       `}
-      style={{ backgroundColor: '#9ED8DB' }}
+      style={{ backgroundColor: '#1D3354' }}
       onClick={onToggle}
     >
-      {/* Image */}
-      <div className="aspect-square relative overflow-hidden" style={{ backgroundColor: '#9ED8DB' }}>
-        {imageUrl ? (
+      {/* Screenshot Preview - Phone style */}
+      <div className="aspect-[9/16] relative overflow-hidden" style={{ backgroundColor: '#000' }}>
+        {screenshot ? (
           <img
-            src={imageUrl}
-            alt="Photo de profil"
-            className="w-full h-full object-cover"
+            src={screenshot}
+            alt="Screenshot profil Vinted"
+            className="w-full h-full object-cover object-top"
             loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <User className="w-12 h-12 text-black/30" />
+            <Smartphone className="w-12 h-12 text-white/30" />
           </div>
         )}
 
@@ -180,21 +180,21 @@ function ProfilePictureCard({ imageUrl, username, isSelected, onToggle }: Profil
         {/* Intro badge */}
         <div
           className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5"
-          style={{ backgroundColor: '#1D3354' }}
+          style={{ backgroundColor: '#9ED8DB' }}
         >
-          <span className="font-bold text-white text-[10px]">INTRO</span>
+          <span className="font-bold text-black text-[10px]">INTRO</span>
         </div>
 
         {/* Selected overlay */}
         {isSelected && (
-          <div className="absolute inset-0 bg-[#1D3354]/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
         )}
       </div>
 
       {/* Info */}
       <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
         <h4 className="font-display font-bold text-black truncate text-xs">
-          Photo de profil
+          Apercu Profil
         </h4>
         {username && (
           <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>

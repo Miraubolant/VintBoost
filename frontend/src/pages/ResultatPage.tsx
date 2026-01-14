@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
-import { Video, X, AlertCircle, ArrowLeft, User } from 'lucide-react'
+import { Video, X, AlertCircle, ArrowLeft, Smartphone } from 'lucide-react'
 
 // Decomposed components
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
@@ -30,7 +30,7 @@ export function ResultatPage() {
   const [customText, setCustomText] = useState('')
   const [resolution, setResolution] = useState<VideoResolution>('1080p')
   const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('9:16')
-  const [includeProfilePicture, setIncludeProfilePicture] = useState(true) // Par défaut inclure la photo de profil
+  const [includeProfileScreenshot, setIncludeProfileScreenshot] = useState(true) // Par défaut inclure le screenshot du profil
 
   // Mobile panel state
   const [showMobilePanel, setShowMobilePanel] = useState(false)
@@ -122,13 +122,13 @@ export function ResultatPage() {
     return orderedArticles
   }, [orderedArticles])
 
-  // Toggle profile picture for intro
-  const handleToggleProfilePicture = () => {
-    setIncludeProfilePicture(prev => !prev)
+  // Toggle profile screenshot for intro
+  const handleToggleProfileScreenshot = () => {
+    setIncludeProfileScreenshot(prev => !prev)
   }
 
-  // Get profile picture URL from userInfo
-  const profilePictureUrl = wardrobeData?.userInfo?.profilePicture || null
+  // Get profile screenshot from wardrobeData
+  const profileScreenshot = wardrobeData?.profileScreenshot || null
 
   const handleGenerateVideo = async () => {
     if (selectedArticles.length === 0) return
@@ -152,7 +152,7 @@ export function ResultatPage() {
       resolution: resolution,
       aspectRatio: aspectRatio,
       username: wardrobeData?.username || '',
-      wardrobeUrl: includeProfilePicture ? (pendingUrl || `https://www.vinted.fr/member/${wardrobeData?.userId}`) : null,
+      profileScreenshot: includeProfileScreenshot ? profileScreenshot : null,
     })
 
     // Consume credit only after successful video generation
@@ -262,9 +262,9 @@ export function ResultatPage() {
                   maxItems={articleLimit}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
-                  profilePictureUrl={profilePictureUrl || undefined}
-                  includeProfilePicture={includeProfilePicture}
-                  onToggleProfilePicture={handleToggleProfilePicture}
+                  profileScreenshot={profileScreenshot || undefined}
+                  includeProfileScreenshot={includeProfileScreenshot}
+                  onToggleProfileScreenshot={handleToggleProfileScreenshot}
                   username={wardrobeData.username}
                 />
               </div>
@@ -352,13 +352,13 @@ export function ResultatPage() {
 
           {/* Mobile Articles Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {/* Profile Picture Card - First position */}
-            {profilePictureUrl && (
-              <MobileProfilePictureCard
-                imageUrl={profilePictureUrl}
+            {/* Profile Screenshot Card - First position */}
+            {profileScreenshot && (
+              <MobileProfileScreenshotCard
+                screenshot={profileScreenshot}
                 username={wardrobeData.username}
-                isSelected={includeProfilePicture}
-                onToggle={handleToggleProfilePicture}
+                isSelected={includeProfileScreenshot}
+                onToggle={handleToggleProfileScreenshot}
               />
             )}
 
@@ -497,14 +497,14 @@ function MobileArticleCard({
   )
 }
 
-// Mobile Profile Picture Card Component
-function MobileProfilePictureCard({
-  imageUrl,
+// Mobile Profile Screenshot Card Component
+function MobileProfileScreenshotCard({
+  screenshot,
   username,
   isSelected,
   onToggle,
 }: {
-  imageUrl: string
+  screenshot: string
   username?: string
   isSelected: boolean
   onToggle: () => void
@@ -517,20 +517,20 @@ function MobileProfilePictureCard({
         active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
         ${isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
       `}
-      style={{ backgroundColor: '#9ED8DB' }}
+      style={{ backgroundColor: '#1D3354' }}
       onClick={onToggle}
     >
-      <div className="aspect-square relative overflow-hidden" style={{ backgroundColor: '#9ED8DB' }}>
-        {imageUrl ? (
+      <div className="aspect-[9/16] relative overflow-hidden" style={{ backgroundColor: '#000' }}>
+        {screenshot ? (
           <img
-            src={imageUrl}
-            alt="Photo de profil"
-            className="w-full h-full object-cover"
+            src={screenshot}
+            alt="Screenshot profil Vinted"
+            className="w-full h-full object-cover object-top"
             loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <User className="w-10 h-10 text-black/30" />
+            <Smartphone className="w-10 h-10 text-white/30" />
           </div>
         )}
 
@@ -543,17 +543,17 @@ function MobileProfilePictureCard({
         </div>
 
         {/* Intro badge */}
-        <div className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5" style={{ backgroundColor: '#1D3354' }}>
-          <span className="font-bold text-white text-[10px]">INTRO</span>
+        <div className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5" style={{ backgroundColor: '#9ED8DB' }}>
+          <span className="font-bold text-black text-[10px]">INTRO</span>
         </div>
 
         {isSelected && (
-          <div className="absolute inset-0 bg-[#1D3354]/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
         )}
       </div>
 
       <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <h4 className="font-display font-bold text-black truncate text-xs">Photo de profil</h4>
+        <h4 className="font-display font-bold text-black truncate text-xs">Apercu Profil</h4>
         {username && (
           <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>@{username}</p>
         )}

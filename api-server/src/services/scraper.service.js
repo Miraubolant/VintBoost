@@ -397,14 +397,31 @@ class ScraperService {
 
   /**
    * Scrape un vestiaire (essaie l'API, puis HTML en fallback)
+   * Capture également un screenshot mobile du profil
    */
   async scrape(url) {
+    let result
     try {
-      return await this.scrapeViaAPI(url)
+      result = await this.scrapeViaAPI(url)
     } catch (error) {
       console.log('[SCRAPE] API approach failed:', error.message)
-      return await this.scrapeViaHTML(url)
+      result = await this.scrapeViaHTML(url)
     }
+
+    // Capturer le screenshot mobile du profil en parallèle
+    try {
+      console.log('[SCRAPE] Capturing profile screenshot...')
+      const screenshotResult = await puppeteerService.captureProfileScreenshot(url)
+      if (screenshotResult.success) {
+        result.profileScreenshot = screenshotResult.screenshot
+        console.log('[SCRAPE] Profile screenshot captured successfully')
+      }
+    } catch (screenshotError) {
+      console.warn('[SCRAPE] Failed to capture screenshot:', screenshotError.message)
+      // Continue sans screenshot
+    }
+
+    return result
   }
 
   /**
