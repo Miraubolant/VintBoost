@@ -9,6 +9,7 @@ const fs = require('fs')
 const fileUtils = require('../utils/file.utils')
 const remotionService = require('../remotion/render.service')
 const audioService = require('./audio.service')
+const puppeteerService = require('./puppeteer.service')
 const appConfig = require('../config')
 
 class VideoService {
@@ -41,7 +42,7 @@ class VideoService {
       customText = '',
       resolution = '1080p',
       aspectRatio = '9:16',
-      profileScreenshot = null, // Screenshot mobile du profil Vinted (base64)
+      profileScreenshotId = null, // ID du screenshot sur le serveur
     } = config
 
     // Validation
@@ -56,7 +57,7 @@ class VideoService {
     const jobId = uuidv4()
     console.log(`[VIDEO] Starting Remotion generation job ${jobId}`)
     console.log(`[VIDEO] Config: ${articles.length} articles, ${duration}s target, watermark=${hasWatermark}, template=${template}, ${resolution} ${aspectRatio}`)
-    console.log(`[VIDEO] Profile screenshot: ${profileScreenshot ? 'Yes' : 'No'}`)
+    console.log(`[VIDEO] Profile screenshot ID: ${profileScreenshotId || 'None'}`)
 
     let tempDirs = null
 
@@ -111,7 +112,17 @@ class VideoService {
       const outputPath = path.join(outputDir, `${jobId}.mp4`)
       const thumbnailPath = path.join(outputDir, `${jobId}-thumb.jpg`)
 
-      // 6. Rendre la vidéo avec Remotion
+      // 6. Préparer l'URL du screenshot si disponible
+      let profileScreenshotUrl = null
+      if (profileScreenshotId) {
+        const screenshotPath = puppeteerService.getScreenshotPath(profileScreenshotId)
+        if (fs.existsSync(screenshotPath)) {
+          profileScreenshotUrl = `${baseUrl}/output/screenshots/${profileScreenshotId}.png`
+          console.log(`[VIDEO] Screenshot URL: ${profileScreenshotUrl}`)
+        }
+      }
+
+      // 7. Rendre la vidéo avec Remotion
       console.log(`[VIDEO] Rendering video with Remotion...`)
 
       const renderResult = await remotionService.renderVideo({
@@ -124,7 +135,7 @@ class VideoService {
         hasWatermark,
         resolution,
         aspectRatio,
-        profileScreenshot,
+        profileScreenshotUrl,
         onProgress: (percent) => {
           // Optionnel: callback de progression
         },
@@ -170,8 +181,13 @@ class VideoService {
       console.log(`[VIDEO] Video generated successfully!`)
       console.log(`[VIDEO] Duration: ${renderResult.duration.toFixed(2)}s, Size: ${renderResult.fileSize}MB`)
 
-      // 9. Cleanup
+      // 10. Cleanup
       await fileUtils.cleanup(tempDir)
+
+      // Supprimer le screenshot temporaire après génération
+      if (profileScreenshotId) {
+        puppeteerService.deleteScreenshot(profileScreenshotId)
+      }
 
       return {
         success: true,

@@ -111,17 +111,17 @@ async function renderVideo(config) {
     hasWatermark = true,
     resolution = '1080p',
     aspectRatio = '9:16',
-    profileScreenshot = null, // Screenshot mobile du profil Vinted (base64 ou URL)
+    profileScreenshotUrl = null, // URL du screenshot mobile du profil Vinted
   } = config;
 
   const fps = 30;
-  const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps, !!profileScreenshot);
+  const totalFrames = calculateTotalFrames(articles.length, clipDuration, fps, !!profileScreenshotUrl);
   const { width, height } = calculateDimensions(resolution, aspectRatio);
 
   console.log(`[REMOTION] Starting render: ${articles.length} articles, ${clipDuration}s each`);
   console.log(`[REMOTION] Resolution: ${width}x${height} (${resolution} ${aspectRatio})`);
   console.log(`[REMOTION] Template: ${template}, Watermark: ${hasWatermark}`);
-  console.log(`[REMOTION] Profile screenshot: ${profileScreenshot ? 'Yes' : 'No'}`);
+  console.log(`[REMOTION] Profile screenshot URL: ${profileScreenshotUrl || 'None'}`);
   console.log(`[REMOTION] Total duration: ${totalFrames / fps}s (${totalFrames} frames)`);
 
   try {
@@ -135,7 +135,7 @@ async function renderVideo(config) {
       template,
       customText,
       hasWatermark,
-      profileScreenshot,
+      profileScreenshotUrl,
       articles: articles.map((article) => {
         const imgUrl = article.localImagePath || article.imageUrl;
         console.log(`[REMOTION] Article ${article.id} image: ${imgUrl}`);

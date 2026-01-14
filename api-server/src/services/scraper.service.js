@@ -413,8 +413,10 @@ class ScraperService {
       console.log('[SCRAPE] Capturing profile screenshot...')
       const screenshotResult = await puppeteerService.captureProfileScreenshot(url)
       if (screenshotResult.success) {
-        result.profileScreenshot = screenshotResult.screenshot
-        console.log('[SCRAPE] Profile screenshot captured successfully')
+        // Stocker l'URL et l'ID du screenshot (pas le base64 pour éviter les erreurs de taille)
+        result.profileScreenshotId = screenshotResult.screenshotId
+        result.profileScreenshotUrl = screenshotResult.screenshotUrl
+        console.log('[SCRAPE] Profile screenshot captured successfully:', screenshotResult.screenshotId)
       }
     } catch (screenshotError) {
       console.warn('[SCRAPE] Failed to capture screenshot:', screenshotError.message)

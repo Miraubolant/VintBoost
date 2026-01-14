@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
-import { Video, X, AlertCircle, ArrowLeft, Smartphone } from 'lucide-react'
+import { Video, X, AlertCircle, ArrowLeft, Smartphone, Check, Plus } from 'lucide-react'
 
 // Decomposed components
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
@@ -127,8 +127,9 @@ export function ResultatPage() {
     setIncludeProfileScreenshot(prev => !prev)
   }
 
-  // Get profile screenshot from wardrobeData
-  const profileScreenshot = wardrobeData?.profileScreenshot || null
+  // Get profile screenshot URL and ID from wardrobeData
+  const profileScreenshotId = wardrobeData?.profileScreenshotId || null
+  const profileScreenshotUrl = wardrobeData?.profileScreenshotUrl || null
 
   const handleGenerateVideo = async () => {
     if (selectedArticles.length === 0) return
@@ -152,7 +153,7 @@ export function ResultatPage() {
       resolution: resolution,
       aspectRatio: aspectRatio,
       username: wardrobeData?.username || '',
-      profileScreenshot: includeProfileScreenshot ? profileScreenshot : null,
+      profileScreenshotId: includeProfileScreenshot ? profileScreenshotId : null,
     })
 
     // Consume credit only after successful video generation
@@ -262,10 +263,6 @@ export function ResultatPage() {
                   maxItems={articleLimit}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
-                  profileScreenshot={profileScreenshot || undefined}
-                  includeProfileScreenshot={includeProfileScreenshot}
-                  onToggleProfileScreenshot={handleToggleProfileScreenshot}
-                  username={wardrobeData.username}
                 />
               </div>
             </div>
@@ -307,7 +304,7 @@ export function ResultatPage() {
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
           <div className="w-80 flex-shrink-0">
-            <div className="sticky top-8">
+            <div className="sticky top-8 space-y-4">
               <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
                 <VideoPreviewSummary
                   selectedArticles={selectedArticles}
@@ -325,6 +322,16 @@ export function ResultatPage() {
                   onUpgradeClick={() => setShowPricingModal(true)}
                 />
               </div>
+
+              {/* Profile Screenshot Preview - Below Video Summary */}
+              {profileScreenshotUrl && (
+                <ProfileScreenshotPreview
+                  screenshotUrl={profileScreenshotUrl}
+                  username={wardrobeData.username}
+                  isIncluded={includeProfileScreenshot}
+                  onToggle={handleToggleProfileScreenshot}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -352,16 +359,6 @@ export function ResultatPage() {
 
           {/* Mobile Articles Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {/* Profile Screenshot Card - First position */}
-            {profileScreenshot && (
-              <MobileProfileScreenshotCard
-                screenshot={profileScreenshot}
-                username={wardrobeData.username}
-                isSelected={includeProfileScreenshot}
-                onToggle={handleToggleProfileScreenshot}
-              />
-            )}
-
             {wardrobeData.items.map((item) => (
               <MobileArticleCard
                 key={item.id}
@@ -497,66 +494,90 @@ function MobileArticleCard({
   )
 }
 
-// Mobile Profile Screenshot Card Component
-function MobileProfileScreenshotCard({
-  screenshot,
+// Profile Screenshot Preview Component (below Video Summary)
+function ProfileScreenshotPreview({
+  screenshotUrl,
   username,
-  isSelected,
+  isIncluded,
   onToggle,
 }: {
-  screenshot: string
+  screenshotUrl: string
   username?: string
-  isSelected: boolean
+  isIncluded: boolean
   onToggle: () => void
 }) {
+  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
   return (
-    <div
-      className={`
-        border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden
-        transition-all cursor-pointer
-        active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-        ${isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
-      `}
-      style={{ backgroundColor: '#1D3354' }}
-      onClick={onToggle}
-    >
-      <div className="aspect-[9/16] relative overflow-hidden" style={{ backgroundColor: '#000' }}>
-        {screenshot ? (
-          <img
-            src={screenshot}
-            alt="Screenshot profil Vinted"
-            className="w-full h-full object-cover object-top"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Smartphone className="w-10 h-10 text-white/30" />
+    <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Header */}
+      <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Smartphone className="w-4 h-4 text-white" />
+            <h3 className="font-display font-bold text-white text-sm">INTRO VIDEO</h3>
           </div>
-        )}
-
-        {/* Selection indicator */}
-        <div
-          className="absolute top-1.5 right-1.5 w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
-          style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
-        >
-          {isSelected ? '✓' : '+'}
+          <button
+            onClick={onToggle}
+            className={`
+              px-2 py-1 border-2 border-black text-xs font-bold font-display
+              shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+              active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+              transition-all
+            `}
+            style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+          >
+            {isIncluded ? 'INCLUS' : 'EXCLURE'}
+          </button>
         </div>
-
-        {/* Intro badge */}
-        <div className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5" style={{ backgroundColor: '#9ED8DB' }}>
-          <span className="font-bold text-black text-[10px]">INTRO</span>
-        </div>
-
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
-        )}
       </div>
 
-      <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <h4 className="font-display font-bold text-black truncate text-xs">Apercu Profil</h4>
-        {username && (
-          <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>@{username}</p>
-        )}
+      {/* Preview */}
+      <div className="p-3">
+        <div className="flex gap-3">
+          {/* Screenshot thumbnail */}
+          <div
+            className={`
+              w-20 aspect-[9/16] border-2 border-black overflow-hidden flex-shrink-0
+              ${!isIncluded ? 'opacity-50 grayscale' : ''}
+            `}
+            style={{ backgroundColor: '#000' }}
+          >
+            <img
+              src={fullUrl}
+              alt="Screenshot profil Vinted"
+              className="w-full h-full object-cover object-top"
+              loading="lazy"
+            />
+          </div>
+
+          {/* Info */}
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="flex items-center gap-1.5 mb-2">
+              <div
+                className="w-5 h-5 border-2 border-black flex items-center justify-center cursor-pointer"
+                style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+                onClick={onToggle}
+              >
+                {isIncluded ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+              </div>
+              <span className="text-xs font-bold" style={{ color: isIncluded ? '#1D3354' : '#888' }}>
+                {isIncluded ? 'Sera affiche en intro' : 'Non inclus'}
+              </span>
+            </div>
+
+            {username && (
+              <p className="text-xs text-black/60">
+                Profil de <span className="font-bold" style={{ color: '#1D3354' }}>@{username}</span>
+              </p>
+            )}
+
+            <p className="text-[10px] text-black/40 mt-1">
+              Screenshot mobile du vestiaire
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )

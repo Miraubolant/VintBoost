@@ -13,11 +13,11 @@ export const VintedVideo = ({
   template = 'classic',
   customText = '',
   hasWatermark = true,
-  profileScreenshot = null, // Screenshot mobile du profil Vinted
+  profileScreenshotUrl = null, // URL du screenshot mobile du profil Vinted
 }) => {
   const { fps } = useVideoConfig();
 
-  const profileFrames = profileScreenshot ? Math.round(3 * fps) : 0; // 3 seconds si screenshot
+  const profileFrames = profileScreenshotUrl ? Math.round(3 * fps) : 0; // 3 seconds si screenshot
   const introFrames = Math.round(2.5 * fps); // 2.5 seconds
   const outroFrames = Math.round(2 * fps);   // 2 seconds
   const articleFrames = Math.round(clipDuration * fps);
@@ -27,11 +27,11 @@ export const VintedVideo = ({
   return (
     <AbsoluteFill>
       {/* Profile Screenshot (optionnel) */}
-      {profileScreenshot && (
+      {profileScreenshotUrl && (
         <>
           <Sequence from={currentFrame} durationInFrames={profileFrames}>
             <ProfileClip
-              screenshotUrl={profileScreenshot}
+              screenshotUrl={profileScreenshotUrl}
               username={username}
               template={template}
             />

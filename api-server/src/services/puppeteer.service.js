@@ -4,6 +4,9 @@
  */
 
 const puppeteer = require('puppeteer')
+const path = require('path')
+const fs = require('fs')
+const crypto = require('crypto')
 const config = require('../config')
 
 // Configuration iPhone 14 Pro Max pour émulation mobile
@@ -64,6 +67,7 @@ class PuppeteerService {
 
   /**
    * Capture un screenshot mobile d'un profil Vinted
+   * Sauvegarde le screenshot en fichier et retourne l'URL
    */
   async captureProfileScreenshot(url) {
     const browser = await this.launchBrowser()
@@ -104,18 +108,31 @@ class PuppeteerService {
         // Pas de popup à fermer
       }
 
-      // Prendre le screenshot
-      const screenshot = await page.screenshot({
+      // Générer un ID unique pour le screenshot
+      const screenshotId = crypto.randomBytes(8).toString('hex')
+      const screenshotsDir = path.join(__dirname, '../../output/screenshots')
+
+      // Créer le dossier screenshots s'il n'existe pas
+      if (!fs.existsSync(screenshotsDir)) {
+        fs.mkdirSync(screenshotsDir, { recursive: true })
+      }
+
+      const screenshotPath = path.join(screenshotsDir, `${screenshotId}.png`)
+
+      // Prendre le screenshot et sauvegarder en fichier
+      await page.screenshot({
         type: 'png',
         fullPage: false, // Juste la partie visible
-        encoding: 'base64'
+        path: screenshotPath
       })
 
-      console.log('[SCREENSHOT] Screenshot captured successfully')
+      console.log(`[SCREENSHOT] Screenshot saved to ${screenshotPath}`)
 
       return {
         success: true,
-        screenshot: `data:image/png;base64,${screenshot}`,
+        screenshotId,
+        screenshotUrl: `/output/screenshots/${screenshotId}.png`,
+        screenshotPath,
         width: IPHONE_14_PRO_MAX.viewport.width,
         height: IPHONE_14_PRO_MAX.viewport.height
       }
@@ -123,6 +140,24 @@ class PuppeteerService {
     } finally {
       await browser.close()
     }
+  }
+
+  /**
+   * Supprime un screenshot temporaire
+   */
+  deleteScreenshot(screenshotId) {
+    const screenshotPath = path.join(__dirname, `../../output/screenshots/${screenshotId}.png`)
+    if (fs.existsSync(screenshotPath)) {
+      fs.unlinkSync(screenshotPath)
+      console.log(`[SCREENSHOT] Deleted screenshot ${screenshotId}`)
+    }
+  }
+
+  /**
+   * Récupère le chemin d'un screenshot par son ID
+   */
+  getScreenshotPath(screenshotId) {
+    return path.join(__dirname, `../../output/screenshots/${screenshotId}.png`)
   }
 }
 

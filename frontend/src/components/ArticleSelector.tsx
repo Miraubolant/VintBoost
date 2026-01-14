@@ -1,4 +1,4 @@
-import { Check, Plus, GripVertical, X, Smartphone } from 'lucide-react'
+import { Check, Plus, GripVertical, X } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
 
 interface ArticleSelectorProps {
@@ -10,11 +10,6 @@ interface ArticleSelectorProps {
   maxItems: number
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick?: () => void
-  // Profile screenshot props
-  profileScreenshot?: string // Screenshot mobile du profil (base64)
-  includeProfileScreenshot?: boolean
-  onToggleProfileScreenshot?: () => void
-  username?: string
 }
 
 // Plan-based article limits
@@ -33,10 +28,6 @@ export function ArticleSelector({
   maxItems,
   plan,
   onUpgradeClick,
-  profileScreenshot,
-  includeProfileScreenshot = false,
-  onToggleProfileScreenshot,
-  username,
 }: ArticleSelectorProps) {
   const planLimit = ARTICLE_LIMITS[plan]
   const effectiveMax = Math.min(maxItems, planLimit)
@@ -103,16 +94,6 @@ export function ArticleSelector({
       {/* Articles Grid */}
       <div className="flex-1 overflow-y-auto max-h-[400px]">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {/* Profile Screenshot Card - First position */}
-          {profileScreenshot && onToggleProfileScreenshot && (
-            <ProfileScreenshotCard
-              screenshot={profileScreenshot}
-              username={username}
-              isSelected={includeProfileScreenshot}
-              onToggle={onToggleProfileScreenshot}
-            />
-          )}
-
           {items.map((item) => {
             const isSelected = selectedItems.has(item.id)
             const isDisabled = !isSelected && selectedItems.size >= effectiveMax
@@ -128,79 +109,6 @@ export function ArticleSelector({
             )
           })}
         </div>
-      </div>
-    </div>
-  )
-}
-
-// Profile Screenshot Card Component
-interface ProfileScreenshotCardProps {
-  screenshot: string
-  username?: string
-  isSelected: boolean
-  onToggle: () => void
-}
-
-function ProfileScreenshotCard({ screenshot, username, isSelected, onToggle }: ProfileScreenshotCardProps) {
-  return (
-    <div
-      className={`
-        border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden
-        transition-all cursor-pointer
-        active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-        ${isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
-        hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-      `}
-      style={{ backgroundColor: '#1D3354' }}
-      onClick={onToggle}
-    >
-      {/* Screenshot Preview - Phone style */}
-      <div className="aspect-[9/16] relative overflow-hidden" style={{ backgroundColor: '#000' }}>
-        {screenshot ? (
-          <img
-            src={screenshot}
-            alt="Screenshot profil Vinted"
-            className="w-full h-full object-cover object-top"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Smartphone className="w-12 h-12 text-white/30" />
-          </div>
-        )}
-
-        {/* Selection indicator */}
-        <div
-          className="absolute top-1.5 right-1.5 w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs transition-colors shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
-          style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
-        >
-          {isSelected ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
-        </div>
-
-        {/* Intro badge */}
-        <div
-          className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5"
-          style={{ backgroundColor: '#9ED8DB' }}
-        >
-          <span className="font-bold text-black text-[10px]">INTRO</span>
-        </div>
-
-        {/* Selected overlay */}
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
-        )}
-      </div>
-
-      {/* Info */}
-      <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <h4 className="font-display font-bold text-black truncate text-xs">
-          Apercu Profil
-        </h4>
-        {username && (
-          <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>
-            @{username}
-          </p>
-        )}
       </div>
     </div>
   )
