@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
-import { Video, X, AlertCircle, ArrowLeft, Camera, Smartphone, Loader2, Trash2 } from 'lucide-react'
+import { Video, X, AlertCircle, ArrowLeft, User } from 'lucide-react'
 
 // Decomposed components
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
@@ -20,7 +20,7 @@ export function ResultatPage() {
   const navigate = useNavigate()
   const { wardrobeData, setWardrobeData, clearWardrobeData, pendingUrl, setPendingUrl } = useWardrobe()
   const { subscription, credits, consumeVideoCredit, refreshUserData } = useAuth()
-  const { scrapeWardrobe, captureProfileScreenshot, data: scrapedData, loading: scraping, screenshotLoading, error: scrapeError } = useVintedScraper()
+  const { scrapeWardrobe, data: scrapedData, loading: scraping, error: scrapeError } = useVintedScraper()
 
   // Video generation states
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
@@ -30,7 +30,7 @@ export function ResultatPage() {
   const [customText, setCustomText] = useState('')
   const [resolution, setResolution] = useState<VideoResolution>('1080p')
   const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('9:16')
-  const [profileScreenshot, setProfileScreenshot] = useState<string | null>(null)
+  const [includeProfilePicture, setIncludeProfilePicture] = useState(true) // Par défaut inclure la photo de profil
 
   // Mobile panel state
   const [showMobilePanel, setShowMobilePanel] = useState(false)
@@ -122,19 +122,13 @@ export function ResultatPage() {
     return orderedArticles
   }, [orderedArticles])
 
-  // Capture profile screenshot
-  const handleCaptureScreenshot = async () => {
-    if (!pendingUrl && !wardrobeData) return
-    const url = pendingUrl || `https://www.vinted.fr/member/${wardrobeData?.userId}`
-    const result = await captureProfileScreenshot(url)
-    if (result?.success && result.screenshot) {
-      setProfileScreenshot(result.screenshot)
-    }
+  // Toggle profile picture for intro
+  const handleToggleProfilePicture = () => {
+    setIncludeProfilePicture(prev => !prev)
   }
 
-  const handleRemoveScreenshot = () => {
-    setProfileScreenshot(null)
-  }
+  // Get profile picture URL from userInfo
+  const profilePictureUrl = wardrobeData?.userInfo?.profilePicture || null
 
   const handleGenerateVideo = async () => {
     if (selectedArticles.length === 0) return
@@ -158,7 +152,7 @@ export function ResultatPage() {
       resolution: resolution,
       aspectRatio: aspectRatio,
       username: wardrobeData?.username || '',
-      profileScreenshot: profileScreenshot,
+      profileScreenshot: includeProfilePicture ? profilePictureUrl : null, // Envoie l'URL, pas le base64
     })
 
     // Consume credit only after successful video generation
@@ -246,103 +240,6 @@ export function ResultatPage() {
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles + Configuration */}
           <div className="flex-1 min-w-0 space-y-4">
-            {/* Profile Screenshot Section */}
-            <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="flex items-center justify-between px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#9ED8DB' }}>
-                <div className="flex items-center gap-2">
-                  <Smartphone className="w-4 h-4" />
-                  <h3 className="font-display font-bold text-black text-sm">APERCU PROFIL (INTRO)</h3>
-                </div>
-                <span className="text-xs font-body text-black/60">Optionnel</span>
-              </div>
-              <div className="p-4">
-                {profileScreenshot ? (
-                  <div className="flex items-start gap-4">
-                    {/* Screenshot Preview */}
-                    <div className="relative">
-                      <div
-                        className="w-24 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden"
-                        style={{ aspectRatio: '9/16' }}
-                      >
-                        <img
-                          src={profileScreenshot}
-                          alt="Profile screenshot"
-                          className="w-full h-full object-cover object-top"
-                        />
-                      </div>
-                      {/* Delete button */}
-                      <button
-                        onClick={handleRemoveScreenshot}
-                        className="absolute -top-2 -right-2 w-6 h-6 border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                        style={{ backgroundColor: '#D64045' }}
-                      >
-                        <Trash2 className="w-3 h-3 text-white" />
-                      </button>
-                    </div>
-                    {/* Info */}
-                    <div className="flex-1">
-                      <p className="font-display font-bold text-sm mb-1" style={{ color: '#1D3354' }}>
-                        Screenshot capture
-                      </p>
-                      <p className="text-xs text-black/60 font-body mb-3">
-                        Ce screenshot apparaitra en intro de ta video (3 secondes)
-                      </p>
-                      <button
-                        onClick={handleCaptureScreenshot}
-                        disabled={screenshotLoading}
-                        className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold font-display border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
-                        style={{ backgroundColor: '#FFFFFF' }}
-                      >
-                        {screenshotLoading ? (
-                          <Loader2 className="w-3 h-3 animate-spin" />
-                        ) : (
-                          <Camera className="w-3 h-3" />
-                        )}
-                        RECAPTURER
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-4">
-                    {/* Placeholder */}
-                    <div
-                      className="w-24 border-2 border-dashed border-black/30 flex items-center justify-center"
-                      style={{ aspectRatio: '9/16', backgroundColor: '#F5F5F5' }}
-                    >
-                      <Smartphone className="w-8 h-8 text-black/20" />
-                    </div>
-                    {/* CTA */}
-                    <div className="flex-1">
-                      <p className="font-display font-bold text-sm mb-1" style={{ color: '#1D3354' }}>
-                        Ajouter un apercu du profil
-                      </p>
-                      <p className="text-xs text-black/60 font-body mb-3">
-                        Capture une vue mobile de ton profil Vinted pour l'intro de ta video
-                      </p>
-                      <button
-                        onClick={handleCaptureScreenshot}
-                        disabled={screenshotLoading}
-                        className="flex items-center gap-2 px-4 py-2 text-xs font-bold font-display border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
-                        style={{ backgroundColor: '#9ED8DB' }}
-                      >
-                        {screenshotLoading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            CAPTURE EN COURS...
-                          </>
-                        ) : (
-                          <>
-                            <Camera className="w-4 h-4" />
-                            CAPTURER LE PROFIL
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
             {/* Articles Section with integrated header */}
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
               {/* Header with back button */}
@@ -365,6 +262,10 @@ export function ResultatPage() {
                   maxItems={articleLimit}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
+                  profilePictureUrl={profilePictureUrl || undefined}
+                  includeProfilePicture={includeProfilePicture}
+                  onToggleProfilePicture={handleToggleProfilePicture}
+                  username={wardrobeData.username}
                 />
               </div>
             </div>
@@ -449,75 +350,18 @@ export function ResultatPage() {
             </div>
           </div>
 
-          {/* Mobile Profile Screenshot */}
-          <div className="mb-4 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-            <div className="flex items-center justify-between px-3 py-2 border-b border-black/20" style={{ backgroundColor: '#9ED8DB' }}>
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-3 h-3" />
-                <span className="font-display font-bold text-xs">APERCU PROFIL</span>
-              </div>
-              <span className="text-[10px] text-black/60">Optionnel</span>
-            </div>
-            <div className="p-3">
-              {profileScreenshot ? (
-                <div className="flex items-center gap-3">
-                  <div className="relative flex-shrink-0">
-                    <div
-                      className="w-14 border border-black overflow-hidden"
-                      style={{ aspectRatio: '9/16' }}
-                    >
-                      <img
-                        src={profileScreenshot}
-                        alt="Profile"
-                        className="w-full h-full object-cover object-top"
-                      />
-                    </div>
-                    <button
-                      onClick={handleRemoveScreenshot}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 border border-black flex items-center justify-center"
-                      style={{ backgroundColor: '#D64045' }}
-                    >
-                      <Trash2 className="w-2.5 h-2.5 text-white" />
-                    </button>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-black/70 mb-1">Screenshot capture</p>
-                    <button
-                      onClick={handleCaptureScreenshot}
-                      disabled={screenshotLoading}
-                      className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold border border-black disabled:opacity-50"
-                      style={{ backgroundColor: '#F5F5F5' }}
-                    >
-                      {screenshotLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
-                      RECAPTURER
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={handleCaptureScreenshot}
-                  disabled={screenshotLoading}
-                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold font-display border-2 border-dashed border-black/30 disabled:opacity-50 transition-all"
-                  style={{ backgroundColor: '#F5F5F5' }}
-                >
-                  {screenshotLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      CAPTURE EN COURS...
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="w-4 h-4" />
-                      CAPTURER MON PROFIL
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-
           {/* Mobile Articles Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {/* Profile Picture Card - First position */}
+            {profilePictureUrl && (
+              <MobileProfilePictureCard
+                imageUrl={profilePictureUrl}
+                username={wardrobeData.username}
+                isSelected={includeProfilePicture}
+                onToggle={handleToggleProfilePicture}
+              />
+            )}
+
             {wardrobeData.items.map((item) => (
               <MobileArticleCard
                 key={item.id}
@@ -647,6 +491,71 @@ function MobileArticleCard({
         <h4 className="font-display font-bold text-black truncate text-xs">{item.title}</h4>
         {item.brand && (
           <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>{item.brand}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Mobile Profile Picture Card Component
+function MobileProfilePictureCard({
+  imageUrl,
+  username,
+  isSelected,
+  onToggle,
+}: {
+  imageUrl: string
+  username?: string
+  isSelected: boolean
+  onToggle: () => void
+}) {
+  return (
+    <div
+      className={`
+        border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden
+        transition-all cursor-pointer
+        active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+        ${isSelected ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
+      `}
+      style={{ backgroundColor: '#9ED8DB' }}
+      onClick={onToggle}
+    >
+      <div className="aspect-square relative overflow-hidden" style={{ backgroundColor: '#9ED8DB' }}>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="Photo de profil"
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <User className="w-10 h-10 text-black/30" />
+          </div>
+        )}
+
+        {/* Selection indicator */}
+        <div
+          className="absolute top-1.5 right-1.5 w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+          style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
+        >
+          {isSelected ? '✓' : '+'}
+        </div>
+
+        {/* Intro badge */}
+        <div className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5" style={{ backgroundColor: '#1D3354' }}>
+          <span className="font-bold text-white text-[10px]">INTRO</span>
+        </div>
+
+        {isSelected && (
+          <div className="absolute inset-0 bg-[#1D3354]/10 pointer-events-none" />
+        )}
+      </div>
+
+      <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+        <h4 className="font-display font-bold text-black truncate text-xs">Photo de profil</h4>
+        {username && (
+          <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>@{username}</p>
         )}
       </div>
     </div>
