@@ -25,7 +25,6 @@ export function ResultatPage() {
   // Video generation states
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
   const [orderedArticles, setOrderedArticles] = useState<VintedItem[]>([])
-  const [videoDuration, setVideoDuration] = useState<15 | 30 | 60>(15)
   const [musicTrack, setMusicTrack] = useState('')
   const [template, setTemplate] = useState<VideoTemplate>('classic')
   const [customText, setCustomText] = useState('')
@@ -136,7 +135,6 @@ export function ResultatPage() {
 
     const result = await generate({
       articles,
-      duration: videoDuration,
       musicTrack: musicTrack,
       title: customText || (wardrobeData?.username ? `@${wardrobeData.username}` : ''),
       template: template,
@@ -272,8 +270,6 @@ export function ResultatPage() {
                   />
                 ) : (
                   <VideoConfigForm
-                    videoDuration={videoDuration}
-                    onDurationChange={setVideoDuration}
                     musicTrack={musicTrack}
                     onMusicChange={setMusicTrack}
                     template={template}
@@ -301,7 +297,6 @@ export function ResultatPage() {
               <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
                 <VideoPreviewSummary
                   selectedArticles={selectedArticles}
-                  videoDuration={videoDuration}
                   musicTrack={musicTrack}
                   template={template}
                   customText={customText}
@@ -375,8 +370,6 @@ export function ResultatPage() {
           selectedArticles={selectedArticles}
           onArticlesReorder={handleArticlesReorder}
           onRemoveArticle={handleRemoveArticle}
-          videoDuration={videoDuration}
-          onDurationChange={setVideoDuration}
           musicTrack={musicTrack}
           onMusicChange={setMusicTrack}
           template={template}
@@ -485,8 +478,6 @@ function MobileConfigPanel({
   selectedArticles,
   onArticlesReorder,
   onRemoveArticle,
-  videoDuration,
-  onDurationChange,
   musicTrack,
   onMusicChange,
   template,
@@ -507,8 +498,6 @@ function MobileConfigPanel({
   selectedArticles: VintedItem[]
   onArticlesReorder: (articles: VintedItem[]) => void
   onRemoveArticle: (id: string) => void
-  videoDuration: 15 | 30 | 60
-  onDurationChange: (d: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (t: string) => void
   template: VideoTemplate
@@ -575,8 +564,6 @@ function MobileConfigPanel({
               selectedArticles={selectedArticles}
               onArticlesReorder={onArticlesReorder}
               onRemoveArticle={onRemoveArticle}
-              videoDuration={videoDuration}
-              onDurationChange={onDurationChange}
               musicTrack={musicTrack}
               onMusicChange={onMusicChange}
               template={template}

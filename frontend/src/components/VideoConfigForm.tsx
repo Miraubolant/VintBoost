@@ -3,7 +3,6 @@ import {
   Music,
   Layout,
   Type,
-  Clock,
   Stamp,
   Lock,
   Upload,
@@ -16,8 +15,6 @@ import {
 import type { VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
 
 interface VideoConfigFormProps {
-  videoDuration: 15 | 30 | 60
-  onDurationChange: (duration: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (track: string) => void
   template: VideoTemplate
@@ -38,7 +35,6 @@ interface VideoConfigFormProps {
 // Plan-based restrictions
 export const PLAN_FEATURES = {
   free: {
-    durations: [15] as const,
     templates: ['classic'] as VideoTemplate[],
     resolutions: ['1080p'] as VideoResolution[],
     aspectRatios: ['9:16'] as VideoAspectRatio[],
@@ -46,7 +42,6 @@ export const PLAN_FEATURES = {
     canRemoveWatermark: false,
   },
   pro: {
-    durations: [15, 30, 60] as const,
     templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
     resolutions: ['720p', '1080p'] as VideoResolution[],
     aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
@@ -54,7 +49,6 @@ export const PLAN_FEATURES = {
     canRemoveWatermark: true,
   },
   business: {
-    durations: [15, 30, 60] as const,
     templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
     resolutions: ['720p', '1080p', '4K'] as VideoResolution[],
     aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
@@ -92,8 +86,6 @@ const templates: { id: VideoTemplate; name: string; color: string; premium: bool
 ]
 
 export function VideoConfigForm({
-  videoDuration,
-  onDurationChange,
   musicTrack,
   onMusicChange,
   template,
@@ -116,35 +108,6 @@ export function VideoConfigForm({
 
   return (
     <div className="space-y-4">
-      {/* Duration - Compact inline */}
-      <div className="flex items-center justify-between">
-        <label className="flex items-center gap-2 font-display font-bold text-xs text-black">
-          <Clock className="w-4 h-4" />
-          DUREE
-        </label>
-        <div className="flex gap-1">
-          {([15, 30, 60] as const).map((d) => {
-            const isAvailable = (features.durations as readonly number[]).includes(d)
-            const isSelected = videoDuration === d
-            return (
-              <button
-                key={d}
-                onClick={() => isAvailable && onDurationChange(d)}
-                disabled={!isAvailable}
-                className={`
-                  relative px-3 py-1.5 font-display font-bold text-xs border-2 border-black
-                  ${isAvailable ? '' : 'opacity-40 cursor-not-allowed'}
-                `}
-                style={{ backgroundColor: isSelected ? '#9ED8DB' : '#FFFFFF' }}
-              >
-                {d}s
-                {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2.5 h-2.5" />}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Template - Compact horizontal */}
       <div>
         <label className="flex items-center gap-2 font-display font-bold text-xs text-black mb-2">

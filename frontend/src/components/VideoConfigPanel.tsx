@@ -2,15 +2,13 @@ import { useState } from 'react'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, TouchSensor } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Music, Layout, Type, GripVertical, X, Clock, Sparkles, Stamp, ChevronDown, ChevronUp, Crown } from 'lucide-react'
+import { Music, Layout, Type, GripVertical, X, Sparkles, Stamp, ChevronDown, ChevronUp, Crown } from 'lucide-react'
 import type { VintedItem, VideoTemplate } from '../types/vinted'
 
 interface VideoConfigPanelProps {
   selectedArticles: VintedItem[]
   onArticlesReorder: (articles: VintedItem[]) => void
   onRemoveArticle: (id: string) => void
-  videoDuration: 15 | 30 | 60
-  onDurationChange: (duration: 15 | 30 | 60) => void
   musicTrack: string
   onMusicChange: (track: string) => void
   template: VideoTemplate
@@ -88,8 +86,6 @@ export function VideoConfigPanel({
   selectedArticles,
   onArticlesReorder,
   onRemoveArticle,
-  videoDuration,
-  onDurationChange,
   musicTrack,
   onMusicChange,
   template,
@@ -133,26 +129,6 @@ export function VideoConfigPanel({
 
   return (
     <div className="space-y-4">
-      {/* Duration - Compact inline */}
-      <div className="flex items-center justify-between">
-        <label className="flex items-center gap-2 font-display font-bold text-xs text-black">
-          <Clock className="w-4 h-4" />
-          DUREE
-        </label>
-        <div className="flex gap-1">
-          {([15, 30, 60] as const).map((d) => (
-            <button
-              key={d}
-              onClick={() => onDurationChange(d)}
-              className="px-3 py-1.5 font-display font-bold text-xs border-2 border-black"
-              style={{ backgroundColor: videoDuration === d ? '#9ED8DB' : '#FFFFFF' }}
-            >
-              {d}s
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Articles Order - Collapsible */}
       <div className="border-2 border-black overflow-hidden">
         <button

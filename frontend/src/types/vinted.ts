@@ -56,7 +56,7 @@ export type VideoTemplate = 'classic' | 'modern' | 'premium'
 
 export interface VideoConfig {
   articles: VideoArticle[]
-  duration: 15 | 30 | 45 | 60
+  duration?: number
   musicTrack: string
   title?: string
   template: VideoTemplate

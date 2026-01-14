@@ -1,9 +1,8 @@
-import { Sparkles, Clock, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin } from 'lucide-react'
+import { Sparkles, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin } from 'lucide-react'
 import type { VintedItem, UserInfo } from '../types/vinted'
 
 interface VideoPreviewSummaryProps {
   selectedArticles: VintedItem[]
-  videoDuration: number
   musicTrack: string
   template: string
   customText: string
@@ -37,7 +36,6 @@ const musicNames: Record<string, string> = {
 
 export function VideoPreviewSummary({
   selectedArticles,
-  videoDuration,
   musicTrack,
   template,
   customText,
@@ -180,11 +178,6 @@ export function VideoPreviewSummary({
 
         {/* Configuration Summary */}
         <div className="space-y-1.5">
-          <SummaryItem
-            icon={<Clock className="w-3.5 h-3.5" />}
-            label="Duree"
-            value={`${videoDuration}s`}
-          />
           <SummaryItem
             icon={<Layout className="w-3.5 h-3.5" />}
             label="Template"
