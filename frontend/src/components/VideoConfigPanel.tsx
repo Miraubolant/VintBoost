@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, TouchSensor } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Music, Layout, Type, GripVertical, X, Sparkles, Stamp, ChevronDown, ChevronUp, Crown } from 'lucide-react'
+import { Music, Layout, Type, GripVertical, X, Sparkles, Stamp, ChevronDown, ChevronUp, Crown, Lock } from 'lucide-react'
 import type { VintedItem, VideoTemplate } from '../types/vinted'
 
 interface VideoConfigPanelProps {
@@ -18,6 +18,7 @@ interface VideoConfigPanelProps {
   hasWatermark: boolean
   onWatermarkChange: (hasWatermark: boolean) => void
   canRemoveWatermark: boolean
+  availableTemplates?: readonly VideoTemplate[]
   onGenerate: () => void
   loading: boolean
   isMobile?: boolean
@@ -95,6 +96,7 @@ export function VideoConfigPanel({
   hasWatermark,
   onWatermarkChange,
   canRemoveWatermark,
+  availableTemplates,
   onGenerate,
   loading,
 }: VideoConfigPanelProps) {
@@ -172,23 +174,32 @@ export function VideoConfigPanel({
           TEMPLATE
         </label>
         <div className="flex gap-2">
-          {templates.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => onTemplateChange(t.id)}
-              className={`
-                flex-1 flex items-center justify-center gap-2 py-2 border-2 border-black
-                ${template === t.id ? 'ring-2 ring-[#1D3354]' : ''}
-              `}
-              style={{ backgroundColor: '#FFFFFF' }}
-            >
-              <div
-                className="w-4 h-4 border border-black"
-                style={{ backgroundColor: t.color }}
-              />
-              <span className="font-bold text-xs">{t.name}</span>
-            </button>
-          ))}
+          {templates.map((t) => {
+            const isAvailable = !availableTemplates || availableTemplates.includes(t.id)
+            const isSelected = template === t.id
+            return (
+              <button
+                key={t.id}
+                onClick={() => isAvailable && onTemplateChange(t.id)}
+                disabled={!isAvailable}
+                className={`
+                  relative flex-1 flex items-center justify-center gap-2 py-2 border-2 border-black
+                  ${isSelected ? 'ring-2 ring-[#1D3354]' : ''}
+                  ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                `}
+                style={{ backgroundColor: '#FFFFFF' }}
+              >
+                <div
+                  className="w-4 h-4 border border-black"
+                  style={{ backgroundColor: t.color }}
+                />
+                <span className="font-bold text-xs">{t.name}</span>
+                {!isAvailable && (
+                  <Lock className="w-3 h-3 text-black/40" />
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
 

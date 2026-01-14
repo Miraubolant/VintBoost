@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
-import { Video, X, AlertCircle, ArrowLeft, Smartphone, Check, Plus } from 'lucide-react'
+import { Video, X, AlertCircle, ArrowLeft, Smartphone, Check, Plus, ZoomIn } from 'lucide-react'
 
 // Decomposed components
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
@@ -30,13 +30,16 @@ export function ResultatPage() {
   const [customText, setCustomText] = useState('')
   const [resolution, setResolution] = useState<VideoResolution>('1080p')
   const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('9:16')
-  const [includeProfileScreenshot, setIncludeProfileScreenshot] = useState(true) // Par défaut inclure le screenshot du profil
+  const [includeProfileScreenshot, setIncludeProfileScreenshot] = useState(true)
 
   // Mobile panel state
   const [showMobilePanel, setShowMobilePanel] = useState(false)
 
   // Pricing modal state
   const [showPricingModal, setShowPricingModal] = useState(false)
+
+  // Screenshot preview modal state
+  const [showScreenshotModal, setShowScreenshotModal] = useState(false)
 
   // Get plan info
   const plan = subscription?.plan || 'free'
@@ -186,9 +189,13 @@ export function ResultatPage() {
     resetVideo()
   }
 
-  // Loading state
+  // Loading state - centered for mobile
   if (scraping || (!wardrobeData && pendingUrl)) {
-    return <ScrapingLoaderModal />
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#E8DFD5' }}>
+        <ScrapingLoaderModal />
+      </div>
+    )
   }
 
   // Error state
@@ -222,38 +229,33 @@ export function ResultatPage() {
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Page Title - Desktop only */}
-      <div className="hidden lg:block text-center pt-8 pb-6">
+      <div className="hidden lg:block text-center pt-6 pb-4">
         <h1
-          className="inline-block font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]"
+          className="inline-block font-display font-bold text-2xl lg:text-3xl text-white border-3 border-black px-5 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           style={{ backgroundColor: '#1D3354' }}
         >
           CONFIGURE TA VIDEO !
         </h1>
-        <p className="font-body text-sm sm:text-base text-black/70 mt-4 max-w-xl mx-auto">
-          <span className="font-bold" style={{ color: '#1D3354' }}>1.</span> Selectionne tes articles{' '}
-          <span className="font-bold" style={{ color: '#1D3354' }}>2.</span> Configure ta video{' '}
-          <span className="font-bold" style={{ color: '#1D3354' }}>3.</span> Genere et telecharge !
-        </p>
       </div>
 
       {/* Main Content - 2 Columns + Sticky Sidebar Desktop */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 lg:pt-0">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-0">
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles + Configuration */}
-          <div className="flex-1 min-w-0 space-y-4">
+          <div className="flex-1 min-w-0 space-y-3">
             {/* Articles Section with integrated header */}
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
               {/* Header with back button */}
-              <div className="flex items-center gap-3 px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+              <div className="flex items-center gap-3 px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
                 <button
                   onClick={handleBack}
-                  className="w-8 h-8 border-2 border-white/30 flex items-center justify-center transition-all hover:bg-white/10 flex-shrink-0"
+                  className="w-7 h-7 border-2 border-white/30 flex items-center justify-center transition-all hover:bg-white/10 flex-shrink-0"
                 >
-                  <ArrowLeft className="w-4 h-4 text-white" />
+                  <ArrowLeft className="w-3.5 h-3.5 text-white" />
                 </button>
-                <h3 className="font-display font-bold text-white text-sm">SELECTION DES ARTICLES</h3>
+                <h3 className="font-display font-bold text-white text-xs">SELECTION DES ARTICLES</h3>
               </div>
-              <div className="p-4">
+              <div className="p-3">
                 <ArticleSelector
                   items={wardrobeData.items}
                   selectedItems={selectedItems}
@@ -267,12 +269,12 @@ export function ResultatPage() {
               </div>
             </div>
 
-            {/* Configuration Section */}
+            {/* Configuration Section - Compact with Intro Video integrated */}
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
-                <h3 className="font-display font-bold text-white text-sm">CONFIGURATION VIDEO</h3>
+              <div className="px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+                <h3 className="font-display font-bold text-white text-xs">CONFIGURATION VIDEO</h3>
               </div>
-              <div className="p-4">
+              <div className="p-3">
                 {videoResult ? (
                   <VideoResultDisplay
                     result={videoResult}
@@ -280,31 +282,44 @@ export function ResultatPage() {
                     onReset={handleReset}
                   />
                 ) : (
-                  <VideoConfigForm
-                    musicTrack={musicTrack}
-                    onMusicChange={setMusicTrack}
-                    template={template}
-                    onTemplateChange={setTemplate}
-                    customText={customText}
-                    onCustomTextChange={setCustomText}
-                    hasWatermark={hasWatermark}
-                    onWatermarkChange={setHasWatermark}
-                    resolution={resolution}
-                    onResolutionChange={setResolution}
-                    aspectRatio={aspectRatio}
-                    onAspectRatioChange={setAspectRatio}
-                    plan={plan}
-                    username={wardrobeData.username}
-                    onUpgradeClick={() => setShowPricingModal(true)}
-                  />
+                  <div className="space-y-3">
+                    {/* Intro Video Section - Integrated */}
+                    {profileScreenshotUrl && (
+                      <DesktopIntroSection
+                        screenshotUrl={profileScreenshotUrl}
+                        username={wardrobeData.username}
+                        isIncluded={includeProfileScreenshot}
+                        onToggle={handleToggleProfileScreenshot}
+                        onPreview={() => setShowScreenshotModal(true)}
+                      />
+                    )}
+
+                    <VideoConfigForm
+                      musicTrack={musicTrack}
+                      onMusicChange={setMusicTrack}
+                      template={template}
+                      onTemplateChange={setTemplate}
+                      customText={customText}
+                      onCustomTextChange={setCustomText}
+                      hasWatermark={hasWatermark}
+                      onWatermarkChange={setHasWatermark}
+                      resolution={resolution}
+                      onResolutionChange={setResolution}
+                      aspectRatio={aspectRatio}
+                      onAspectRatioChange={setAspectRatio}
+                      plan={plan}
+                      username={wardrobeData.username}
+                      onUpgradeClick={() => setShowPricingModal(true)}
+                    />
+                  </div>
                 )}
               </div>
             </div>
           </div>
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
-          <div className="w-80 flex-shrink-0">
-            <div className="sticky top-8 space-y-4">
+          <div className="w-72 flex-shrink-0">
+            <div className="sticky top-4">
               <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
                 <VideoPreviewSummary
                   selectedArticles={selectedArticles}
@@ -322,16 +337,6 @@ export function ResultatPage() {
                   onUpgradeClick={() => setShowPricingModal(true)}
                 />
               </div>
-
-              {/* Profile Screenshot Preview - Below Video Summary */}
-              {profileScreenshotUrl && (
-                <ProfileScreenshotPreview
-                  screenshotUrl={profileScreenshotUrl}
-                  username={wardrobeData.username}
-                  isIncluded={includeProfileScreenshot}
-                  onToggle={handleToggleProfileScreenshot}
-                />
-              )}
             </div>
           </div>
         </div>
@@ -357,8 +362,19 @@ export function ResultatPage() {
             </div>
           </div>
 
-          {/* Mobile Articles Grid */}
+          {/* Mobile Articles Grid - WITH Screenshot Preview */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {/* Mobile Profile Screenshot Card - First position */}
+            {profileScreenshotUrl && (
+              <MobileProfileScreenshotCard
+                screenshotUrl={profileScreenshotUrl}
+                username={wardrobeData.username}
+                isIncluded={includeProfileScreenshot}
+                onToggle={handleToggleProfileScreenshot}
+                onPreview={() => setShowScreenshotModal(true)}
+              />
+            )}
+
             {wardrobeData.items.map((item) => (
               <MobileArticleCard
                 key={item.id}
@@ -400,6 +416,7 @@ export function ResultatPage() {
           hasWatermark={hasWatermark}
           onWatermarkChange={setHasWatermark}
           canRemoveWatermark={features.canRemoveWatermark}
+          availableTemplates={features.templates}
           onGenerate={handleGenerateVideo}
           loading={videoLoading}
           videoResult={videoResult}
@@ -407,6 +424,18 @@ export function ResultatPage() {
           onDownload={() => videoResult && downloadVideo(videoResult.videoId)}
           onReset={handleReset}
           onClose={() => setShowMobilePanel(false)}
+          profileScreenshotUrl={profileScreenshotUrl}
+          includeProfileScreenshot={includeProfileScreenshot}
+          onToggleProfileScreenshot={handleToggleProfileScreenshot}
+          username={wardrobeData.username}
+        />
+      )}
+
+      {/* Screenshot Preview Modal */}
+      {showScreenshotModal && profileScreenshotUrl && (
+        <ScreenshotPreviewModal
+          screenshotUrl={profileScreenshotUrl}
+          onClose={() => setShowScreenshotModal(false)}
         />
       )}
 
@@ -424,6 +453,192 @@ export function ResultatPage() {
         isOpen={showPricingModal}
         onClose={() => setShowPricingModal(false)}
       />
+    </div>
+  )
+}
+
+// Desktop Intro Section - Compact horizontal layout
+function DesktopIntroSection({
+  screenshotUrl,
+  username,
+  isIncluded,
+  onToggle,
+  onPreview,
+}: {
+  screenshotUrl: string
+  username?: string
+  isIncluded: boolean
+  onToggle: () => void
+  onPreview: () => void
+}) {
+  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
+  return (
+    <div
+      className="flex items-center gap-3 p-2 border-2 border-black"
+      style={{ backgroundColor: isIncluded ? '#9ED8DB20' : '#F5F5F5' }}
+    >
+      {/* Screenshot thumbnail */}
+      <div
+        className={`
+          w-10 h-16 border-2 border-black overflow-hidden flex-shrink-0 cursor-pointer relative group
+          ${!isIncluded ? 'opacity-50 grayscale' : ''}
+        `}
+        style={{ backgroundColor: '#000' }}
+        onClick={onPreview}
+      >
+        <img
+          src={fullUrl}
+          alt="Screenshot profil"
+          className="w-full h-full object-cover object-top"
+        />
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <ZoomIn className="w-4 h-4 text-white" />
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <Smartphone className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
+          <span className="font-display font-bold text-xs">INTRO VIDEO</span>
+          {username && (
+            <span className="text-[10px] text-black/50">@{username}</span>
+          )}
+        </div>
+        <p className="text-[10px] text-black/50 mt-0.5">
+          {isIncluded ? 'Sera affiche en debut de video' : 'Non inclus dans la video'}
+        </p>
+      </div>
+
+      {/* Toggle */}
+      <button
+        onClick={onToggle}
+        className={`
+          px-2 py-1 border-2 border-black text-[10px] font-bold font-display
+          shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+          active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+          transition-all
+        `}
+        style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+      >
+        {isIncluded ? 'INCLUS' : 'EXCLURE'}
+      </button>
+    </div>
+  )
+}
+
+// Screenshot Preview Modal
+function ScreenshotPreviewModal({
+  screenshotUrl,
+  onClose,
+}: {
+  screenshotUrl: string
+  onClose: () => void
+}) {
+  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
+  return (
+    <div
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+      onClick={onClose}
+    >
+      <div
+        className="relative max-w-sm w-full max-h-[90vh] border-3 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute -top-3 -right-3 w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] z-10"
+          style={{ backgroundColor: '#D64045' }}
+        >
+          <X className="w-4 h-4 text-white" />
+        </button>
+
+        {/* Image */}
+        <img
+          src={fullUrl}
+          alt="Screenshot profil Vinted"
+          className="w-full h-auto object-contain"
+          style={{ backgroundColor: '#000' }}
+        />
+      </div>
+    </div>
+  )
+}
+
+// Mobile Profile Screenshot Card
+function MobileProfileScreenshotCard({
+  screenshotUrl,
+  username,
+  isIncluded,
+  onToggle,
+  onPreview,
+}: {
+  screenshotUrl: string
+  username?: string
+  isIncluded: boolean
+  onToggle: () => void
+  onPreview: () => void
+}) {
+  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
+  return (
+    <div
+      className={`
+        border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden
+        transition-all
+        ${isIncluded ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
+      `}
+      style={{ backgroundColor: '#1D3354' }}
+    >
+      <div
+        className="aspect-[9/16] relative overflow-hidden cursor-pointer"
+        style={{ backgroundColor: '#000' }}
+        onClick={onPreview}
+      >
+        <img
+          src={fullUrl}
+          alt="Screenshot profil Vinted"
+          className={`w-full h-full object-cover object-top ${!isIncluded ? 'opacity-50 grayscale' : ''}`}
+          loading="lazy"
+        />
+
+        {/* Zoom icon overlay */}
+        <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 active:opacity-100 transition-opacity">
+          <ZoomIn className="w-8 h-8 text-white" />
+        </div>
+
+        {/* Selection indicator */}
+        <div
+          className="absolute top-1.5 right-1.5 w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+          style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+          onClick={(e) => { e.stopPropagation(); onToggle(); }}
+        >
+          {isIncluded ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+        </div>
+
+        {/* Intro badge */}
+        <div className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5" style={{ backgroundColor: '#9ED8DB' }}>
+          <span className="font-bold text-black text-[10px]">INTRO</span>
+        </div>
+
+        {isIncluded && (
+          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
+        )}
+      </div>
+
+      <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+        <h4 className="font-display font-bold text-black truncate text-xs">Apercu Profil</h4>
+        {username && (
+          <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>@{username}</p>
+        )}
+      </div>
     </div>
   )
 }
@@ -494,95 +709,6 @@ function MobileArticleCard({
   )
 }
 
-// Profile Screenshot Preview Component (below Video Summary)
-function ProfileScreenshotPreview({
-  screenshotUrl,
-  username,
-  isIncluded,
-  onToggle,
-}: {
-  screenshotUrl: string
-  username?: string
-  isIncluded: boolean
-  onToggle: () => void
-}) {
-  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
-  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
-
-  return (
-    <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Header */}
-      <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Smartphone className="w-4 h-4 text-white" />
-            <h3 className="font-display font-bold text-white text-sm">INTRO VIDEO</h3>
-          </div>
-          <button
-            onClick={onToggle}
-            className={`
-              px-2 py-1 border-2 border-black text-xs font-bold font-display
-              shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-              active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-              transition-all
-            `}
-            style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
-          >
-            {isIncluded ? 'INCLUS' : 'EXCLURE'}
-          </button>
-        </div>
-      </div>
-
-      {/* Preview */}
-      <div className="p-3">
-        <div className="flex gap-3">
-          {/* Screenshot thumbnail */}
-          <div
-            className={`
-              w-20 aspect-[9/16] border-2 border-black overflow-hidden flex-shrink-0
-              ${!isIncluded ? 'opacity-50 grayscale' : ''}
-            `}
-            style={{ backgroundColor: '#000' }}
-          >
-            <img
-              src={fullUrl}
-              alt="Screenshot profil Vinted"
-              className="w-full h-full object-cover object-top"
-              loading="lazy"
-            />
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="flex items-center gap-1.5 mb-2">
-              <div
-                className="w-5 h-5 border-2 border-black flex items-center justify-center cursor-pointer"
-                style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
-                onClick={onToggle}
-              >
-                {isIncluded ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
-              </div>
-              <span className="text-xs font-bold" style={{ color: isIncluded ? '#1D3354' : '#888' }}>
-                {isIncluded ? 'Sera affiche en intro' : 'Non inclus'}
-              </span>
-            </div>
-
-            {username && (
-              <p className="text-xs text-black/60">
-                Profil de <span className="font-bold" style={{ color: '#1D3354' }}>@{username}</span>
-              </p>
-            )}
-
-            <p className="text-[10px] text-black/40 mt-1">
-              Screenshot mobile du vestiaire
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // Mobile Config Panel Component
 function MobileConfigPanel({
   selectedArticles,
@@ -597,6 +723,7 @@ function MobileConfigPanel({
   hasWatermark,
   onWatermarkChange,
   canRemoveWatermark,
+  availableTemplates,
   onGenerate,
   loading,
   videoResult,
@@ -604,6 +731,10 @@ function MobileConfigPanel({
   onDownload,
   onReset,
   onClose,
+  profileScreenshotUrl,
+  includeProfileScreenshot,
+  onToggleProfileScreenshot,
+  username,
 }: {
   selectedArticles: VintedItem[]
   onArticlesReorder: (articles: VintedItem[]) => void
@@ -617,6 +748,7 @@ function MobileConfigPanel({
   hasWatermark: boolean
   onWatermarkChange: (w: boolean) => void
   canRemoveWatermark: boolean
+  availableTemplates: readonly VideoTemplate[]
   onGenerate: () => void
   loading: boolean
   videoResult: any
@@ -624,6 +756,10 @@ function MobileConfigPanel({
   onDownload: () => void
   onReset: () => void
   onClose: () => void
+  profileScreenshotUrl: string | null
+  includeProfileScreenshot: boolean
+  onToggleProfileScreenshot: () => void
+  username?: string
 }) {
   return (
     <div className="lg:hidden fixed inset-0 z-[9999]">
@@ -650,12 +786,13 @@ function MobileConfigPanel({
                 <p className="text-xs text-black/50">{selectedArticles.length} articles</p>
               </div>
             </div>
+            {/* RED close button */}
             <button
               onClick={onClose}
-              className="p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              style={{ backgroundColor: '#9ED8DB' }}
+              className="p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+              style={{ backgroundColor: '#D64045' }}
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 text-white" />
             </button>
           </div>
         </div>
@@ -670,23 +807,36 @@ function MobileConfigPanel({
               isMobile
             />
           ) : (
-            <VideoConfigPanel
-              selectedArticles={selectedArticles}
-              onArticlesReorder={onArticlesReorder}
-              onRemoveArticle={onRemoveArticle}
-              musicTrack={musicTrack}
-              onMusicChange={onMusicChange}
-              template={template}
-              onTemplateChange={onTemplateChange}
-              customText={customText}
-              onCustomTextChange={onCustomTextChange}
-              hasWatermark={hasWatermark}
-              onWatermarkChange={onWatermarkChange}
-              canRemoveWatermark={canRemoveWatermark}
-              onGenerate={onGenerate}
-              loading={loading}
-              isMobile
-            />
+            <div className="space-y-4">
+              {/* Intro Video Section for Mobile */}
+              {profileScreenshotUrl && (
+                <MobileIntroSection
+                  screenshotUrl={profileScreenshotUrl}
+                  username={username}
+                  isIncluded={includeProfileScreenshot}
+                  onToggle={onToggleProfileScreenshot}
+                />
+              )}
+
+              <VideoConfigPanel
+                selectedArticles={selectedArticles}
+                onArticlesReorder={onArticlesReorder}
+                onRemoveArticle={onRemoveArticle}
+                musicTrack={musicTrack}
+                onMusicChange={onMusicChange}
+                template={template}
+                onTemplateChange={onTemplateChange}
+                customText={customText}
+                onCustomTextChange={onCustomTextChange}
+                hasWatermark={hasWatermark}
+                onWatermarkChange={onWatermarkChange}
+                canRemoveWatermark={canRemoveWatermark}
+                availableTemplates={availableTemplates}
+                onGenerate={onGenerate}
+                loading={loading}
+                isMobile
+              />
+            </div>
           )}
 
           {videoError && (
@@ -696,6 +846,72 @@ function MobileConfigPanel({
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+// Mobile Intro Section
+function MobileIntroSection({
+  screenshotUrl,
+  username,
+  isIncluded,
+  onToggle,
+}: {
+  screenshotUrl: string
+  username?: string
+  isIncluded: boolean
+  onToggle: () => void
+}) {
+  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
+  return (
+    <div
+      className="flex items-center gap-3 p-3 border-2 border-black"
+      style={{ backgroundColor: isIncluded ? '#9ED8DB20' : '#F5F5F5' }}
+    >
+      {/* Screenshot thumbnail */}
+      <div
+        className={`
+          w-12 h-20 border-2 border-black overflow-hidden flex-shrink-0
+          ${!isIncluded ? 'opacity-50 grayscale' : ''}
+        `}
+        style={{ backgroundColor: '#000' }}
+      >
+        <img
+          src={fullUrl}
+          alt="Screenshot profil"
+          className="w-full h-full object-cover object-top"
+        />
+      </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <Smartphone className="w-4 h-4" style={{ color: '#1D3354' }} />
+          <span className="font-display font-bold text-sm">INTRO VIDEO</span>
+        </div>
+        {username && (
+          <p className="text-xs text-black/50">Profil @{username}</p>
+        )}
+        <p className="text-[10px] text-black/40 mt-1">
+          {isIncluded ? 'Inclus en debut de video' : 'Non inclus'}
+        </p>
+      </div>
+
+      {/* Toggle */}
+      <button
+        onClick={onToggle}
+        className={`
+          px-3 py-2 border-2 border-black text-xs font-bold font-display
+          shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+          active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+          transition-all
+        `}
+        style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+      >
+        {isIncluded ? 'INCLUS' : 'EXCLURE'}
+      </button>
     </div>
   )
 }
