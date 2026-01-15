@@ -218,9 +218,9 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Fixed Config Bar - Desktop - Below main header with gap */}
-      <div className="hidden lg:block fixed top-[72px] left-0 right-0 z-40 border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
-        <div className="max-w-7xl mx-auto px-4">
+      {/* Fixed Config Bar - Desktop - Below main header with 20px gap */}
+      <div className="hidden lg:block fixed top-[84px] left-4 right-4 z-40 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="px-4">
           <div className="flex items-center gap-4 py-2.5">
             {/* Back Button */}
             <button
@@ -261,7 +261,7 @@ export function ResultatPage() {
       </div>
 
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-36">
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-44">
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
@@ -287,7 +287,7 @@ export function ResultatPage() {
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
           <div className="w-80 flex-shrink-0">
-            <div className="sticky top-[140px]">
+            <div className="sticky top-[168px]">
               <VideoPreviewSummary
                 selectedArticles={selectedArticles}
                 musicTrack={musicTrack}
