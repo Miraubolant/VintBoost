@@ -218,8 +218,8 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Fixed Config Bar - Desktop - Below main header */}
-      <div className="hidden lg:block fixed top-16 left-0 right-0 z-40 border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Fixed Config Bar - Desktop - Below main header with gap */}
+      <div className="hidden lg:block fixed top-[72px] left-0 right-0 z-40 border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-4 py-2.5">
             {/* Back Button */}
@@ -261,7 +261,7 @@ export function ResultatPage() {
       </div>
 
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-28">
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-36">
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
@@ -287,7 +287,7 @@ export function ResultatPage() {
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
           <div className="w-80 flex-shrink-0">
-            <div className="sticky top-[120px]">
+            <div className="sticky top-[140px]">
               <VideoPreviewSummary
                 selectedArticles={selectedArticles}
                 musicTrack={musicTrack}
