@@ -8,8 +8,6 @@ interface ArticleSelectorProps {
   items: VintedItem[]
   selectedItems: Set<string>
   onToggleItem: (itemId: string) => void
-  onSelectAll: () => void
-  onDeselectAll: () => void
   maxItems: number
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick?: () => void
@@ -35,8 +33,6 @@ export function ArticleSelector({
   items,
   selectedItems,
   onToggleItem,
-  onSelectAll,
-  onDeselectAll,
   maxItems,
   plan,
   onUpgradeClick,
@@ -73,27 +69,8 @@ export function ArticleSelector({
             </span>
           </div>
           <span className="text-xs text-black/50 font-body">
-            articles selectionnes
+            articles sélectionnés
           </span>
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            onClick={onSelectAll}
-            disabled={selectedItems.size >= effectiveMax}
-            className="text-xs font-bold font-display px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: '#9ED8DB' }}
-          >
-            TOUT
-          </button>
-          <button
-            onClick={onDeselectAll}
-            disabled={selectedItems.size === 0}
-            className="text-xs font-bold text-black/70 font-display px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: '#FFFFFF' }}
-          >
-            AUCUN
-          </button>
         </div>
       </div>
 

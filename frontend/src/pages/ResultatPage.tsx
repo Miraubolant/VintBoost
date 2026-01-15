@@ -113,15 +113,6 @@ export function ResultatPage() {
     })
   }
 
-  const selectAll = () => {
-    const items = (wardrobeData?.items || []).slice(0, articleLimit)
-    setSelectedItems(new Set(items.map(item => item.id)))
-  }
-
-  const deselectAll = () => {
-    setSelectedItems(new Set())
-  }
-
   const selectedArticles = useMemo(() => {
     return orderedArticles
   }, [orderedArticles])
@@ -286,8 +277,6 @@ export function ResultatPage() {
                   items={wardrobeData.items}
                   selectedItems={selectedItems}
                   onToggleItem={toggleItemSelection}
-                  onSelectAll={selectAll}
-                  onDeselectAll={deselectAll}
                   maxItems={articleLimit}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
@@ -428,10 +417,6 @@ export function ResultatPage() {
           onDownload={() => videoResult && downloadVideo(videoResult.videoId)}
           onReset={handleReset}
           onClose={() => setShowMobilePanel(false)}
-          profileScreenshotUrl={profileScreenshotUrl}
-          includeProfileScreenshot={includeProfileScreenshot}
-          onToggleProfileScreenshot={handleToggleProfileScreenshot}
-          username={wardrobeData.username}
         />
       )}
 
@@ -928,10 +913,6 @@ function MobileConfigPanel({
   onDownload,
   onReset,
   onClose,
-  profileScreenshotUrl,
-  includeProfileScreenshot,
-  onToggleProfileScreenshot,
-  username,
 }: {
   selectedArticles: VintedItem[]
   onArticlesReorder: (articles: VintedItem[]) => void
@@ -953,10 +934,6 @@ function MobileConfigPanel({
   onDownload: () => void
   onReset: () => void
   onClose: () => void
-  profileScreenshotUrl: string | null
-  includeProfileScreenshot: boolean
-  onToggleProfileScreenshot: () => void
-  username?: string
 }) {
   return (
     <div className="lg:hidden fixed inset-0 z-[9999]">
@@ -1005,16 +982,6 @@ function MobileConfigPanel({
             />
           ) : (
             <div className="space-y-4">
-              {/* Intro Video Section for Mobile */}
-              {profileScreenshotUrl && (
-                <MobileIntroSection
-                  screenshotUrl={profileScreenshotUrl}
-                  username={username}
-                  isIncluded={includeProfileScreenshot}
-                  onToggle={onToggleProfileScreenshot}
-                />
-              )}
-
               <VideoConfigPanel
                 selectedArticles={selectedArticles}
                 onArticlesReorder={onArticlesReorder}
@@ -1047,68 +1014,3 @@ function MobileConfigPanel({
   )
 }
 
-// Mobile Intro Section
-function MobileIntroSection({
-  screenshotUrl,
-  username,
-  isIncluded,
-  onToggle,
-}: {
-  screenshotUrl: string
-  username?: string
-  isIncluded: boolean
-  onToggle: () => void
-}) {
-  const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
-  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
-
-  return (
-    <div
-      className="flex items-center gap-3 p-3 border-2 border-black"
-      style={{ backgroundColor: isIncluded ? '#9ED8DB20' : '#F5F5F5' }}
-    >
-      {/* Screenshot thumbnail */}
-      <div
-        className={`
-          w-12 h-20 border-2 border-black overflow-hidden flex-shrink-0
-          ${!isIncluded ? 'opacity-50 grayscale' : ''}
-        `}
-        style={{ backgroundColor: '#000' }}
-      >
-        <img
-          src={fullUrl}
-          alt="Screenshot profil"
-          className="w-full h-full object-cover object-top"
-        />
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <Smartphone className="w-4 h-4" style={{ color: '#1D3354' }} />
-          <span className="font-display font-bold text-sm">INTRO VIDÉO</span>
-        </div>
-        {username && (
-          <p className="text-xs text-black/50">Profil @{username}</p>
-        )}
-        <p className="text-[10px] text-black/40 mt-1">
-          {isIncluded ? 'Inclus en debut de video' : 'Non inclus'}
-        </p>
-      </div>
-
-      {/* Toggle */}
-      <button
-        onClick={onToggle}
-        className={`
-          px-3 py-2 border-2 border-black text-xs font-bold font-display
-          shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-          active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-          transition-all
-        `}
-        style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
-      >
-        {isIncluded ? 'INCLUS' : 'EXCLURE'}
-      </button>
-    </div>
-  )
-}
