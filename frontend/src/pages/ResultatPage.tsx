@@ -15,7 +15,7 @@ import { VideoResultDisplay } from '../components/VideoResultDisplay'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
 import { PricingModal } from '../components/PricingModal'
 import { VideoSuccessModal } from '../components/VideoSuccessModal'
-import { VideoSidebar } from '../components/sidebar'
+import { CompactSidebar } from '../components/sidebar'
 
 export function ResultatPage() {
   const navigate = useNavigate()
@@ -224,26 +224,33 @@ export function ResultatPage() {
         <div className="hidden lg:block mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-display font-bold text-2xl" style={{ color: '#1D3354' }}>
-                Crée ta vidéo
+              <h1 className="font-display font-bold text-3xl tracking-tight mb-1">
+                <span
+                  className="inline-block bg-white border-3 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  style={{ color: '#1D3354' }}
+                >
+                  CREE TA VIDEO
+                </span>
               </h1>
-              <p className="text-sm text-black/60 font-body mt-1">
-                Sélectionne tes articles, personnalise et génère en 1 clic
+              <p className="text-sm text-black/60 font-body mt-3">
+                Selectionne tes articles, personnalise et genere en 1 clic
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#9ED8DB' }}>1</span>
-                <span className="font-body text-xs text-black/70">Sélectionner</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#9ED8DB' }}>2</span>
-                <span className="font-body text-xs text-black/70">Configurer</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#D64045', color: '#FFF' }}>3</span>
-                <span className="font-body text-xs text-black/70">Générer</span>
-              </div>
+            <div className="flex items-center gap-2 text-xs text-black/50 font-body">
+              <span className="flex items-center gap-1.5">
+                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#9ED8DB]">1</span>
+                Selectionner
+              </span>
+              <span className="text-black/30">→</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#9ED8DB]">2</span>
+                Configurer
+              </span>
+              <span className="text-black/30">→</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#D64045] text-white">3</span>
+                Generer
+              </span>
             </div>
           </div>
         </div>
@@ -274,7 +281,7 @@ export function ResultatPage() {
           {/* Right Sidebar: Preview & Generate (Sticky) */}
           <div className="w-[340px] flex-shrink-0">
             <div className="sticky top-24">
-              <VideoSidebar
+              <CompactSidebar
                 username={wardrobeData.username}
                 userInfo={wardrobeData.userInfo}
                 totalItems={wardrobeData.items.length}

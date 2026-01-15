@@ -1,4 +1,5 @@
 export { VideoSidebar } from './VideoSidebar'
+export { CompactSidebar } from './CompactSidebar'
 export { SidebarUserProfile } from './SidebarUserProfile'
 export { SidebarVideoPreview } from './SidebarVideoPreview'
 export { SidebarVideoConfig } from './SidebarVideoConfig'
