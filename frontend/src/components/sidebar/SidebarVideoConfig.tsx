@@ -15,7 +15,7 @@ interface SidebarVideoConfigProps {
 }
 
 const templateOptions = [
-  { id: 'classic' as VideoTemplate, name: 'Classique', color: '#FFFFFF', textColor: '#000' },
+  { id: 'classic' as VideoTemplate, name: 'Classique', color: '#1D3354', textColor: '#FFF' },
   { id: 'modern' as VideoTemplate, name: 'Moderne', color: '#9ED8DB', textColor: '#000' },
   { id: 'premium' as VideoTemplate, name: 'Premium', color: '#D64045', textColor: '#FFF' },
 ]
@@ -121,46 +121,57 @@ export function SidebarVideoConfig({
         {/* Watermark Toggle */}
         <ConfigSection icon={<Stamp className="w-4 h-4" />} label="Filigrane VintBoost">
           <div
-            className="flex items-center justify-between p-3 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            className="border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden"
             style={{ backgroundColor: '#F8F8F8' }}
           >
-            <div className="flex-1">
-              <p className="font-display font-bold text-xs text-black">
-                {hasWatermark ? 'Avec filigrane' : 'Sans filigrane'}
-              </p>
-              <p className="text-[10px] text-black/50 mt-0.5">
-                {isPremium
-                  ? 'Vous pouvez desactiver le filigrane'
-                  : 'Passez Pro pour retirer le filigrane'}
-              </p>
+            {/* Toggle buttons */}
+            <div className="grid grid-cols-2">
+              <button
+                onClick={() => isPremium && onWatermarkChange?.(false)}
+                disabled={!isPremium}
+                className={`
+                  py-3 font-display font-bold text-xs transition-all border-r border-black
+                  ${!hasWatermark
+                    ? 'bg-[#9ED8DB] text-black'
+                    : 'bg-white text-black/50 hover:bg-gray-50'
+                  }
+                  ${!isPremium ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+              >
+                SANS
+              </button>
+              <button
+                onClick={() => isPremium && onWatermarkChange?.(true)}
+                disabled={!isPremium}
+                className={`
+                  py-3 font-display font-bold text-xs transition-all
+                  ${hasWatermark
+                    ? 'bg-[#1D3354] text-white'
+                    : 'bg-white text-black/50 hover:bg-gray-50'
+                  }
+                  ${!isPremium ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+              >
+                AVEC
+              </button>
             </div>
-            <div className="flex items-center gap-3">
+
+            {/* Info section */}
+            <div className="px-3 py-2.5 border-t border-black/20 flex items-center justify-between">
+              <p className="text-[10px] text-black/60">
+                {isPremium
+                  ? (hasWatermark ? 'Logo VintBoost visible' : 'Video sans logo')
+                  : 'Passez Pro pour retirer'}
+              </p>
               {!isPremium && (
                 <button
                   onClick={onUpgradeClick}
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#D64045] border-2 border-black text-[10px] font-bold text-white hover:bg-[#c53539] transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
+                  className="flex items-center gap-1 px-2 py-1 bg-[#D64045] border border-black text-[9px] font-bold text-white hover:bg-[#c53539] transition-all"
                 >
-                  <Crown className="w-3 h-3" />
+                  <Crown className="w-2.5 h-2.5" />
                   PRO
                 </button>
               )}
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={hasWatermark}
-                  onChange={(e) => isPremium && onWatermarkChange?.(e.target.checked)}
-                  disabled={!isPremium}
-                  className="sr-only"
-                />
-                <div
-                  className={`w-12 h-6 border-2 border-black relative transition-all ${!isPremium ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  style={{ backgroundColor: hasWatermark ? '#9ED8DB' : '#E8DFD5' }}
-                >
-                  <span
-                    className={`absolute top-[3px] left-[3px] w-4 h-4 bg-[#1D3354] transition-transform ${hasWatermark ? 'translate-x-[22px]' : ''}`}
-                  />
-                </div>
-              </label>
             </div>
           </div>
         </ConfigSection>

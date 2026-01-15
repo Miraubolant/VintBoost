@@ -219,7 +219,35 @@ export function ResultatPage() {
   return (
     <div className="min-h-screen pb-24 lg:pb-8" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-8">
+      <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-6">
+        {/* Desktop Page Header */}
+        <div className="hidden lg:block mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-display font-bold text-2xl" style={{ color: '#1D3354' }}>
+                Crée ta vidéo
+              </h1>
+              <p className="text-sm text-black/60 font-body mt-1">
+                Sélectionne tes articles, personnalise et génère en 1 clic
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#9ED8DB' }}>1</span>
+                <span className="font-body text-xs text-black/70">Sélectionner</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#9ED8DB' }}>2</span>
+                <span className="font-body text-xs text-black/70">Configurer</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <span className="w-6 h-6 flex items-center justify-center border-2 border-black font-display font-bold text-xs" style={{ backgroundColor: '#D64045', color: '#FFF' }}>3</span>
+                <span className="font-body text-xs text-black/70">Générer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="hidden lg:flex lg:gap-6">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">

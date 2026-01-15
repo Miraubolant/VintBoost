@@ -26,8 +26,8 @@ export const ARTICLE_LIMITS = {
   business: 20,
 } as const
 
-// Items per page for desktop pagination (5 rows of 6 columns = 30)
-const ITEMS_PER_PAGE = 30
+// Items per page for desktop pagination (3 rows of 5 columns = 15)
+const ITEMS_PER_PAGE = 15
 
 export function ArticleSelector({
   items,

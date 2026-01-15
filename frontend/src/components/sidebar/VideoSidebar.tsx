@@ -64,6 +64,15 @@ export function VideoSidebar({
         totalItems={totalItems}
       />
 
+      {/* Generate Button - En haut pour visibilite */}
+      <SidebarGenerateButton
+        canGenerate={canGenerate}
+        creditsRemaining={creditsRemaining}
+        loading={loading}
+        onGenerate={onGenerate}
+        onUpgradeClick={onUpgradeClick}
+      />
+
       {/* Video Preview */}
       <SidebarVideoPreview
         selectedArticles={selectedArticles}
@@ -82,15 +91,6 @@ export function VideoSidebar({
         onTemplateChange={onTemplateChange}
         onCustomTextChange={onCustomTextChange}
         onWatermarkChange={onWatermarkChange}
-        onUpgradeClick={onUpgradeClick}
-      />
-
-      {/* Generate Button */}
-      <SidebarGenerateButton
-        canGenerate={canGenerate}
-        creditsRemaining={creditsRemaining}
-        loading={loading}
-        onGenerate={onGenerate}
         onUpgradeClick={onUpgradeClick}
       />
     </div>
