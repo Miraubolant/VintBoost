@@ -11,11 +11,11 @@ import { Video, X, AlertCircle, ArrowLeft, Check, Plus, ZoomIn, History } from '
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
 import { ArticleSelector, ARTICLE_LIMITS } from '../components/ArticleSelector'
 import { PLAN_FEATURES } from '../components/VideoConfigForm'
-import { VideoPreviewSummary } from '../components/VideoPreviewSummary'
 import { VideoResultDisplay } from '../components/VideoResultDisplay'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
 import { PricingModal } from '../components/PricingModal'
 import { VideoSuccessModal } from '../components/VideoSuccessModal'
+import { VideoSidebar } from '../components/sidebar'
 
 export function ResultatPage() {
   const navigate = useNavigate()
@@ -217,15 +217,15 @@ export function ResultatPage() {
   }
 
   return (
-    <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
+    <div className="min-h-screen pb-24 lg:pb-8" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-4">
-        <div className="hidden lg:flex lg:gap-4">
+      <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-8">
+        <div className="hidden lg:flex lg:gap-6">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
               {/* Articles Grid */}
-              <div className="p-3">
+              <div className="p-4">
                 <ArticleSelector
                   items={wardrobeData.items}
                   selectedItems={selectedItems}
@@ -244,28 +244,28 @@ export function ResultatPage() {
           </div>
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
-          <div className="w-80 flex-shrink-0">
-            <div className="sticky top-20">
-              <VideoPreviewSummary
+          <div className="w-[340px] flex-shrink-0">
+            <div className="sticky top-24">
+              <VideoSidebar
+                username={wardrobeData.username}
+                userInfo={wardrobeData.userInfo}
+                totalItems={wardrobeData.items.length}
                 selectedArticles={selectedArticles}
+                profileScreenshotUrl={profileScreenshotUrl}
+                includeProfileScreenshot={includeProfileScreenshot}
                 musicTrack={musicTrack}
                 template={template}
                 customText={customText}
                 hasWatermark={hasWatermark}
-                creditsRemaining={totalCreditsRemaining}
-                onGenerate={handleGenerateVideo}
-                loading={videoLoading}
                 plan={plan}
-                userInfo={wardrobeData.userInfo}
-                username={wardrobeData.username}
-                totalItems={wardrobeData.items.length}
-                onUpgradeClick={() => setShowPricingModal(true)}
-                profileScreenshotUrl={profileScreenshotUrl}
-                includeProfileScreenshot={includeProfileScreenshot}
                 onMusicChange={setMusicTrack}
                 onTemplateChange={setTemplate}
                 onCustomTextChange={setCustomText}
                 onWatermarkChange={setHasWatermark}
+                creditsRemaining={totalCreditsRemaining}
+                onGenerate={handleGenerateVideo}
+                loading={videoLoading}
+                onUpgradeClick={() => setShowPricingModal(true)}
               />
             </div>
           </div>
