@@ -218,36 +218,55 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Fixed Config Bar - Desktop */}
-      <div className="hidden lg:block fixed top-0 left-0 right-0 z-40 border-b-3 border-black shadow-[0_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#1D3354' }}>
-        <div className="max-w-7xl mx-auto">
-          <DesktopCompactConfig
-            musicTrack={musicTrack}
-            onMusicChange={setMusicTrack}
-            template={template}
-            onTemplateChange={setTemplate}
-            customText={customText}
-            onCustomTextChange={setCustomText}
-            hasWatermark={hasWatermark}
-            onWatermarkChange={setHasWatermark}
-            aspectRatio={aspectRatio}
-            onAspectRatioChange={setAspectRatio}
-            resolution={resolution}
-            onResolutionChange={setResolution}
-            plan={plan}
-            onUpgradeClick={() => setShowPricingModal(true)}
-            onHistoryClick={() => navigate('/account')}
-            onBackClick={handleBack}
-          />
+      {/* Page Title - Desktop */}
+      <div className="hidden lg:block text-center pt-10 pb-6">
+        <div className="flex items-center justify-center gap-4 mb-3">
+          <button
+            onClick={handleBack}
+            className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1
+            className="inline-block font-display font-bold text-2xl lg:text-3xl text-white border-3 border-black px-5 py-2.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            style={{ backgroundColor: '#1D3354' }}
+          >
+            CRÉE TA VIDÉO VINTED
+          </h1>
         </div>
+        <p className="text-sm text-black/60 font-body">
+          1. Sélectionne tes articles · 2. Configure ta vidéo · 3. Génère et télécharge
+        </p>
       </div>
 
-      {/* Main Content - Desktop: Articles + Sticky Sidebar */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-20">
+      {/* Main Content - Desktop: Unified Section + Sticky Sidebar */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-0">
         <div className="hidden lg:flex lg:gap-4">
-          {/* Left Column: Articles */}
+          {/* Left Column: Unified Config + Articles */}
           <div className="flex-1 min-w-0">
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
+              {/* Compact Config Bar */}
+              <div className="sticky top-0 z-30 border-b-3 border-black" style={{ backgroundColor: '#1D3354' }}>
+                <DesktopCompactConfig
+                  musicTrack={musicTrack}
+                  onMusicChange={setMusicTrack}
+                  template={template}
+                  onTemplateChange={setTemplate}
+                  customText={customText}
+                  onCustomTextChange={setCustomText}
+                  hasWatermark={hasWatermark}
+                  onWatermarkChange={setHasWatermark}
+                  aspectRatio={aspectRatio}
+                  onAspectRatioChange={setAspectRatio}
+                  resolution={resolution}
+                  onResolutionChange={setResolution}
+                  plan={plan}
+                  onUpgradeClick={() => setShowPricingModal(true)}
+                  onHistoryClick={() => navigate('/account')}
+                />
+              </div>
+
               {/* Articles Grid */}
               <div className="p-3">
                 <ArticleSelector
@@ -433,7 +452,7 @@ export function ResultatPage() {
   )
 }
 
-// Desktop Compact Config - Fixed bar at top
+// Desktop Compact Config - Sticky bar inside card
 function DesktopCompactConfig({
   musicTrack,
   onMusicChange,
@@ -450,7 +469,6 @@ function DesktopCompactConfig({
   plan,
   onUpgradeClick,
   onHistoryClick,
-  onBackClick,
 }: {
   musicTrack: string
   onMusicChange: (track: string) => void
@@ -467,7 +485,6 @@ function DesktopCompactConfig({
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick: () => void
   onHistoryClick: () => void
-  onBackClick: () => void
 }) {
   const isPremium = plan === 'pro' || plan === 'business'
   const isBusiness = plan === 'business'
@@ -494,23 +511,7 @@ function DesktopCompactConfig({
 
   return (
     <div className="px-4 py-3">
-      <div className="flex items-center gap-4">
-        {/* Back Button */}
-        <button
-          onClick={onBackClick}
-          className="w-9 h-9 border-2 border-white/30 flex items-center justify-center hover:bg-white/10 transition-all flex-shrink-0"
-        >
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </button>
-
-        {/* Title */}
-        <h1 className="font-display font-bold text-white text-lg flex-shrink-0">
-          CRÉE TA VIDÉO
-        </h1>
-
-        {/* Separator */}
-        <div className="w-px h-6 bg-white/20" />
-
+      <div className="flex flex-wrap items-center gap-3">
         {/* Template */}
         <div className="flex items-center gap-2">
           <Layout className="w-4 h-4 text-white/70" />
