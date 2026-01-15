@@ -218,25 +218,25 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Fixed Config Bar - Desktop */}
-      <div className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b-[3px] border-black" style={{ backgroundColor: '#1D3354' }}>
+      {/* Fixed Config Bar - Desktop - Below main header */}
+      <div className="hidden lg:block fixed top-16 left-0 right-0 z-40 border-b-3 border-black" style={{ backgroundColor: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-4 py-2.5">
             {/* Back Button */}
             <button
               onClick={handleBack}
-              className="w-9 h-9 border-2 border-white/30 flex items-center justify-center hover:bg-white/10 transition-all flex-shrink-0"
+              className="w-9 h-9 border-2 border-black flex items-center justify-center hover:bg-black/5 transition-all flex-shrink-0"
             >
-              <ArrowLeft className="w-5 h-5 text-white" />
+              <ArrowLeft className="w-5 h-5 text-black" />
             </button>
 
             {/* Title */}
-            <h1 className="font-display font-bold text-white text-base flex-shrink-0">
+            <h1 className="font-display font-bold text-base flex-shrink-0" style={{ color: '#1D3354' }}>
               CRÉE TA VIDÉO
             </h1>
 
             {/* Separator */}
-            <div className="w-px h-6 bg-white/20" />
+            <div className="w-px h-6 bg-black/20" />
 
             {/* Config Options */}
             <DesktopCompactConfig
@@ -261,7 +261,7 @@ export function ResultatPage() {
       </div>
 
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-16">
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-28">
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
@@ -287,7 +287,7 @@ export function ResultatPage() {
 
           {/* Right Sidebar: Preview & Generate (Sticky) */}
           <div className="w-80 flex-shrink-0">
-            <div className="sticky top-[72px]">
+            <div className="sticky top-[120px]">
               <VideoPreviewSummary
                 selectedArticles={selectedArticles}
                 musicTrack={musicTrack}
@@ -512,7 +512,7 @@ function DesktopCompactConfig({
     <div className="flex flex-1 items-center gap-3">
       {/* Template */}
       <div className="flex items-center gap-1.5">
-        <Layout className="w-3.5 h-3.5 text-white/60" />
+        <Layout className="w-3.5 h-3.5 text-black/50" />
         <div className="flex gap-0.5">
           {templates.map((t) => {
             const isAvailable = plan !== 'free' || t.id === 'classic'
@@ -522,8 +522,8 @@ function DesktopCompactConfig({
                 onClick={() => isAvailable && onTemplateChange(t.id)}
                 disabled={!isAvailable}
                 className={`
-                  relative w-6 h-6 border-2 border-white/40 flex items-center justify-center transition-all
-                  ${template === t.id ? 'ring-2 ring-white' : 'hover:border-white/70'}
+                  relative w-6 h-6 border-2 border-black flex items-center justify-center transition-all
+                  ${template === t.id ? 'ring-2 ring-[#1D3354]' : 'hover:ring-1 hover:ring-black/30'}
                   ${!isAvailable ? 'opacity-30 cursor-not-allowed' : ''}
                 `}
                 style={{ backgroundColor: t.color }}
@@ -538,31 +538,31 @@ function DesktopCompactConfig({
 
       {/* Music */}
       <div className="flex items-center gap-1.5">
-        <Music className="w-3.5 h-3.5 text-white/60" />
+        <Music className="w-3.5 h-3.5 text-black/50" />
         <div className="relative">
           <select
             value={musicTrack}
             onChange={(e) => onMusicChange(e.target.value)}
-            className="pl-2 pr-6 py-1 border-2 border-white/40 font-body text-[11px] appearance-none cursor-pointer bg-white/10 text-white hover:bg-white/20 transition-all"
+            className="pl-2 pr-6 py-1 border-2 border-black font-body text-[11px] appearance-none cursor-pointer bg-white text-black hover:bg-gray-50 transition-all"
           >
             {musicTracks.map((track) => (
-              <option key={track.id} value={track.id} className="text-black">{track.name}</option>
+              <option key={track.id} value={track.id}>{track.name}</option>
             ))}
           </select>
-          <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none" />
+          <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-black pointer-events-none" />
         </div>
       </div>
 
       {/* Custom Text */}
       <div className="flex items-center gap-1.5 flex-1 min-w-[120px] max-w-[180px]">
-        <Type className="w-3.5 h-3.5 text-white/60 flex-shrink-0" />
+        <Type className="w-3.5 h-3.5 text-black/50 flex-shrink-0" />
         <input
           type="text"
           value={customText}
           onChange={(e) => onCustomTextChange(e.target.value)}
           placeholder="Accroche..."
           maxLength={30}
-          className="w-full px-2 py-1 border-2 border-white/40 font-body text-[11px] bg-white/10 text-white placeholder:text-white/40 hover:bg-white/20 focus:bg-white/20 transition-all"
+          className="w-full px-2 py-1 border-2 border-black font-body text-[11px] bg-white text-black placeholder:text-black/40 hover:bg-gray-50 focus:bg-gray-50 transition-all"
         />
       </div>
 
@@ -577,14 +577,14 @@ function DesktopCompactConfig({
               onClick={() => isAvailable && onAspectRatioChange(opt.id)}
               disabled={!isAvailable}
               className={`
-                relative w-7 h-7 border-2 flex items-center justify-center transition-all
-                ${aspectRatio === opt.id ? 'border-white bg-white text-[#1D3354]' : 'border-white/40 text-white hover:border-white/70'}
+                relative w-7 h-7 border-2 border-black flex items-center justify-center transition-all
+                ${aspectRatio === opt.id ? 'bg-[#1D3354] text-white' : 'bg-white text-black hover:bg-gray-50'}
                 ${!isAvailable ? 'opacity-30 cursor-not-allowed' : ''}
               `}
               title={opt.label}
             >
               <Icon className="w-3.5 h-3.5" />
-              {!isAvailable && <Lock className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 text-white" />}
+              {!isAvailable && <Lock className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 text-black" />}
             </button>
           )
         })}
@@ -595,20 +595,20 @@ function DesktopCompactConfig({
         <div className="flex items-center gap-0.5">
           <button
             onClick={() => onResolutionChange('1080p')}
-            className={`px-2 py-1 border-2 font-display font-bold text-[9px] transition-all ${
+            className={`px-2 py-1 border-2 border-black font-display font-bold text-[9px] transition-all ${
               resolution === '1080p'
-                ? 'border-white bg-white text-[#1D3354]'
-                : 'border-white/40 text-white hover:border-white/70'
+                ? 'bg-[#1D3354] text-white'
+                : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
             HD
           </button>
           <button
             onClick={() => onResolutionChange('4K')}
-            className={`px-2 py-1 border-2 font-display font-bold text-[9px] transition-all ${
+            className={`px-2 py-1 border-2 border-black font-display font-bold text-[9px] transition-all ${
               resolution === '4K'
-                ? 'border-white bg-white text-[#1D3354]'
-                : 'border-white/40 text-white hover:border-white/70'
+                ? 'bg-[#1D3354] text-white'
+                : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
             4K
@@ -617,8 +617,8 @@ function DesktopCompactConfig({
       )}
 
       {/* Watermark */}
-      <div className="flex items-center gap-1.5 pl-2 border-l border-white/20">
-        <Stamp className="w-3.5 h-3.5 text-white/60" />
+      <div className="flex items-center gap-1.5 pl-2 border-l border-black/20">
+        <Stamp className="w-3.5 h-3.5 text-black/50" />
         <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -628,18 +628,18 @@ function DesktopCompactConfig({
             className="sr-only"
           />
           <div
-            className={`w-7 h-4 border-2 border-white/40 relative transition-all ${!isPremium ? 'opacity-50' : ''}`}
-            style={{ backgroundColor: hasWatermark ? '#9ED8DB' : 'transparent' }}
+            className={`w-7 h-4 border-2 border-black relative transition-all ${!isPremium ? 'opacity-50' : ''}`}
+            style={{ backgroundColor: hasWatermark ? '#9ED8DB' : '#F5F5F5' }}
           >
             <span
-              className={`absolute top-[1px] left-[1px] w-2.5 h-2.5 bg-white transition-transform ${hasWatermark ? 'translate-x-2.5' : ''}`}
+              className={`absolute top-[1px] left-[1px] w-2.5 h-2.5 bg-[#1D3354] transition-transform ${hasWatermark ? 'translate-x-2.5' : ''}`}
             />
           </div>
         </label>
         {!isPremium && (
           <button
             onClick={onUpgradeClick}
-            className="flex items-center gap-0.5 px-1.5 py-0.5 bg-[#D64045] border border-white/40 text-[9px] font-bold text-white hover:bg-[#c53539] transition-all"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 bg-[#D64045] border-2 border-black text-[9px] font-bold text-white hover:bg-[#c53539] transition-all"
           >
             <Crown className="w-2.5 h-2.5" />
             PRO
@@ -650,7 +650,7 @@ function DesktopCompactConfig({
       {/* History Button */}
       <button
         onClick={onHistoryClick}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 border-2 border-white bg-white font-display font-bold text-[10px] text-[#1D3354] hover:bg-[#9ED8DB] transition-all ml-auto"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 border-2 border-black bg-[#1D3354] font-display font-bold text-[10px] text-white hover:bg-[#2a4a6b] transition-all ml-auto"
       >
         <History className="w-3.5 h-3.5" />
         MES VIDÉOS

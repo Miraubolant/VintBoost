@@ -68,11 +68,11 @@ export function VideoPreviewSummary({
 
   return (
     <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* User Profile Header - Navy Blue */}
-      <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+      {/* User Profile Header */}
+      <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#F8F8F8' }}>
         <div className="flex items-center gap-3">
           {userInfo?.profilePicture ? (
-            <div className="w-10 h-10 border-2 border-white/30 overflow-hidden flex-shrink-0">
+            <div className="w-10 h-10 border-2 border-black overflow-hidden flex-shrink-0">
               <img
                 src={userInfo.profilePicture}
                 alt={username}
@@ -81,7 +81,7 @@ export function VideoPreviewSummary({
             </div>
           ) : (
             <div
-              className="w-10 h-10 border-2 border-white/30 flex items-center justify-center flex-shrink-0"
+              className="w-10 h-10 border-2 border-black flex items-center justify-center flex-shrink-0"
               style={{ backgroundColor: '#9ED8DB' }}
             >
               <span className="font-display font-bold text-sm text-black">
@@ -90,11 +90,11 @@ export function VideoPreviewSummary({
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-display font-bold text-white truncate">
+            <h3 className="text-sm font-display font-bold truncate" style={{ color: '#1D3354' }}>
               @{username || 'Utilisateur'}
             </h3>
             {userInfo?.city && (
-              <p className="text-[10px] text-white/60 flex items-center gap-1">
+              <p className="text-[10px] text-black/60 flex items-center gap-1">
                 <MapPin className="w-2.5 h-2.5" />
                 {userInfo.city}
               </p>
@@ -234,13 +234,13 @@ export function VideoPreviewSummary({
         </div>
       </div>
 
-      {/* Credits & CTA - Navy Blue Footer */}
-      <div className="p-3 border-t-2 border-black" style={{ backgroundColor: '#1D3354' }}>
+      {/* Credits & CTA Footer */}
+      <div className="p-3 border-t-2 border-black" style={{ backgroundColor: '#F8F8F8' }}>
         {/* Credits indicator */}
         <div className="flex items-center justify-between mb-2.5">
           <div className="flex items-center gap-1.5">
-            <CreditCard className="w-3.5 h-3.5 text-white/70" />
-            <span className="font-display font-bold text-[10px] text-white/70">CREDITS RESTANTS</span>
+            <CreditCard className="w-3.5 h-3.5 text-black/50" />
+            <span className="font-display font-bold text-[10px] text-black/60">CREDITS RESTANTS</span>
           </div>
           <span
             className="px-2 py-0.5 border-2 border-black font-display font-bold text-sm"
