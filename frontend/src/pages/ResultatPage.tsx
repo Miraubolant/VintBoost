@@ -261,7 +261,7 @@ export function ResultatPage() {
       </div>
 
       {/* Main Content - Desktop */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-16">
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-16">
         <div className="hidden lg:flex lg:gap-4">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
