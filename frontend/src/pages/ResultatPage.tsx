@@ -219,7 +219,7 @@ export function ResultatPage() {
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Fixed Config Bar - Desktop */}
-      <div className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b-3 border-black" style={{ backgroundColor: '#1D3354' }}>
+      <div className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b-[3px] border-black" style={{ backgroundColor: '#1D3354' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-4 py-2.5">
             {/* Back Button */}
@@ -304,7 +304,6 @@ export function ResultatPage() {
                 onUpgradeClick={() => setShowPricingModal(true)}
                 profileScreenshotUrl={profileScreenshotUrl}
                 includeProfileScreenshot={includeProfileScreenshot}
-                onPreviewScreenshot={() => setShowScreenshotModal(true)}
               />
             </div>
           </div>

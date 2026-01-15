@@ -1,4 +1,4 @@
-import { Sparkles, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin, ZoomIn, Image } from 'lucide-react'
+import { Sparkles, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin, Image } from 'lucide-react'
 import type { VintedItem, UserInfo } from '../types/vinted'
 
 const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
@@ -20,7 +20,6 @@ interface VideoPreviewSummaryProps {
   // Intro screenshot props
   profileScreenshotUrl?: string | null
   includeProfileScreenshot?: boolean
-  onPreviewScreenshot?: () => void
 }
 
 const templateNames: Record<string, string> = {
@@ -56,7 +55,6 @@ export function VideoPreviewSummary({
   onUpgradeClick,
   profileScreenshotUrl,
   includeProfileScreenshot = false,
-  onPreviewScreenshot,
 }: VideoPreviewSummaryProps) {
   const canGenerate = selectedArticles.length > 0 && creditsRemaining > 0
   const totalValue = selectedArticles.reduce(
@@ -153,34 +151,21 @@ export function VideoPreviewSummary({
 
           <div className="flex flex-wrap gap-1.5">
             {/* Intro Screenshot Preview */}
-            {fullScreenshotUrl && (
+            {fullScreenshotUrl && includeProfileScreenshot && (
               <div
-                className={`relative w-10 h-10 border-2 border-black overflow-hidden cursor-pointer group ${
-                  includeProfileScreenshot ? 'ring-2 ring-offset-1 ring-[#1D3354]' : 'opacity-50'
-                }`}
+                className="w-10 h-10 border-2 border-black overflow-hidden"
                 style={{ backgroundColor: '#1D3354' }}
-                onClick={onPreviewScreenshot}
               >
                 <img
                   src={fullScreenshotUrl}
                   alt="Intro"
                   className="w-full h-full object-cover object-top"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <ZoomIn className="w-3 h-3 text-white" />
-                </div>
-                {/* INTRO Badge */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 px-1 py-0.5 text-center"
-                  style={{ backgroundColor: '#9ED8DB' }}
-                >
-                  <span className="text-[7px] font-bold">INTRO</span>
-                </div>
               </div>
             )}
 
             {/* Selected Articles */}
-            {selectedArticles.slice(0, fullScreenshotUrl ? 5 : 6).map((item) => (
+            {selectedArticles.slice(0, (fullScreenshotUrl && includeProfileScreenshot) ? 5 : 6).map((item) => (
               <div
                 key={item.id}
                 className="w-10 h-10 border border-black overflow-hidden"
@@ -194,12 +179,12 @@ export function VideoPreviewSummary({
             ))}
 
             {/* More articles indicator */}
-            {selectedArticles.length > (fullScreenshotUrl ? 5 : 6) && (
+            {selectedArticles.length > ((fullScreenshotUrl && includeProfileScreenshot) ? 5 : 6) && (
               <div
                 className="w-10 h-10 border border-black flex items-center justify-center text-[10px] font-bold"
                 style={{ backgroundColor: '#E8DFD5' }}
               >
-                +{selectedArticles.length - (fullScreenshotUrl ? 5 : 6)}
+                +{selectedArticles.length - ((fullScreenshotUrl && includeProfileScreenshot) ? 5 : 6)}
               </div>
             )}
           </div>
