@@ -43,10 +43,13 @@ serve(async (req) => {
     }
 
     // Get request body
-    const { priceId, plan } = await req.json()
+    const { priceId, plan, isOneTime } = await req.json()
     if (!priceId) {
       throw new Error('Price ID is required')
     }
+
+    // Determine payment mode: 'payment' for one-time, 'subscription' for recurring
+    const paymentMode = isOneTime ? 'payment' : 'subscription'
 
     // Check if user already has a Stripe customer ID
     const { data: profile } = await supabaseClient
@@ -74,8 +77,8 @@ serve(async (req) => {
         .eq('id', user.id)
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Build checkout session options
+    const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       line_items: [
         {
@@ -83,20 +86,28 @@ serve(async (req) => {
           quantity: 1,
         },
       ],
-      mode: 'subscription',
+      mode: paymentMode,
       success_url: `${req.headers.get('origin')}/account?success=true&plan=${plan}`,
       cancel_url: `${req.headers.get('origin')}/?canceled=true`,
-      subscription_data: {
+      metadata: {
+        supabase_user_id: user.id,
+        plan: plan,
+        is_one_time: isOneTime ? 'true' : 'false',
+      },
+    }
+
+    // Add subscription_data only for subscription mode
+    if (paymentMode === 'subscription') {
+      sessionOptions.subscription_data = {
         metadata: {
           supabase_user_id: user.id,
           plan: plan,
         },
-      },
-      metadata: {
-        supabase_user_id: user.id,
-        plan: plan,
-      },
-    })
+      }
+    }
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create(sessionOptions)
 
     return new Response(
       JSON.stringify({ url: session.url }),

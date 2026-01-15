@@ -107,6 +107,18 @@ export function useVideoGeneration() {
           supabaseThumbnailUrl = uploadResult.thumbnailUrl
         }
 
+        // Get user's storage_days from subscription
+        const { data: subscription } = await supabase
+          .from('subscriptions')
+          .select('storage_days')
+          .eq('user_id', user.id)
+          .single()
+
+        // Calculate expires_at based on storage_days (default 1 day for free)
+        const storageDays = subscription?.storage_days || 1
+        const expiresAt = new Date()
+        expiresAt.setDate(expiresAt.getDate() + storageDays)
+
         // Save video record to database
         await supabase.from('user_videos').insert({
           user_id: user.id,
@@ -118,6 +130,7 @@ export function useVideoGeneration() {
           file_size: data.fileSize,
           template: config.template || 'classic',
           articles_count: config.articles.length,
+          expires_at: expiresAt.toISOString(),
         })
       } catch {
         // Continue with API URLs if Supabase upload fails

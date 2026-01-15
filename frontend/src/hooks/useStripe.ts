@@ -2,9 +2,16 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 // Stripe Price IDs
+// Pro is a one-time payment (2,99€), Business is subscription (5,99€/month)
 export const STRIPE_PRICES = {
-  pro: 'price_1Sow53K7Yon7d585HdHNbLgS',
-  business: 'price_1Sow6DK7Yon7d585RsV1cflP',
+  pro: 'price_1SpoqGK7Yon7d585SyjAeqea',
+  business: 'price_1SpoqrK7Yon7d585I02XU0ya',
+}
+
+// Plan configuration
+const PLAN_CONFIG = {
+  pro: { isOneTime: true },
+  business: { isOneTime: false },
 }
 
 export function useStripe() {
@@ -23,9 +30,10 @@ export function useStripe() {
       }
 
       const priceId = STRIPE_PRICES[plan]
+      const { isOneTime } = PLAN_CONFIG[plan]
 
       const response = await supabase.functions.invoke('create-checkout-session', {
-        body: { priceId, plan },
+        body: { priceId, plan, isOneTime },
       })
 
       if (response.error) {

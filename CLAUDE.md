@@ -117,34 +117,45 @@ supabase db push  # Push migrations
 ```
 
 ## Subscription Plans
-| Plan | Videos/month | Price | Features |
-|------|--------------|-------|----------|
-| Free | 1 | 0€ | Basic templates, Watermark |
-| Pro | 5 | 3.99€ | All templates, No watermark, 1080p |
-| Business | 15 | 9.99€ | All templates, No watermark, 4K |
+| Plan | Type | Videos | Price | Features |
+|------|------|--------|-------|----------|
+| Free | - | 1 | 0€ | 1 template, Watermark, 1 jour sauvegarde |
+| Pack Pro | One-time | 5 | 2,99€ | All templates, No watermark, 1080p HD, 7 jours sauvegarde |
+| Business | Abonnement | 15/mois | 5,99€/mois | All templates, No watermark, 4K, 30 jours sauvegarde |
 
 ## Credits & Subscription Logic
 
 ### Plans Details
-| Plan | Videos/month | Articles/video | Duration | Resolution | Templates | Watermark |
-|------|--------------|----------------|----------|------------|-----------|-----------|
-| Free | 1 | 5 | 15s | 1080p | 1 (Classic) | Forced |
-| Pro | 5 | 10 | 15s/30s/60s | 1080p | 3 | Optional |
-| Business | 15 | 20 | 15s/30s/60s | 4K | 3 | Optional |
+| Plan | Type | Videos | Articles/video | Duration | Resolution | Templates | Watermark | Sauvegarde |
+|------|------|--------|----------------|----------|------------|-----------|-----------|------------|
+| Free | - | 1 | 5 | 15s | 1080p | 1 (Classic) | Forced | 1 jour |
+| Pack Pro | One-time | 5 | 10 | 15s/30s/60s | 1080p HD | 3 | Optional | 7 jours |
+| Business | Subscription | 15/mois | 20 | 15s/30s/60s | 4K | 3 | Optional | 30 jours |
 
 ### Database Tables
 
 #### `subscriptions`
 - `user_id` - UUID (unique per user)
 - `plan` - 'free' | 'pro' | 'business'
+- `plan_type` - 'free' | 'one_time' | 'subscription' (NEW)
 - `status` - 'active' | 'cancelled' | 'expired' | 'past_due' | 'trialing'
-- `videos_limit` - Monthly limit (1, 5, or 15)
-- `videos_used` - Current month usage counter
-- `period_start` / `period_end` - Billing period
+- `videos_limit` - Video limit (1, 5, or 15)
+- `videos_used` - Usage counter
+- `max_articles` - Max articles per video (5, 10, or 20) (NEW)
+- `storage_days` - Video retention days (1, 7, or 30) (NEW)
+- `period_start` / `period_end` - Billing period (for Business only)
 
 #### `credits`
 - `user_id` - UUID
 - `amount` - Extra credits purchased (not monthly, persistent)
+
+#### `user_videos`
+- `id` - UUID
+- `user_id` - UUID
+- `video_url` - Storage URL
+- `thumbnail_url` - Thumbnail URL
+- `expires_at` - Auto-deletion timestamp (NEW)
+- `created_at` - Creation timestamp
 
 #### `user_analytics`
 - `total_videos_generated` - Lifetime total
@@ -179,10 +190,25 @@ supabase db push  # Push migrations
 - Call `consumeVideoCredit()` in `useVideoGeneration.ts` after `generate()` success
 - This ensures users are only charged for successful generations
 
-### Monthly Reset
+### Monthly Reset (Business only)
 - `videos_used` resets to 0 at the start of each billing period
 - Handled by Stripe webhook on subscription renewal
 - Extra `credits.amount` do NOT reset (persistent purchases)
+- **Pack Pro**: No reset (one-time purchase, 5 videos total)
+
+### Video Auto-Deletion Logic
+Videos are automatically deleted based on user's plan:
+
+| Plan | Storage Duration | expires_at calculation |
+|------|------------------|------------------------|
+| Free | 1 jour | created_at + 1 day |
+| Pack Pro | 7 jours | created_at + 7 days |
+| Business | 30 jours | created_at + 30 days |
+
+**Implementation**:
+- Edge function `cleanup-expired-videos` runs daily via CRON
+- Deletes videos where `expires_at < NOW()`
+- Also removes files from Supabase Storage bucket
 
 ### Watermark Logic
 - **Free plan**: Watermark forced ON, cannot be disabled
@@ -226,8 +252,8 @@ Videos are uploaded to Supabase Storage bucket `videos`:
 - `customer-portal` - Opens Stripe customer portal for subscription management
 
 ### Stripe Configuration
-- **Pro Plan**: `price_1Sow53K7Yon7d585HdHNbLgS` (3.99€/month, 5 videos)
-- **Business Plan**: `price_1Sow6DK7Yon7d585RsV1cflP` (9.99€/month, 15 videos)
+- **Pack Pro**: `price_1SpoqGK7Yon7d585SyjAeqea` (2,99€ one-time, 5 videos)
+- **Business Plan**: `price_1SpoqrK7Yon7d585I02XU0ya` (5,99€/month, 15 videos/month)
 - **Webhook URL**: `https://mkzhgzvtvsezqlpesdgc.supabase.co/functions/v1/stripe-webhook`
 
 ### Supabase Secrets
@@ -252,4 +278,69 @@ supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_xxxxx
 supabase functions deploy create-checkout-session --no-verify-jwt
 supabase functions deploy customer-portal --no-verify-jwt
 supabase functions deploy stripe-webhook --no-verify-jwt
+supabase functions deploy cleanup-expired-videos --no-verify-jwt
 ```
+
+### CRON Job for Video Cleanup
+Configure in Supabase Dashboard > Database > Extensions > pg_cron:
+```sql
+-- Run daily at 3:00 AM UTC
+SELECT cron.schedule(
+  'cleanup-expired-videos',
+  '0 3 * * *',
+  $$
+  SELECT net.http_post(
+    url := 'https://mkzhgzvtvsezqlpesdgc.supabase.co/functions/v1/cleanup-expired-videos',
+    headers := '{"Authorization": "Bearer <service_role_key>"}'::jsonb
+  );
+  $$
+);
+```
+
+## Deployment Checklist (Pricing V2 Migration)
+
+### 1. Stripe Dashboard
+- [ ] Create new product "Pack Pro" (one-time, 2,99€)
+- [ ] Create new product "Business" (subscription, 5,99€/month)
+- [ ] Copy new price IDs and update in `frontend/src/hooks/useStripe.ts`
+- [ ] Archive old prices (3.99€ Pro, 9.99€ Business)
+
+### 2. Supabase Database
+```bash
+# Push migration (adds plan_type, max_articles, storage_days, expires_at)
+supabase db push
+```
+
+### 3. Deploy Edge Functions
+```bash
+supabase functions deploy create-checkout-session --no-verify-jwt
+supabase functions deploy stripe-webhook --no-verify-jwt
+supabase functions deploy cleanup-expired-videos --no-verify-jwt
+```
+
+### 4. Configure CRON Job
+In Supabase Dashboard > Database > Extensions > pg_cron, enable pg_cron and pg_net extensions, then run:
+```sql
+SELECT cron.schedule(
+  'cleanup-expired-videos',
+  '0 3 * * *',
+  $$
+  SELECT net.http_post(
+    url := 'https://mkzhgzvtvsezqlpesdgc.supabase.co/functions/v1/cleanup-expired-videos',
+    headers := '{"Authorization": "Bearer YOUR_SERVICE_ROLE_KEY"}'::jsonb
+  );
+  $$
+);
+```
+
+### 5. Deploy Frontend
+Redeploy frontend via Coolify to apply UI changes:
+- New pricing display (2,99€ / 5,99€)
+- Video expiration badges in AccountPage
+- Updated FAQ answers
+
+### 6. Test the Migration
+- [ ] Test Pack Pro purchase (one-time payment)
+- [ ] Test Business subscription
+- [ ] Verify videos show expiration countdown
+- [ ] Verify expired videos are deleted by cleanup function

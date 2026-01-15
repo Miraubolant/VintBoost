@@ -42,12 +42,12 @@ const faqItems: FAQItem[] = [
   {
     category: 'TARIFS',
     question: "Quel plan choisir ?",
-    answer: "Le plan Gratuit te permet de tester avec 1 video. Le plan Pro a 3,99 euros/mois est ideal pour les vendeurs reguliers avec 5 videos HD/mois. Le plan Business a 9,99 euros/mois convient aux vendeurs professionnels avec 15 videos 4K/mois."
+    answer: "Le plan Gratuit te permet de tester avec 1 vidéo. Le Pack Pro à 2,99€ (achat unique) est idéal pour les vendeurs occasionnels avec 5 vidéos HD incluses. L'abonnement Business à 5,99€/mois convient aux vendeurs professionnels avec 15 vidéos 4K/mois."
   },
   {
     category: 'TARIFS',
-    question: "Puis-je changer de plan a tout moment ?",
-    answer: "Oui, tu peux upgrader ou downgrader ton plan a tout moment. Le changement prend effet immediatement et le prorata est calcule automatiquement."
+    question: "Quelle est la différence entre Pack et Abonnement ?",
+    answer: "Le Pack Pro est un achat unique : tu paies une fois 2,99€ et tu obtiens 5 vidéos à utiliser quand tu veux. L'abonnement Business te donne 15 vidéos chaque mois avec renouvellement automatique à 5,99€/mois."
   },
   {
     category: 'TECHNIQUE',
@@ -56,8 +56,8 @@ const faqItems: FAQItem[] = [
   },
   {
     category: 'TECHNIQUE',
-    question: "Y a-t-il une limite de stockage ?",
-    answer: "Non, il n'y a pas de limite de stockage. Tes videos restent disponibles dans ton compte pendant 30 jours apres leur generation."
+    question: "Combien de temps sont conservées mes vidéos ?",
+    answer: "La durée de conservation dépend de ton plan : 1 jour pour le plan Gratuit, 7 jours pour le Pack Pro, et 30 jours pour l'abonnement Business. Pense à télécharger tes vidéos avant expiration !"
   },
 ]
 

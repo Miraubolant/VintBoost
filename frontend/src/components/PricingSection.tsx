@@ -27,9 +27,10 @@ const plans: PricingPlan[] = [
     description: 'Pour découvrir',
     features: [
       '1 vidéo HD offerte',
-      'Templates basiques',
+      'Template Classic',
       'Watermark VintBoost',
-      'Export rapide',
+      '5 articles max',
+      'Sauvegarde 1 jour',
     ],
     buttonText: 'ESSAYER GRATUIT',
     buttonStyle: 'navy',
@@ -37,19 +38,19 @@ const plans: PricingPlan[] = [
     icon: Sparkles,
   },
   {
-    name: 'PRO',
-    price: '3.99€',
-    period: '/mois',
+    name: 'PACK PRO',
+    price: '2,99€',
     videos: '5 vidéos',
-    description: 'Le plus populaire',
+    description: 'Achat unique',
     features: [
-      '5 vidéos HD/mois',
+      '5 vidéos HD incluses',
       'Tous les templates',
       'Sans watermark',
-      'Support prioritaire',
+      '10 articles max',
+      'Sauvegarde 7 jours',
       'Export 1080p',
     ],
-    buttonText: 'CHOISIR PRO',
+    buttonText: 'ACHETER LE PACK',
     buttonStyle: 'red',
     popular: true,
     highlight: 'POPULAIRE',
@@ -58,18 +59,19 @@ const plans: PricingPlan[] = [
   },
   {
     name: 'BUSINESS',
-    price: '9.99€',
+    price: '5,99€',
     period: '/mois',
-    videos: '15 vidéos',
-    description: 'Pour les pros',
+    videos: '15 vidéos/mois',
+    description: 'Abonnement mensuel',
     features: [
       '15 vidéos 4K/mois',
       'Tous les templates',
       'Sans watermark',
-      'Support 24/7',
+      '20 articles max',
+      'Sauvegarde 30 jours',
       'Export 4K',
     ],
-    buttonText: 'CHOISIR BUSINESS',
+    buttonText: 'S\'ABONNER',
     buttonStyle: 'navy',
     stripePlan: 'business',
     icon: Zap,
@@ -185,7 +187,7 @@ export function PricingSection() {
                     {plan.period && <span className="text-base sm:text-lg font-normal">{plan.period}</span>}
                   </div>
                   <div className="font-display font-bold text-xs sm:text-sm text-black uppercase">
-                    {plan.period ? 'Par mois' : 'Paiement unique'}
+                    {plan.period ? 'Par mois' : plan.isFree ? 'Pour toujours' : 'Achat unique'}
                   </div>
                   {plan.popular && (
                     <div className="mt-2 px-3 py-1 text-white border-2 border-black font-display font-bold text-xs inline-block transform rotate-2" style={{ backgroundColor: '#1D3354' }}>

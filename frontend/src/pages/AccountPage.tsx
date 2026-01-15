@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image, Settings, Loader2, Calendar, Zap, Clock, Play, Grid3X3, List } from 'lucide-react'
+import { User, Video, BarChart3, CreditCard, Trash2, Download, TrendingUp, AlertTriangle, Image, Settings, Loader2, Calendar, Zap, Clock, Play, Grid3X3, List, Timer } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useStripe } from '../hooks/useStripe'
 import { supabase } from '../lib/supabase'
@@ -16,6 +16,7 @@ interface UserVideo {
   articles_count: number | null
   template: string | null
   created_at: string
+  expires_at: string | null
 }
 
 interface UserAnalytics {
@@ -201,6 +202,22 @@ export function AccountPage() {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const getExpirationInfo = (expiresAt: string | null) => {
+    if (!expiresAt) return null
+    const now = new Date()
+    const expiry = new Date(expiresAt)
+    const diff = expiry.getTime() - now.getTime()
+
+    if (diff <= 0) return { text: 'Expirée', isExpired: true, isUrgent: true }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const days = Math.floor(hours / 24)
+
+    if (days > 1) return { text: `${days}j restants`, isExpired: false, isUrgent: false }
+    if (hours > 1) return { text: `${hours}h restantes`, isExpired: false, isUrgent: days === 0 }
+    return { text: 'Moins d\'1h', isExpired: false, isUrgent: true }
   }
 
   if (loading || !user) {
@@ -600,6 +617,24 @@ export function AccountPage() {
                         </div>
                       )}
 
+                      {/* Expiration badge */}
+                      {(() => {
+                        const expInfo = getExpirationInfo(video.expires_at)
+                        if (!expInfo) return null
+                        return (
+                          <div
+                            className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-display font-bold border border-black"
+                            style={{
+                              backgroundColor: expInfo.isExpired ? '#D64045' : expInfo.isUrgent ? '#FFA500' : '#9ED8DB',
+                              color: expInfo.isExpired || expInfo.isUrgent ? '#FFF' : '#000'
+                            }}
+                          >
+                            <Timer className="w-2.5 h-2.5" />
+                            {expInfo.text}
+                          </div>
+                        )
+                      })()}
+
                       {/* Delete button */}
                       <button
                         onClick={(e) => {
@@ -703,6 +738,22 @@ export function AccountPage() {
                                 {video.template}
                               </span>
                             )}
+                            {(() => {
+                              const expInfo = getExpirationInfo(video.expires_at)
+                              if (!expInfo) return null
+                              return (
+                                <div
+                                  className="flex items-center gap-1 px-1.5 py-0.5 border border-black font-display font-bold"
+                                  style={{
+                                    backgroundColor: expInfo.isExpired ? '#D64045' : expInfo.isUrgent ? '#FFA500' : '#9ED8DB',
+                                    color: expInfo.isExpired || expInfo.isUrgent ? '#FFF' : '#000'
+                                  }}
+                                >
+                                  <Timer className="w-2.5 h-2.5" />
+                                  {expInfo.text}
+                                </div>
+                              )
+                            })()}
                           </div>
                         </div>
 
