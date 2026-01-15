@@ -76,7 +76,7 @@ export function CompactSidebar({
   const hasIntro = fullScreenshotUrl && includeProfileScreenshot
 
   return (
-    <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+    <div className="h-full flex flex-col border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
       {/* Header: User Profile Compact */}
       <div className="px-4 py-3 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
         <div className="flex items-center gap-3">
@@ -149,8 +149,8 @@ export function CompactSidebar({
         </div>
       </div>
 
-      {/* Configuration - Ultra compact */}
-      <div className="px-4 py-3 space-y-3">
+      {/* Configuration - Ultra compact - Flex-1 to push generate button down */}
+      <div className="px-4 py-3 space-y-3 flex-1">
         {/* Template - Inline buttons */}
         <div className="flex items-center gap-2">
           <Layout className="w-3.5 h-3.5 text-black/40 flex-shrink-0" />

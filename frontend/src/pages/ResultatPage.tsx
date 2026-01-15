@@ -217,45 +217,23 @@ export function ResultatPage() {
   }
 
   return (
-    <div className="min-h-screen pb-24 lg:pb-8" style={{ backgroundColor: '#E8DFD5' }}>
+    <div className="min-h-screen pb-20 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Main Content - Desktop */}
       <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-6">
-        {/* Desktop Page Header */}
-        <div className="hidden lg:block mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-display font-bold text-3xl tracking-tight mb-1">
-                <span
-                  className="inline-block bg-white border-3 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                  style={{ color: '#1D3354' }}
-                >
-                  CREE TA VIDEO
-                </span>
-              </h1>
-              <p className="text-sm text-black/60 font-body mt-3">
-                Selectionne tes articles, personnalise et genere en 1 clic
-              </p>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-black/50 font-body">
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#9ED8DB]">1</span>
-                Selectionner
-              </span>
-              <span className="text-black/30">→</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#9ED8DB]">2</span>
-                Configurer
-              </span>
-              <span className="text-black/30">→</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-5 h-5 flex items-center justify-center border border-black/30 font-display font-bold text-[10px] bg-[#D64045] text-white">3</span>
-                Generer
-              </span>
-            </div>
-          </div>
+        {/* Desktop Page Header - Centered like AccountPage */}
+        <div className="hidden lg:block text-center mb-6">
+          <h1
+            className="inline-block font-display font-bold text-3xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]"
+            style={{ backgroundColor: '#1D3354' }}
+          >
+            CREE TA VIDEO
+          </h1>
+          <p className="text-sm text-black/60 font-body mt-3">
+            Selectionne tes articles, personnalise et genere en 1 clic
+          </p>
         </div>
 
-        <div className="hidden lg:flex lg:gap-6">
+        <div className="hidden lg:flex lg:gap-6 lg:items-start">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
@@ -278,9 +256,9 @@ export function ResultatPage() {
             </div>
           </div>
 
-          {/* Right Sidebar: Preview & Generate (Sticky) */}
-          <div className="w-[340px] flex-shrink-0">
-            <div className="sticky top-24">
+          {/* Right Sidebar: Preview & Generate */}
+          <div className="w-[340px] flex-shrink-0 self-stretch">
+            <div className="h-full">
               <CompactSidebar
                 username={wardrobeData.username}
                 userInfo={wardrobeData.userInfo}
