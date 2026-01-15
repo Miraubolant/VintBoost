@@ -130,7 +130,7 @@ export function BlogArticlePage() {
   return (
     <>
       <Helmet>
-        <title>{post.title} | Blog VintBoost</title>
+        <title>{post.title} | VintBoost</title>
         <meta name="description" content={post.metaDescription} />
         <meta name="keywords" content={post.tags.join(', ')} />
         <link rel="canonical" href={shareUrl} />

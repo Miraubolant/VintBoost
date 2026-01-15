@@ -25,11 +25,11 @@ export function BlogPage() {
   return (
     <>
       <Helmet>
-        <title>Blog VintBoost - Conseils et astuces pour vendre sur Vinted</title>
+        <title>Conseils et astuces pour vendre sur Vinted | VintBoost</title>
         <meta name="description" content="Découvre tous nos conseils pour booster tes ventes Vinted : photos, vidéos TikTok, profil optimisé, tendances mode seconde main. Guide complet du vendeur Vinted." />
         <meta name="keywords" content="vinted conseils, vendre vinted, astuces vinted, photos vinted, tiktok vinted, mode seconde main" />
         <link rel="canonical" href="https://vintboost.com/blog" />
-        <meta property="og:title" content="Blog VintBoost - Conseils pour vendre sur Vinted" />
+        <meta property="og:title" content="Conseils et astuces pour vendre sur Vinted | VintBoost" />
         <meta property="og:description" content="Découvre tous nos conseils pour booster tes ventes Vinted : photos, vidéos, profil optimisé." />
         <meta property="og:url" content="https://vintboost.com/blog" />
         <meta property="og:type" content="website" />

@@ -10,27 +10,27 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     question: "Comment fonctionne VintBoost ?",
-    answer: "VintBoost récupère automatiquement les articles de ton vestiaire Vinted à partir de ton lien profil, puis génère une vidéo promotionnelle professionnelle avec tes produits. Tu n'as qu'à coller ton lien et cliquer sur générer !"
+    answer: "C'est simple ! Colle le lien de ton profil Vinted, sélectionne les articles à mettre en avant (5 à 20 selon ton plan), personnalise ta vidéo (durée, musique, template), et génère ta vidéo promo en quelques secondes !"
   },
   {
-    question: "Combien de temps prend la génération d'une vidéo ?",
-    answer: "La génération d'une vidéo prend environ 30 secondes à 2 minutes selon le nombre d'articles et la qualité choisie. Tu recevras une notification dès que ta vidéo sera prête."
+    question: "Combien de temps prend la génération ?",
+    answer: "La génération prend environ 30 secondes à 2 minutes selon le nombre d'articles. Une fois générée, tu peux télécharger ta vidéo immédiatement."
   },
   {
-    question: "Puis-je personnaliser mes vidéos ?",
-    answer: "Oui ! Tu peux sélectionner jusqu'à 10 articles de ton vestiaire, choisir la durée de la vidéo (15s, 30s, 45s ou 60s), et avec les plans payants, accéder à des templates premium et la qualité HD/4K."
+    question: "Quelles durées de vidéo sont disponibles ?",
+    answer: "Tu peux créer des vidéos de 15s, 30s ou 60s. Les formats courts sont parfaits pour TikTok et Reels, le format long pour des présentations plus complètes."
   },
   {
     question: "Les vidéos ont-elles un watermark ?",
-    answer: "Le plan gratuit inclut un watermark VintBoost discret. Les plans Pro et Business permettent de générer des vidéos sans aucun watermark pour un rendu 100% professionnel."
+    answer: "Le plan Gratuit inclut un watermark VintBoost. Les plans Pro et Business permettent de le désactiver pour un rendu 100% professionnel."
   },
   {
-    question: "Comment utiliser mes vidéos ?",
-    answer: "Une fois générées, tu peux télécharger tes vidéos et les partager sur TikTok, Instagram Reels, Stories ou directement dans tes annonces Vinted pour attirer plus d'acheteurs."
+    question: "Quel plan choisir ?",
+    answer: "Gratuit : 1 vidéo pour tester. Pack Pro (2,99€) : 5 vidéos HD, achat unique. Business (5,99€/mois) : 15 vidéos 4K/mois pour les pros."
   },
   {
-    question: "Est-ce compatible avec tous les comptes Vinted ?",
-    answer: "Oui, VintBoost fonctionne avec tous les comptes Vinted publics. Il te suffit de coller le lien de ton profil ou de ton vestiaire pour commencer."
+    question: "Combien de temps sont conservées mes vidéos ?",
+    answer: "1 jour (Gratuit), 7 jours (Pro), ou 30 jours (Business). Un badge t'indique le temps restant pour télécharger tes vidéos."
   },
 ]
 

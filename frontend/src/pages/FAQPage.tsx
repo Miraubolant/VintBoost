@@ -12,52 +12,57 @@ const faqItems: FAQItem[] = [
   {
     category: 'GENERAL',
     question: "Comment fonctionne VintBoost ?",
-    answer: "VintBoost recupere automatiquement les articles de ton vestiaire Vinted a partir de ton lien profil, puis genere une video promotionnelle professionnelle avec tes produits. Tu n'as qu'a coller ton lien et cliquer sur generer !"
+    answer: "C'est simple ! 1) Colle le lien de ton profil Vinted. 2) VintBoost recupere automatiquement tes articles en vente. 3) Selectionne les articles a mettre en avant (jusqu'a 5, 10 ou 20 selon ton plan). 4) Personnalise ta video (duree, musique, template). 5) Genere et telecharge ta video promo !"
   },
   {
     category: 'GENERAL',
     question: "Combien de temps prend la generation d'une video ?",
-    answer: "La generation d'une video prend environ 30 secondes a 2 minutes selon le nombre d'articles et la qualite choisie. Tu recevras une notification des que ta video sera prete."
+    answer: "La generation d'une video prend environ 30 secondes a 2 minutes selon le nombre d'articles et la qualite choisie. Une fois generee, tu peux la telecharger immediatement."
   },
   {
     category: 'FONCTIONNALITES',
-    question: "Puis-je personnaliser mes videos ?",
-    answer: "Oui ! Tu peux selectionner jusqu'a 10 articles de ton vestiaire, choisir la duree de la video (15s, 30s, 45s ou 60s), et avec les plans payants, acceder a des templates premium et la qualite HD/4K."
+    question: "Combien d'articles puis-je mettre dans une video ?",
+    answer: "Le nombre d'articles depend de ton plan : 5 articles max pour le plan Gratuit, 10 articles pour le Pack Pro, et 20 articles pour l'abonnement Business."
+  },
+  {
+    category: 'FONCTIONNALITES',
+    question: "Quelles durees de video sont disponibles ?",
+    answer: "Tu peux creer des videos de 15 secondes, 30 secondes ou 60 secondes selon tes besoins. Les formats courts (15-30s) sont parfaits pour TikTok et Reels, le format long (60s) pour des presentations plus completes."
   },
   {
     category: 'FONCTIONNALITES',
     question: "Les videos ont-elles un watermark ?",
-    answer: "Le plan gratuit inclut un watermark VintBoost discret. Les plans Pro et Business permettent de generer des videos sans aucun watermark pour un rendu 100% professionnel."
+    answer: "Le plan Gratuit inclut un watermark VintBoost. Les plans Pro et Business permettent de desactiver le watermark pour un rendu 100% professionnel."
   },
   {
     category: 'UTILISATION',
     question: "Comment utiliser mes videos ?",
-    answer: "Une fois generees, tu peux telecharger tes videos et les partager sur TikTok, Instagram Reels, Stories ou directement dans tes annonces Vinted pour attirer plus d'acheteurs."
+    answer: "Une fois generees, telecharge tes videos et partage-les sur TikTok, Instagram Reels, Stories, ou directement dans tes annonces Vinted pour attirer plus d'acheteurs potentiels."
   },
   {
     category: 'UTILISATION',
     question: "Est-ce compatible avec tous les comptes Vinted ?",
-    answer: "Oui, VintBoost fonctionne avec tous les comptes Vinted publics. Il te suffit de coller le lien de ton profil ou de ton vestiaire pour commencer."
+    answer: "Oui, VintBoost fonctionne avec tous les comptes Vinted publics. Il te suffit de coller le lien de ton profil Vinted pour commencer."
   },
   {
     category: 'TARIFS',
     question: "Quel plan choisir ?",
-    answer: "Le plan Gratuit te permet de tester avec 1 vidéo. Le Pack Pro à 2,99€ (achat unique) est idéal pour les vendeurs occasionnels avec 5 vidéos HD incluses. L'abonnement Business à 5,99€/mois convient aux vendeurs professionnels avec 15 vidéos 4K/mois."
+    answer: "Le plan Gratuit te permet de tester avec 1 video (5 articles max, watermark). Le Pack Pro a 2,99€ (achat unique) offre 5 videos HD avec 10 articles max et sans watermark. L'abonnement Business a 5,99€/mois te donne 15 videos 4K/mois avec 20 articles max."
   },
   {
     category: 'TARIFS',
-    question: "Quelle est la différence entre Pack et Abonnement ?",
-    answer: "Le Pack Pro est un achat unique : tu paies une fois 2,99€ et tu obtiens 5 vidéos à utiliser quand tu veux. L'abonnement Business te donne 15 vidéos chaque mois avec renouvellement automatique à 5,99€/mois."
+    question: "Quelle est la difference entre Pack et Abonnement ?",
+    answer: "Le Pack Pro est un achat unique : tu paies une fois 2,99€ et tu obtiens 5 videos a utiliser quand tu veux (pas de date limite d'utilisation). L'abonnement Business te donne 15 nouvelles videos chaque mois avec renouvellement automatique a 5,99€/mois."
   },
   {
     category: 'TECHNIQUE',
     question: "Quels formats de video sont disponibles ?",
-    answer: "Toutes les videos sont exportees en MP4, optimisees pour les reseaux sociaux. Les plans payants offrent la qualite 1080p (Pro) ou 4K (Business)."
+    answer: "Toutes les videos sont exportees en MP4 au format 9:16 (vertical), optimise pour TikTok et Instagram. La qualite est 1080p HD pour le Pack Pro et 4K pour l'abonnement Business."
   },
   {
     category: 'TECHNIQUE',
-    question: "Combien de temps sont conservées mes vidéos ?",
-    answer: "La durée de conservation dépend de ton plan : 1 jour pour le plan Gratuit, 7 jours pour le Pack Pro, et 30 jours pour l'abonnement Business. Pense à télécharger tes vidéos avant expiration !"
+    question: "Combien de temps sont conservees mes videos ?",
+    answer: "La duree de conservation depend de ton plan : 1 jour pour le plan Gratuit, 7 jours pour le Pack Pro, et 30 jours pour l'abonnement Business. Un badge d'expiration te rappelle de telecharger tes videos a temps !"
   },
 ]
 
