@@ -44,14 +44,14 @@ export const PLAN_FEATURES = {
   },
   pro: {
     templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
-    resolutions: ['720p', '1080p'] as VideoResolution[],
+    resolutions: ['1080p'] as VideoResolution[],
     aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
     canUploadMusic: true,
     canRemoveWatermark: true,
   },
   business: {
     templates: ['classic', 'modern', 'premium'] as VideoTemplate[],
-    resolutions: ['720p', '1080p', '4K'] as VideoResolution[],
+    resolutions: ['1080p', '4K'] as VideoResolution[],
     aspectRatios: ['9:16', '16:9', '1:1'] as VideoAspectRatio[],
     canUploadMusic: true,
     canRemoveWatermark: true,
@@ -65,9 +65,8 @@ const aspectRatioOptions = [
 ]
 
 const resolutionOptions = [
-  { id: '720p' as VideoResolution, name: '720p' },
-  { id: '1080p' as VideoResolution, name: '1080p' },
-  { id: '4K' as VideoResolution, name: '4K' },
+  { id: '1080p' as VideoResolution, name: '1080p HD' },
+  { id: '4K' as VideoResolution, name: '4K Ultra' },
 ]
 
 const musicTracks = [

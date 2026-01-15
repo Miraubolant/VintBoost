@@ -5,12 +5,12 @@ import { useAuth } from '../context/AuthContext'
 import { useVintedScraper } from '../hooks/useVintedScraper'
 import { useVideoGeneration } from '../hooks/useVideoGeneration'
 import type { VintedItem, VideoArticle, VideoResolution, VideoAspectRatio, VideoTemplate } from '../types/vinted'
-import { Video, X, AlertCircle, ArrowLeft, Smartphone, Check, Plus, ZoomIn } from 'lucide-react'
+import { Video, X, AlertCircle, ArrowLeft, Smartphone, Check, Plus, ZoomIn, History, Music, Layout, Stamp, Monitor, Square, Lock, Crown, ChevronDown, Type } from 'lucide-react'
 
 // Decomposed components
 import { ScrapingLoaderModal } from '../components/ScrapingLoaderModal'
 import { ArticleSelector, ARTICLE_LIMITS } from '../components/ArticleSelector'
-import { VideoConfigForm, PLAN_FEATURES } from '../components/VideoConfigForm'
+import { PLAN_FEATURES } from '../components/VideoConfigForm'
 import { VideoPreviewSummary } from '../components/VideoPreviewSummary'
 import { VideoResultDisplay } from '../components/VideoResultDisplay'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
@@ -229,38 +229,64 @@ export function ResultatPage() {
 
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
-      {/* Page Title & Tutorial - Desktop */}
-      <div className="hidden lg:block text-center pt-8 pb-6">
-        <h1
-          className="inline-block font-display font-bold text-3xl lg:text-4xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] mb-4"
-          style={{ backgroundColor: '#1D3354' }}
-        >
-          CRÉE TA VIDÉO VINTED
-        </h1>
-        <p className="font-body text-sm text-black/70 max-w-2xl mx-auto mt-4 leading-relaxed">
-          <span className="font-bold" style={{ color: '#1D3354' }}>1.</span> Sélectionne tes articles &nbsp;→&nbsp;
-          <span className="font-bold" style={{ color: '#1D3354' }}>2.</span> Configure ta vidéo &nbsp;→&nbsp;
-          <span className="font-bold" style={{ color: '#1D3354' }}>3.</span> Génère et télécharge !
-        </p>
+      {/* Page Title - Desktop */}
+      <div className="hidden lg:block text-center pt-6 pb-4">
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={handleBack}
+            className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1
+            className="inline-block font-display font-bold text-2xl lg:text-3xl text-white border-3 border-black px-5 py-2.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            style={{ backgroundColor: '#1D3354' }}
+          >
+            CRÉE TA VIDÉO VINTED
+          </h1>
+          <button
+            onClick={() => navigate('/account')}
+            className="flex items-center gap-2 px-3 py-2 border-2 border-black font-display font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+            style={{ backgroundColor: '#9ED8DB' }}
+          >
+            <History className="w-4 h-4" />
+            MES VIDÉOS
+          </button>
+        </div>
       </div>
 
-      {/* Main Content - 2 Columns + Sticky Sidebar Desktop */}
+      {/* Main Content - Desktop: Unified Section + Sticky Sidebar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 lg:pt-0">
         <div className="hidden lg:flex lg:gap-4">
-          {/* Left Column: Articles + Configuration */}
-          <div className="flex-1 min-w-0 space-y-3">
-            {/* Articles Section with integrated header */}
+          {/* Left Column: Unified Config + Articles */}
+          <div className="flex-1 min-w-0">
             <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-              {/* Header with back button */}
-              <div className="flex items-center gap-3 px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
-                <button
-                  onClick={handleBack}
-                  className="w-7 h-7 border-2 border-white/30 flex items-center justify-center transition-all hover:bg-white/10 flex-shrink-0"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5 text-white" />
-                </button>
-                <h3 className="font-display font-bold text-white text-xs">SÉLECTION DES ARTICLES</h3>
+              {/* Compact Config Bar */}
+              <div className="border-b-2 border-black" style={{ backgroundColor: '#F8F8F8' }}>
+                <DesktopCompactConfig
+                  profileScreenshotUrl={profileScreenshotUrl}
+                  includeProfileScreenshot={includeProfileScreenshot}
+                  onToggleProfileScreenshot={handleToggleProfileScreenshot}
+                  onPreviewScreenshot={() => setShowScreenshotModal(true)}
+                  musicTrack={musicTrack}
+                  onMusicChange={setMusicTrack}
+                  template={template}
+                  onTemplateChange={setTemplate}
+                  customText={customText}
+                  onCustomTextChange={setCustomText}
+                  hasWatermark={hasWatermark}
+                  onWatermarkChange={setHasWatermark}
+                  aspectRatio={aspectRatio}
+                  onAspectRatioChange={setAspectRatio}
+                  resolution={resolution}
+                  onResolutionChange={setResolution}
+                  plan={plan}
+                  onUpgradeClick={() => setShowPricingModal(true)}
+                />
               </div>
+
+              {/* Articles Grid */}
               <div className="p-3">
                 <ArticleSelector
                   items={wardrobeData.items}
@@ -272,46 +298,6 @@ export function ResultatPage() {
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
                 />
-              </div>
-            </div>
-
-            {/* Configuration Section - Compact 2-column layout */}
-            <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="px-3 py-2 border-b-2 border-black" style={{ backgroundColor: '#1D3354' }}>
-                <h3 className="font-display font-bold text-white text-xs">CONFIGURATION VIDÉO</h3>
-              </div>
-              <div className="p-3">
-                <div className="space-y-3">
-                  {/* Intro Video Section - Integrated */}
-                  {profileScreenshotUrl && (
-                    <DesktopIntroSection
-                      screenshotUrl={profileScreenshotUrl}
-                      username={wardrobeData.username}
-                      isIncluded={includeProfileScreenshot}
-                      onToggle={handleToggleProfileScreenshot}
-                      onPreview={() => setShowScreenshotModal(true)}
-                    />
-                  )}
-
-                  <VideoConfigForm
-                    musicTrack={musicTrack}
-                    onMusicChange={setMusicTrack}
-                    template={template}
-                    onTemplateChange={setTemplate}
-                    customText={customText}
-                    onCustomTextChange={setCustomText}
-                    hasWatermark={hasWatermark}
-                    onWatermarkChange={setHasWatermark}
-                    resolution={resolution}
-                    onResolutionChange={setResolution}
-                    aspectRatio={aspectRatio}
-                    onAspectRatioChange={setAspectRatio}
-                    plan={plan}
-                    username={wardrobeData.username}
-                    onUpgradeClick={() => setShowPricingModal(true)}
-                    compact
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -341,40 +327,43 @@ export function ResultatPage() {
         </div>
 
         {/* Mobile Layout */}
-        <div className="lg:hidden">
-          {/* Mobile Title & Tutorial */}
-          <div className="text-center mb-4">
-            <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="lg:hidden pt-4">
+          {/* Mobile Title & Actions */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
               <button
                 onClick={handleBack}
-                className="w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="w-9 h-9 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
                 style={{ backgroundColor: '#FFFFFF' }}
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <h1
-                className="font-display font-bold text-lg text-white border-2 border-black px-4 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                className="font-display font-bold text-base text-white border-2 border-black px-4 py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 style={{ backgroundColor: '#1D3354' }}
               >
                 CRÉE TA VIDÉO
               </h1>
+              <button
+                onClick={() => navigate('/account')}
+                className="w-9 h-9 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                style={{ backgroundColor: '#9ED8DB' }}
+              >
+                <History className="w-4 h-4" />
+              </button>
             </div>
-            <div className="flex items-center justify-center gap-1 text-[10px] text-black/60 font-body">
-              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">1. Sélectionne</span>
-              <span>→</span>
-              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">2. Configure</span>
-              <span>→</span>
-              <span className="px-1.5 py-0.5 border border-black/20 bg-white/50 font-bold">3. Génère</span>
-            </div>
+            <p className="text-center text-xs text-black/60 font-body">
+              Sélectionne tes articles puis configure ta vidéo
+            </p>
           </div>
 
           {/* Mobile Selection Header */}
           <div className="flex items-center justify-between mb-3 px-1">
             <h2 className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>
-              SÉLECTION ({selectedItems.size}/{articleLimit})
+              ARTICLES ({selectedItems.size}/{articleLimit})
             </h2>
             <p className="text-xs text-black/50 font-body">
-              Choisis tes articles
+              Appuie pour sélectionner
             </p>
           </div>
 
@@ -483,74 +472,245 @@ export function ResultatPage() {
   )
 }
 
-// Desktop Intro Section - Compact horizontal layout
-function DesktopIntroSection({
-  screenshotUrl,
-  username,
-  isIncluded,
-  onToggle,
-  onPreview,
+// Desktop Compact Config - All options in a single compact bar
+function DesktopCompactConfig({
+  profileScreenshotUrl,
+  includeProfileScreenshot,
+  onToggleProfileScreenshot,
+  onPreviewScreenshot,
+  musicTrack,
+  onMusicChange,
+  template,
+  onTemplateChange,
+  customText,
+  onCustomTextChange,
+  hasWatermark,
+  onWatermarkChange,
+  aspectRatio,
+  onAspectRatioChange,
+  resolution,
+  onResolutionChange,
+  plan,
+  onUpgradeClick,
 }: {
-  screenshotUrl: string
-  username?: string
-  isIncluded: boolean
-  onToggle: () => void
-  onPreview: () => void
+  profileScreenshotUrl: string | null
+  includeProfileScreenshot: boolean
+  onToggleProfileScreenshot: () => void
+  onPreviewScreenshot: () => void
+  musicTrack: string
+  onMusicChange: (track: string) => void
+  template: VideoTemplate
+  onTemplateChange: (template: VideoTemplate) => void
+  customText: string
+  onCustomTextChange: (text: string) => void
+  hasWatermark: boolean
+  onWatermarkChange: (hasWatermark: boolean) => void
+  aspectRatio: VideoAspectRatio
+  onAspectRatioChange: (ratio: VideoAspectRatio) => void
+  resolution: VideoResolution
+  onResolutionChange: (res: VideoResolution) => void
+  plan: 'free' | 'pro' | 'business'
+  onUpgradeClick: () => void
 }) {
   const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
-  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+  const fullScreenshotUrl = profileScreenshotUrl?.startsWith('http') ? profileScreenshotUrl : `${API_URL}${profileScreenshotUrl}`
+
+  const isPremium = plan === 'pro' || plan === 'business'
+  const isBusiness = plan === 'business'
+
+  const templates = [
+    { id: 'classic' as VideoTemplate, name: 'Classic', color: '#1D3354' },
+    { id: 'modern' as VideoTemplate, name: 'Modern', color: '#9ED8DB' },
+    { id: 'premium' as VideoTemplate, name: 'Premium', color: '#D64045' },
+  ]
+
+  const musicTracks = [
+    { id: '', name: 'Sans musique' },
+    { id: 'upbeat', name: 'Upbeat' },
+    { id: 'chill', name: 'Chill' },
+    { id: 'fashion', name: 'Fashion' },
+    { id: 'trendy', name: 'Trendy' },
+  ]
+
+  const aspectOptions = [
+    { id: '9:16' as VideoAspectRatio, icon: Smartphone, label: '9:16' },
+    { id: '16:9' as VideoAspectRatio, icon: Monitor, label: '16:9' },
+    { id: '1:1' as VideoAspectRatio, icon: Square, label: '1:1' },
+  ]
 
   return (
-    <div
-      className="flex items-center gap-3 p-2 border-2 border-black"
-      style={{ backgroundColor: isIncluded ? '#9ED8DB20' : '#F5F5F5' }}
-    >
-      {/* Screenshot thumbnail */}
-      <div
-        className={`
-          w-10 h-16 border-2 border-black overflow-hidden flex-shrink-0 cursor-pointer relative group
-          ${!isIncluded ? 'opacity-50 grayscale' : ''}
-        `}
-        style={{ backgroundColor: '#000' }}
-        onClick={onPreview}
-      >
-        <img
-          src={fullUrl}
-          alt="Screenshot profil"
-          className="w-full h-full object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <ZoomIn className="w-4 h-4 text-white" />
-        </div>
-      </div>
+    <div className="p-3">
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Intro Screenshot Toggle */}
+        {profileScreenshotUrl && (
+          <div className="flex items-center gap-2 pr-3 border-r-2 border-black/10">
+            <div
+              className={`
+                w-8 h-14 border-2 border-black overflow-hidden flex-shrink-0 cursor-pointer relative group
+                ${!includeProfileScreenshot ? 'opacity-40 grayscale' : ''}
+              `}
+              style={{ backgroundColor: '#000' }}
+              onClick={onPreviewScreenshot}
+            >
+              <img
+                src={fullScreenshotUrl}
+                alt="Intro"
+                className="w-full h-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <ZoomIn className="w-3 h-3 text-white" />
+              </div>
+            </div>
+            <button
+              onClick={onToggleProfileScreenshot}
+              className={`
+                flex items-center gap-1 px-2 py-1 border-2 border-black text-[9px] font-bold font-display
+                shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px]
+              `}
+              style={{ backgroundColor: includeProfileScreenshot ? '#9ED8DB' : '#FFFFFF' }}
+            >
+              <Smartphone className="w-3 h-3" />
+              {includeProfileScreenshot ? 'INTRO' : 'OFF'}
+            </button>
+          </div>
+        )}
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <Smartphone className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
-          <span className="font-display font-bold text-xs">INTRO VIDÉO</span>
-          {username && (
-            <span className="text-[10px] text-black/50">@{username}</span>
+        {/* Template */}
+        <div className="flex items-center gap-1.5">
+          <Layout className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
+          <div className="flex gap-0.5">
+            {templates.map((t) => {
+              const isAvailable = plan !== 'free' || t.id === 'classic'
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => isAvailable && onTemplateChange(t.id)}
+                  disabled={!isAvailable}
+                  className={`
+                    relative w-6 h-6 border-2 border-black flex items-center justify-center
+                    ${template === t.id ? 'ring-1 ring-[#1D3354]' : ''}
+                    ${!isAvailable ? 'opacity-30 cursor-not-allowed' : ''}
+                  `}
+                  style={{ backgroundColor: t.color }}
+                  title={t.name}
+                >
+                  {!isAvailable && <Lock className="w-2 h-2 text-white" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Music */}
+        <div className="flex items-center gap-1.5">
+          <Music className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
+          <div className="relative">
+            <select
+              value={musicTrack}
+              onChange={(e) => onMusicChange(e.target.value)}
+              className="pl-2 pr-6 py-1 border-2 border-black font-body text-[10px] appearance-none cursor-pointer w-24"
+              style={{ backgroundColor: '#FFFFFF' }}
+            >
+              {musicTracks.map((track) => (
+                <option key={track.id} value={track.id}>{track.name}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Custom Text */}
+        <div className="flex items-center gap-1.5 flex-1 min-w-[120px] max-w-[200px]">
+          <Type className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#1D3354' }} />
+          <input
+            type="text"
+            value={customText}
+            onChange={(e) => onCustomTextChange(e.target.value)}
+            placeholder="Accroche..."
+            maxLength={30}
+            className="w-full px-2 py-1 border-2 border-black font-body text-[10px] placeholder:text-black/40"
+            style={{ backgroundColor: '#FFFFFF' }}
+          />
+        </div>
+
+        {/* Format (Aspect Ratio) */}
+        <div className="flex items-center gap-1">
+          {aspectOptions.map((opt) => {
+            const isAvailable = plan !== 'free' || opt.id === '9:16'
+            const Icon = opt.icon
+            return (
+              <button
+                key={opt.id}
+                onClick={() => isAvailable && onAspectRatioChange(opt.id)}
+                disabled={!isAvailable}
+                className={`
+                  relative w-7 h-7 border-2 border-black flex items-center justify-center
+                  ${aspectRatio === opt.id ? 'ring-1 ring-[#1D3354]' : ''}
+                  ${!isAvailable ? 'opacity-30 cursor-not-allowed' : ''}
+                `}
+                style={{ backgroundColor: aspectRatio === opt.id ? '#9ED8DB' : '#FFFFFF' }}
+                title={opt.label}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {!isAvailable && <Lock className="absolute -top-1 -right-1 w-2 h-2" />}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Resolution (only show if business) */}
+        {isBusiness && (
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => onResolutionChange('1080p')}
+              className={`px-2 py-1 border-2 border-black font-display font-bold text-[9px]`}
+              style={{ backgroundColor: resolution === '1080p' ? '#9ED8DB' : '#FFFFFF' }}
+            >
+              HD
+            </button>
+            <button
+              onClick={() => onResolutionChange('4K')}
+              className={`px-2 py-1 border-2 border-black font-display font-bold text-[9px]`}
+              style={{ backgroundColor: resolution === '4K' ? '#9ED8DB' : '#FFFFFF' }}
+            >
+              4K
+            </button>
+          </div>
+        )}
+
+        {/* Watermark */}
+        <div className="flex items-center gap-1.5 pl-2 border-l-2 border-black/10">
+          <Stamp className="w-3.5 h-3.5" style={{ color: '#1D3354' }} />
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasWatermark}
+              onChange={(e) => isPremium && onWatermarkChange(e.target.checked)}
+              disabled={!isPremium}
+              className="sr-only"
+            />
+            <div
+              className={`w-7 h-4 border-2 border-black relative ${!isPremium ? 'opacity-50' : ''}`}
+              style={{ backgroundColor: hasWatermark ? '#1D3354' : '#FFFFFF' }}
+            >
+              <span
+                className={`absolute top-[1px] left-[1px] w-2.5 h-2.5 border border-black transition-transform ${hasWatermark ? 'translate-x-2.5' : ''}`}
+                style={{ backgroundColor: '#FFFFFF' }}
+              />
+            </div>
+          </label>
+          {!isPremium && (
+            <button
+              onClick={onUpgradeClick}
+              className="flex items-center gap-0.5 text-[9px] font-bold hover:opacity-80"
+              style={{ color: '#D64045' }}
+            >
+              <Crown className="w-2.5 h-2.5" />
+              PRO
+            </button>
           )}
         </div>
-        <p className="text-[10px] text-black/50 mt-0.5">
-          {isIncluded ? 'Sera affiche en debut de video' : 'Non inclus dans la video'}
-        </p>
       </div>
-
-      {/* Toggle */}
-      <button
-        onClick={onToggle}
-        className={`
-          px-2 py-1 border-2 border-black text-[10px] font-bold font-display
-          shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-          active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-          transition-all
-        `}
-        style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
-      >
-        {isIncluded ? 'INCLUS' : 'EXCLURE'}
-      </button>
     </div>
   )
 }
