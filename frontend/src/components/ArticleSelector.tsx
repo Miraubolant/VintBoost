@@ -1,4 +1,5 @@
-import { Check, Plus, GripVertical, X } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Plus, GripVertical, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
 
 interface ArticleSelectorProps {
@@ -19,6 +20,9 @@ export const ARTICLE_LIMITS = {
   business: 20,
 } as const
 
+// Items per page for desktop pagination (5 rows of 6 columns = 30)
+const ITEMS_PER_PAGE = 30
+
 export function ArticleSelector({
   items,
   selectedItems,
@@ -31,6 +35,13 @@ export function ArticleSelector({
 }: ArticleSelectorProps) {
   const planLimit = ARTICLE_LIMITS[plan]
   const effectiveMax = Math.min(maxItems, planLimit)
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const paginatedItems = items.slice(startIndex, endIndex)
 
   return (
     <div className="h-full flex flex-col">
@@ -91,10 +102,10 @@ export function ArticleSelector({
         </div>
       )}
 
-      {/* Articles Grid */}
-      <div className="flex-1 overflow-y-auto max-h-[400px]">
+      {/* Articles Grid - No scroll, pagination instead */}
+      <div className="flex-1">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {items.map((item) => {
+          {paginatedItems.map((item) => {
             const isSelected = selectedItems.has(item.id)
             const isDisabled = !isSelected && selectedItems.size >= effectiveMax
 
@@ -110,6 +121,53 @@ export function ArticleSelector({
           })}
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-4 pt-4 border-t-2 border-black/10">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="flex items-center gap-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-8 h-8 border-2 border-black font-display font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                  currentPage === page
+                    ? ''
+                    : 'hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
+                }`}
+                style={{
+                  backgroundColor: currentPage === page ? '#1D3354' : '#FFFFFF',
+                  color: currentPage === page ? '#FFFFFF' : '#000000',
+                }}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            style={{ backgroundColor: '#FFFFFF' }}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          <span className="text-xs text-black/50 font-body ml-2">
+            {startIndex + 1}-{Math.min(endIndex, items.length)} sur {items.length}
+          </span>
+        </div>
+      )}
     </div>
   )
 }
