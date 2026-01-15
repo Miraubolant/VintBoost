@@ -187,7 +187,7 @@ export function PricingSection() {
                     {plan.period && <span className="text-base sm:text-lg font-normal">{plan.period}</span>}
                   </div>
                   <div className="font-display font-bold text-xs sm:text-sm text-black uppercase">
-                    {plan.period ? 'Par mois' : plan.isFree ? 'Pour toujours' : 'Achat unique'}
+                    {plan.period ? 'Par mois' : plan.isFree ? 'Parfait pour tester' : 'Achat unique'}
                   </div>
                   {plan.popular && (
                     <div className="mt-2 px-3 py-1 text-white border-2 border-black font-display font-bold text-xs inline-block transform rotate-2" style={{ backgroundColor: '#1D3354' }}>
