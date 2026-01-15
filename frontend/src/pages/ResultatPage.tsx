@@ -230,8 +230,8 @@ export function ResultatPage() {
   return (
     <div className="min-h-screen pb-24 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Page Title - Desktop */}
-      <div className="hidden lg:block text-center pt-6 pb-4">
-        <div className="flex items-center justify-center gap-4">
+      <div className="hidden lg:block text-center pt-10 pb-6">
+        <div className="flex items-center justify-center gap-4 mb-3">
           <button
             onClick={handleBack}
             className="w-10 h-10 border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
@@ -245,15 +245,10 @@ export function ResultatPage() {
           >
             CRÉE TA VIDÉO VINTED
           </h1>
-          <button
-            onClick={() => navigate('/account')}
-            className="flex items-center gap-2 px-3 py-2 border-2 border-black font-display font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
-            style={{ backgroundColor: '#9ED8DB' }}
-          >
-            <History className="w-4 h-4" />
-            MES VIDÉOS
-          </button>
         </div>
+        <p className="text-sm text-black/60 font-body">
+          1. Sélectionne tes articles · 2. Configure ta vidéo · 3. Génère et télécharge
+        </p>
       </div>
 
       {/* Main Content - Desktop: Unified Section + Sticky Sidebar */}
@@ -283,6 +278,7 @@ export function ResultatPage() {
                   onResolutionChange={setResolution}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
+                  onHistoryClick={() => navigate('/account')}
                 />
               </div>
 
@@ -492,6 +488,7 @@ function DesktopCompactConfig({
   onResolutionChange,
   plan,
   onUpgradeClick,
+  onHistoryClick,
 }: {
   profileScreenshotUrl: string | null
   includeProfileScreenshot: boolean
@@ -511,6 +508,7 @@ function DesktopCompactConfig({
   onResolutionChange: (res: VideoResolution) => void
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick: () => void
+  onHistoryClick: () => void
 }) {
   const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
   const fullScreenshotUrl = profileScreenshotUrl?.startsWith('http') ? profileScreenshotUrl : `${API_URL}${profileScreenshotUrl}`
@@ -710,6 +708,16 @@ function DesktopCompactConfig({
             </button>
           )}
         </div>
+
+        {/* History Button */}
+        <button
+          onClick={onHistoryClick}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 border-2 border-black font-display font-bold text-[10px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ml-auto"
+          style={{ backgroundColor: '#9ED8DB' }}
+        >
+          <History className="w-3.5 h-3.5" />
+          MES VIDÉOS
+        </button>
       </div>
     </div>
   )
