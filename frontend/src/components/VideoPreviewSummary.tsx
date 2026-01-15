@@ -1,5 +1,5 @@
-import { Sparkles, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin, Image } from 'lucide-react'
-import type { VintedItem, UserInfo } from '../types/vinted'
+import { Sparkles, Music, Layout, Type, Package, CreditCard, AlertCircle, ShoppingBag, Users, ThumbsUp, MapPin, Image, Stamp, Lock, ChevronDown } from 'lucide-react'
+import type { VintedItem, UserInfo, VideoTemplate } from '../types/vinted'
 
 const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
 
@@ -20,24 +20,26 @@ interface VideoPreviewSummaryProps {
   // Intro screenshot props
   profileScreenshotUrl?: string | null
   includeProfileScreenshot?: boolean
+  // Config change handlers
+  onMusicChange?: (track: string) => void
+  onTemplateChange?: (template: VideoTemplate) => void
+  onCustomTextChange?: (text: string) => void
+  onWatermarkChange?: (hasWatermark: boolean) => void
 }
 
-const templateNames: Record<string, string> = {
-  classic: 'Classique',
-  modern: 'Moderne',
-  premium: 'Premium',
-}
+const templateOptions = [
+  { id: 'classic' as VideoTemplate, name: 'Classique', color: '#FFFFFF' },
+  { id: 'modern' as VideoTemplate, name: 'Moderne', color: '#9ED8DB' },
+  { id: 'premium' as VideoTemplate, name: 'Premium', color: '#D64045' },
+]
 
-const musicNames: Record<string, string> = {
-  '': 'Sans musique',
-  upbeat: 'Upbeat Energy',
-  chill: 'Chill Vibes',
-  fashion: 'Fashion Forward',
-  trendy: 'Trendy Beat',
-  summer: 'Summer Days',
-  elegant: 'Elegant Style',
-  custom: 'Musique personnalisee',
-}
+const musicOptions = [
+  { id: '', name: 'Sans musique' },
+  { id: 'upbeat', name: 'Upbeat' },
+  { id: 'chill', name: 'Chill' },
+  { id: 'fashion', name: 'Fashion' },
+  { id: 'trendy', name: 'Trendy' },
+]
 
 export function VideoPreviewSummary({
   selectedArticles,
@@ -55,12 +57,17 @@ export function VideoPreviewSummary({
   onUpgradeClick,
   profileScreenshotUrl,
   includeProfileScreenshot = false,
+  onMusicChange,
+  onTemplateChange,
+  onCustomTextChange,
+  onWatermarkChange,
 }: VideoPreviewSummaryProps) {
   const canGenerate = selectedArticles.length > 0 && creditsRemaining > 0
   const totalValue = selectedArticles.reduce(
     (sum, item) => sum + (parseFloat(item.price) || 0),
     0
   )
+  const isPremium = plan === 'pro' || plan === 'business'
 
   const fullScreenshotUrl = profileScreenshotUrl
     ? (profileScreenshotUrl.startsWith('http') ? profileScreenshotUrl : `${API_URL}${profileScreenshotUrl}`)
@@ -129,19 +136,8 @@ export function VideoPreviewSummary({
         </div>
       )}
 
-      {/* Video Summary Header */}
-      <div
-        className="px-3 py-2 border-b-2 border-black flex items-center gap-2"
-        style={{ backgroundColor: '#9ED8DB' }}
-      >
-        <Sparkles className="w-3.5 h-3.5" />
-        <h3 className="font-display font-bold text-black text-xs">
-          RESUME DE LA VIDEO
-        </h3>
-      </div>
-
-      {/* Content */}
-      <div className="p-3 space-y-3" style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Content Preview */}
+      <div className="p-3 space-y-3 border-b-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
         {/* Media Preview - Intro + Articles */}
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -199,27 +195,118 @@ export function VideoPreviewSummary({
             <span>{totalValue.toFixed(0)}€</span>
           </div>
         </div>
+      </div>
 
-        {/* Configuration Summary - Compact Grid */}
-        <div className="grid grid-cols-2 gap-1.5">
-          <ConfigItem
-            icon={<Layout className="w-3 h-3" />}
-            label="Template"
-            value={templateNames[template] || template}
+      {/* Configuration Section */}
+      <div
+        className="px-3 py-2 border-b-2 border-black flex items-center gap-2"
+        style={{ backgroundColor: '#9ED8DB' }}
+      >
+        <Sparkles className="w-3.5 h-3.5" />
+        <h3 className="font-display font-bold text-black text-xs">
+          CONFIGURATION
+        </h3>
+      </div>
+
+      <div className="p-3 space-y-3" style={{ backgroundColor: '#FFFFFF' }}>
+        {/* Template Selection */}
+        <div>
+          <div className="flex items-center gap-1.5 mb-2">
+            <Layout className="w-3.5 h-3.5 text-black/50" />
+            <span className="font-display font-bold text-[10px] text-black/60">TEMPLATE</span>
+          </div>
+          <div className="flex gap-1.5">
+            {templateOptions.map((t) => {
+              const isAvailable = plan !== 'free' || t.id === 'classic'
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => isAvailable && onTemplateChange?.(t.id)}
+                  disabled={!isAvailable}
+                  className={`
+                    relative flex-1 py-2 border-2 border-black font-display font-bold text-[10px] transition-all
+                    ${template === t.id ? 'ring-2 ring-[#1D3354] ring-offset-1' : 'hover:bg-black/5'}
+                    ${!isAvailable ? 'opacity-40 cursor-not-allowed' : ''}
+                  `}
+                  style={{ backgroundColor: t.color, color: t.id === 'premium' ? '#FFF' : '#000' }}
+                >
+                  {t.name}
+                  {!isAvailable && <Lock className="absolute top-0.5 right-0.5 w-2.5 h-2.5" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Music Selection */}
+        <div>
+          <div className="flex items-center gap-1.5 mb-2">
+            <Music className="w-3.5 h-3.5 text-black/50" />
+            <span className="font-display font-bold text-[10px] text-black/60">MUSIQUE</span>
+          </div>
+          <div className="relative">
+            <select
+              value={musicTrack}
+              onChange={(e) => onMusicChange?.(e.target.value)}
+              className="w-full px-3 py-2 border-2 border-black font-body text-xs appearance-none cursor-pointer bg-white text-black hover:bg-gray-50 transition-all"
+            >
+              {musicOptions.map((track) => (
+                <option key={track.id} value={track.id}>{track.name}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Custom Text */}
+        <div>
+          <div className="flex items-center gap-1.5 mb-2">
+            <Type className="w-3.5 h-3.5 text-black/50" />
+            <span className="font-display font-bold text-[10px] text-black/60">TEXTE PERSONNALISE</span>
+          </div>
+          <input
+            type="text"
+            value={customText}
+            onChange={(e) => onCustomTextChange?.(e.target.value)}
+            placeholder="Ex: -20% ce week-end !"
+            maxLength={30}
+            className="w-full px-3 py-2 border-2 border-black font-body text-xs bg-white text-black placeholder:text-black/40 hover:bg-gray-50 focus:bg-gray-50 transition-all"
           />
-          <ConfigItem
-            icon={<Music className="w-3 h-3" />}
-            label="Musique"
-            value={musicNames[musicTrack] || 'Sans'}
-          />
-          {customText && (
-            <ConfigItem
-              icon={<Type className="w-3 h-3" />}
-              label="Texte"
-              value={customText}
-              className="col-span-2"
-            />
-          )}
+        </div>
+
+        {/* Watermark Toggle */}
+        <div className="flex items-center justify-between py-2 px-3 border-2 border-black" style={{ backgroundColor: '#F8F8F8' }}>
+          <div className="flex items-center gap-2">
+            <Stamp className="w-3.5 h-3.5 text-black/50" />
+            <span className="font-display font-bold text-[10px] text-black/60">WATERMARK</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {!isPremium && (
+              <button
+                onClick={onUpgradeClick}
+                className="px-2 py-0.5 bg-[#D64045] border border-black text-[9px] font-bold text-white hover:bg-[#c53539] transition-all"
+              >
+                PRO
+              </button>
+            )}
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={hasWatermark}
+                onChange={(e) => isPremium && onWatermarkChange?.(e.target.checked)}
+                disabled={!isPremium}
+                className="sr-only"
+              />
+              <div
+                className={`w-10 h-5 border-2 border-black relative transition-all ${!isPremium ? 'opacity-50' : ''}`}
+                style={{ backgroundColor: hasWatermark ? '#9ED8DB' : '#F5F5F5' }}
+              >
+                <span
+                  className={`absolute top-[2px] left-[2px] w-3.5 h-3.5 bg-[#1D3354] transition-transform ${hasWatermark ? 'translate-x-[18px]' : ''}`}
+                />
+              </div>
+            </label>
+          </div>
         </div>
 
         {/* Technical specs */}
@@ -228,9 +315,7 @@ export function VideoPreviewSummary({
             {plan === 'business' ? '4K' : '1080p'}
           </span>
           <span className="px-1.5 py-0.5 border border-black bg-[#F5F5F5]">MP4</span>
-          {hasWatermark && (
-            <span className="px-1.5 py-0.5 border border-black bg-[#F5F5F5]">Watermark</span>
-          )}
+          <span className="px-1.5 py-0.5 border border-black bg-[#F5F5F5]">9:16</span>
         </div>
       </div>
 
@@ -287,38 +372,16 @@ export function VideoPreviewSummary({
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              GÉNÉRATION...
+              GENERATION...
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4" />
-              GÉNÉRER MA VIDÉO
+              GENERER MA VIDEO
             </span>
           )}
         </button>
       </div>
-    </div>
-  )
-}
-
-function ConfigItem({
-  icon,
-  label,
-  value,
-  className = '',
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  className?: string
-}) {
-  return (
-    <div className={`px-2 py-1.5 border border-black/15 ${className}`} style={{ backgroundColor: '#FAFAFA' }}>
-      <div className="flex items-center gap-1 text-black/40 mb-0.5">
-        {icon}
-        <span className="text-[8px] font-body uppercase">{label}</span>
-      </div>
-      <span className="font-display font-bold text-[10px] truncate block">{value}</span>
     </div>
   )
 }
