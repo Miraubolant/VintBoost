@@ -15,6 +15,7 @@ import { VideoResultDisplay } from '../components/VideoResultDisplay'
 import { VideoConfigPanel } from '../components/VideoConfigPanel'
 import { PricingModal } from '../components/PricingModal'
 import { VideoSuccessModal } from '../components/VideoSuccessModal'
+import { VideoLoadingOverlay } from '../components/VideoLoadingOverlay'
 import { CompactSidebar } from '../components/sidebar'
 
 export function ResultatPage() {
@@ -236,7 +237,10 @@ export function ResultatPage() {
         <div className="hidden lg:flex lg:gap-6 lg:items-start">
           {/* Left Column: Articles */}
           <div className="flex-1 min-w-0">
-            <div className="border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#FFFFFF' }}>
+            <div className="relative border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+              {/* Video Loading Overlay */}
+              <VideoLoadingOverlay isVisible={videoLoading} />
+
               {/* Articles Grid */}
               <div className="p-4">
                 <ArticleSelector
