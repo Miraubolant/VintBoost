@@ -20,7 +20,7 @@ import { VideoSuccessModal } from '../components/VideoSuccessModal'
 export function ResultatPage() {
   const navigate = useNavigate()
   const { wardrobeData, setWardrobeData, clearWardrobeData, pendingUrl, setPendingUrl } = useWardrobe()
-  const { subscription, credits, consumeVideoCredit, refreshUserData } = useAuth()
+  const { subscription, credits, refreshUserData } = useAuth()
   const { scrapeWardrobe, data: scrapedData, loading: scraping, error: scrapeError } = useVintedScraper()
 
   // Video generation states
@@ -160,12 +160,10 @@ export function ResultatPage() {
       profileScreenshotId: includeProfileScreenshot ? profileScreenshotId : null,
     })
 
-    // Consume credit only after successful video generation
+    // Credit consumption is now handled inside useVideoGeneration hook
+    // Just refresh user data to update UI
     if (result?.success) {
-      const consumed = await consumeVideoCredit(articles.length)
-      if (consumed) {
-        await refreshUserData()
-      }
+      await refreshUserData()
     }
   }
 
@@ -293,6 +291,11 @@ export function ResultatPage() {
                   maxItems={articleLimit}
                   plan={plan}
                   onUpgradeClick={() => setShowPricingModal(true)}
+                  profileScreenshotUrl={profileScreenshotUrl}
+                  includeProfileScreenshot={includeProfileScreenshot}
+                  onToggleProfileScreenshot={handleToggleProfileScreenshot}
+                  onPreviewScreenshot={() => setShowScreenshotModal(true)}
+                  username={wardrobeData.username}
                 />
               </div>
             </div>

@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Check, Plus, GripVertical, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Check, Plus, GripVertical, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import type { VintedItem } from '../types/vinted'
+
+const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
 
 interface ArticleSelectorProps {
   items: VintedItem[]
@@ -11,6 +13,12 @@ interface ArticleSelectorProps {
   maxItems: number
   plan: 'free' | 'pro' | 'business'
   onUpgradeClick?: () => void
+  // Profile screenshot props (optional)
+  profileScreenshotUrl?: string | null
+  includeProfileScreenshot?: boolean
+  onToggleProfileScreenshot?: () => void
+  onPreviewScreenshot?: () => void
+  username?: string
 }
 
 // Plan-based article limits
@@ -32,6 +40,11 @@ export function ArticleSelector({
   maxItems,
   plan,
   onUpgradeClick,
+  profileScreenshotUrl,
+  includeProfileScreenshot = false,
+  onToggleProfileScreenshot,
+  onPreviewScreenshot,
+  username,
 }: ArticleSelectorProps) {
   const planLimit = ARTICLE_LIMITS[plan]
   const effectiveMax = Math.min(maxItems, planLimit)
@@ -105,6 +118,17 @@ export function ArticleSelector({
       {/* Articles Grid - No scroll, pagination instead */}
       <div className="flex-1">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          {/* Profile Screenshot Card - First position on page 1 */}
+          {currentPage === 1 && profileScreenshotUrl && onToggleProfileScreenshot && onPreviewScreenshot && (
+            <ProfileScreenshotCard
+              screenshotUrl={profileScreenshotUrl}
+              username={username}
+              isIncluded={includeProfileScreenshot}
+              onToggle={onToggleProfileScreenshot}
+              onPreview={onPreviewScreenshot}
+            />
+          )}
+
           {paginatedItems.map((item) => {
             const isSelected = selectedItems.has(item.id)
             const isDisabled = !isSelected && selectedItems.size >= effectiveMax
@@ -316,6 +340,84 @@ export function ArticleListItem({ item, isSelected, isDisabled, onToggle, onRemo
           {isSelected ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
         </div>
       )}
+    </div>
+  )
+}
+
+// Profile Screenshot Card for desktop grid
+interface ProfileScreenshotCardProps {
+  screenshotUrl: string
+  username?: string
+  isIncluded: boolean
+  onToggle: () => void
+  onPreview: () => void
+}
+
+function ProfileScreenshotCard({ screenshotUrl, username, isIncluded, onToggle, onPreview }: ProfileScreenshotCardProps) {
+  const fullUrl = screenshotUrl.startsWith('http') ? screenshotUrl : `${API_URL}${screenshotUrl}`
+
+  return (
+    <div
+      className={`
+        border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden
+        transition-all
+        ${isIncluded ? 'ring-2 ring-offset-1 ring-[#1D3354]' : ''}
+        hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+      `}
+      style={{ backgroundColor: '#1D3354' }}
+    >
+      {/* Image - 9:16 aspect ratio for screenshot */}
+      <div
+        className="aspect-square relative overflow-hidden cursor-pointer group"
+        style={{ backgroundColor: '#000' }}
+        onClick={onPreview}
+      >
+        <img
+          src={fullUrl}
+          alt="Screenshot profil Vinted"
+          className={`w-full h-full object-cover object-top ${!isIncluded ? 'opacity-50 grayscale' : ''}`}
+          loading="lazy"
+        />
+
+        {/* Zoom overlay on hover */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <ZoomIn className="w-6 h-6 text-white" />
+        </div>
+
+        {/* Selection indicator */}
+        <div
+          className="absolute top-1.5 right-1.5 w-6 h-6 border-2 border-black flex items-center justify-center font-bold text-xs transition-colors shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
+          style={{ backgroundColor: isIncluded ? '#9ED8DB' : '#FFFFFF' }}
+          onClick={(e) => { e.stopPropagation(); onToggle(); }}
+        >
+          {isIncluded ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+        </div>
+
+        {/* INTRO badge */}
+        <div
+          className="absolute bottom-1.5 left-1.5 border-2 border-black px-2 py-0.5"
+          style={{ backgroundColor: '#9ED8DB' }}
+        >
+          <span className="font-bold text-black text-xs">INTRO</span>
+        </div>
+
+        {/* Selected overlay */}
+        {isIncluded && (
+          <div className="absolute inset-0 bg-[#9ED8DB]/20 pointer-events-none" />
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="p-2 border-t-2 border-black" style={{ backgroundColor: '#FFFFFF' }}>
+        <h4 className="font-display font-bold text-black truncate text-xs" title="Aperçu Profil">
+          Aperçu Profil
+        </h4>
+        {username && (
+          <p className="text-[10px] font-bold truncate" style={{ color: '#1D3354' }}>
+            @{username}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

@@ -62,12 +62,12 @@ export function NoCreditModal({ isOpen, onClose, onNavigateToPricing }: NoCredit
           {/* Plans summary */}
           <div className="space-y-2 mb-6">
             <div className="flex items-center justify-between px-3 py-2 border-2 border-black" style={{ backgroundColor: '#F5F5F5' }}>
-              <span className="font-display font-bold text-xs">PRO</span>
-              <span className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>3.99€/mois - 5 videos</span>
+              <span className="font-display font-bold text-xs">PACK PRO</span>
+              <span className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>2.99€ unique - 5 videos</span>
             </div>
             <div className="flex items-center justify-between px-3 py-2 border-2 border-black" style={{ backgroundColor: '#F5F5F5' }}>
               <span className="font-display font-bold text-xs">BUSINESS</span>
-              <span className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>9.99€/mois - 15 videos</span>
+              <span className="font-display font-bold text-sm" style={{ color: '#1D3354' }}>5.99€/mois - 15 videos</span>
             </div>
           </div>
 

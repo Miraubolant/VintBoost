@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import type { VideoConfig, VideoGenerationResult, MusicTrack } from '../types/vinted'
 import { supabase, uploadVideoToStorage } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 
 const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
 const API_KEY = import.meta.env.VITE_SCRAPER_API_KEY || ''
@@ -15,6 +16,10 @@ export function useVideoGeneration() {
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<VideoGenerationResult | null>(null)
   const [musicTracks, setMusicTracks] = useState<MusicTrack[]>([])
+  const { consumeVideoCredit } = useAuth()
+
+  // Use ref to track if credit was consumed for this generation
+  const creditConsumedRef = useRef(false)
 
   // Charger les musiques disponibles
   const fetchMusicTracks = useCallback(async () => {
@@ -44,6 +49,7 @@ export function useVideoGeneration() {
     setLoading(true)
     setError(null)
     setResult(null)
+    creditConsumedRef.current = false // Reset for new generation
 
     try {
       // Get current user
@@ -146,6 +152,14 @@ export function useVideoGeneration() {
       }
 
       setResult(videoResult)
+
+      // CRITICAL: Consume video credit AFTER successful generation
+      if (!creditConsumedRef.current) {
+        creditConsumedRef.current = true
+        const articlesCount = config.articles?.length || 1
+        await consumeVideoCredit(articlesCount)
+      }
+
       return videoResult
     } catch (err) {
       let message = 'Erreur inconnue'
@@ -161,7 +175,7 @@ export function useVideoGeneration() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [consumeVideoCredit])
 
   // Télécharger la vidéo
   const downloadVideo = useCallback(async (videoId: string) => {

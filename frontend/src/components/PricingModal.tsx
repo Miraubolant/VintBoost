@@ -10,17 +10,17 @@ interface PricingModalProps {
 
 const plans = [
   {
-    name: 'PRO',
-    price: '3.99€',
-    period: '/mois',
+    name: 'PACK PRO',
+    price: '2.99€',
+    period: ' unique',
     videos: '5 videos',
     features: [
-      '5 videos HD/mois',
+      '5 videos HD',
       '10 articles/video',
       'Sans watermark',
       'Tous les templates',
     ],
-    buttonText: 'CHOISIR PRO',
+    buttonText: 'ACHETER LE PACK',
     popular: true,
     stripePlan: 'pro' as const,
     icon: Crown,
@@ -28,16 +28,16 @@ const plans = [
   },
   {
     name: 'BUSINESS',
-    price: '9.99€',
+    price: '5.99€',
     period: '/mois',
     videos: '15 videos',
     features: [
       '15 videos 4K/mois',
       '20 articles/video',
       'Sans watermark',
-      'Support 24/7',
+      'Support prioritaire',
     ],
-    buttonText: 'CHOISIR BUSINESS',
+    buttonText: 'S\'ABONNER',
     popular: false,
     stripePlan: 'business' as const,
     icon: Zap,
