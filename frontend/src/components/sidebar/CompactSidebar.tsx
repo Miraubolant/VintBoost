@@ -1,5 +1,5 @@
-import { Sparkles, Music, Layout, Type, Stamp, Lock, Crown, ChevronDown, MapPin, Zap, AlertCircle, Film } from 'lucide-react'
-import type { VintedItem, UserInfo, VideoTemplate } from '../../types/vinted'
+import { Sparkles, Music, Layout, Type, Stamp, Lock, Crown, ChevronDown, MapPin, Zap, AlertCircle, Film, Smartphone, Monitor, Square } from 'lucide-react'
+import type { VintedItem, UserInfo, VideoTemplate, VideoAspectRatio } from '../../types/vinted'
 
 const API_URL = import.meta.env.VITE_SCRAPER_API_URL || 'http://localhost:3000'
 
@@ -17,12 +17,14 @@ interface CompactSidebarProps {
   template: string
   customText: string
   hasWatermark: boolean
+  aspectRatio?: VideoAspectRatio
   plan: 'free' | 'pro' | 'business'
   // Config handlers
   onMusicChange?: (track: string) => void
   onTemplateChange?: (template: VideoTemplate) => void
   onCustomTextChange?: (text: string) => void
   onWatermarkChange?: (hasWatermark: boolean) => void
+  onAspectRatioChange?: (ratio: VideoAspectRatio) => void
   // Generation
   creditsRemaining: number
   onGenerate: () => void
@@ -45,6 +47,12 @@ const musicOptions = [
   { id: 'trendy', name: 'Trendy' },
 ]
 
+const aspectRatioOptions = [
+  { id: '9:16' as VideoAspectRatio, name: 'TikTok', icon: Smartphone },
+  { id: '16:9' as VideoAspectRatio, name: 'YouTube', icon: Monitor },
+  { id: '1:1' as VideoAspectRatio, name: 'Instagram', icon: Square },
+]
+
 export function CompactSidebar({
   username,
   userInfo,
@@ -56,11 +64,13 @@ export function CompactSidebar({
   template,
   customText,
   hasWatermark,
+  aspectRatio = '9:16',
   plan,
   onMusicChange,
   onTemplateChange,
   onCustomTextChange,
   onWatermarkChange,
+  onAspectRatioChange,
   creditsRemaining,
   onGenerate,
   loading,
@@ -119,7 +129,7 @@ export function CompactSidebar({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
             <Film className="w-3.5 h-3.5 text-black/50" />
-            <span className="font-display font-bold text-[10px] text-black/60">APERCU</span>
+            <span className="font-display font-bold text-[10px] text-black/60">APERÇU</span>
           </div>
           <span className="text-[10px] text-black/50">
             {hasIntro ? '1 intro + ' : ''}{selectedArticles.length} articles • {totalValue.toFixed(0)}€
@@ -143,7 +153,7 @@ export function CompactSidebar({
           )}
           {selectedArticles.length === 0 && (
             <div className="w-full py-3 text-center text-[10px] text-black/40">
-              Selectionne des articles
+              Sélectionne des articles
             </div>
           )}
         </div>
@@ -239,6 +249,34 @@ export function CompactSidebar({
           </div>
         </div>
 
+        {/* Format - Aspect ratio selector for Pro/Business */}
+        <div className="flex items-center gap-2">
+          <Film className="w-3.5 h-3.5 text-black/40 flex-shrink-0" />
+          <div className="flex flex-1 gap-1">
+            {aspectRatioOptions.map((ratio) => {
+              const Icon = ratio.icon
+              const isAvailable = isPremium
+              const isSelected = aspectRatio === ratio.id
+              return (
+                <button
+                  key={ratio.id}
+                  onClick={() => isAvailable && onAspectRatioChange?.(ratio.id)}
+                  disabled={!isAvailable && ratio.id !== '9:16'}
+                  className={`
+                    flex-1 py-1.5 border border-black font-display font-bold text-[9px] transition-all flex items-center justify-center gap-1
+                    ${isSelected ? 'bg-[#1D3354] text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white text-black/60 hover:bg-gray-50'}
+                    ${!isAvailable && ratio.id !== '9:16' ? 'opacity-40 cursor-not-allowed' : ''}
+                  `}
+                >
+                  <Icon className="w-3 h-3" />
+                  {ratio.name}
+                  {!isAvailable && ratio.id !== '9:16' && <Lock className="w-2 h-2 ml-0.5" />}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
         {/* Specs row */}
         <div className="flex items-center justify-between pt-2 border-t border-black/10">
           <div className="flex items-center gap-1">
@@ -246,7 +284,7 @@ export function CompactSidebar({
               {plan === 'business' ? '4K' : '1080p'}
             </span>
             <span className="px-1.5 py-0.5 border border-black/30 text-[9px] font-bold bg-[#F5F5F5]">MP4</span>
-            <span className="px-1.5 py-0.5 border border-black/30 text-[9px] font-bold bg-[#F5F5F5]">9:16</span>
+            <span className="px-1.5 py-0.5 border border-black/30 text-[9px] font-bold bg-[#F5F5F5]">{aspectRatio}</span>
           </div>
         </div>
       </div>
@@ -257,7 +295,7 @@ export function CompactSidebar({
           <div className="flex items-center gap-2">
             <AlertCircle className="w-3.5 h-3.5 text-white flex-shrink-0" />
             <p className="text-[10px] text-white">
-              Plus de credits !{' '}
+              Plus de crédits !{' '}
               <button onClick={onUpgradeClick} className="underline font-bold">Upgrader</button>
             </p>
           </div>
@@ -283,12 +321,12 @@ export function CompactSidebar({
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              GENERATION...
+              GÉNÉRATION...
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4" />
-              GENERER MA VIDEO
+              GÉNÉRER MA VIDÉO
             </span>
           )}
         </button>

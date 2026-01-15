@@ -31,7 +31,7 @@ export function ResultatPage() {
   const [template, setTemplate] = useState<VideoTemplate>('classic')
   const [customText, setCustomText] = useState('')
   const [resolution, setResolution] = useState<VideoResolution>('1080p')
-  const [aspectRatio] = useState<VideoAspectRatio>('9:16')
+  const [aspectRatio, setAspectRatio] = useState<VideoAspectRatio>('9:16')
   const [includeProfileScreenshot, setIncludeProfileScreenshot] = useState(true)
 
   // Mobile panel state
@@ -220,17 +220,17 @@ export function ResultatPage() {
   return (
     <div className="min-h-screen pb-20 lg:pb-4" style={{ backgroundColor: '#E8DFD5' }}>
       {/* Main Content - Desktop */}
-      <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-6">
+      <div className="relative z-0 max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:pt-10">
         {/* Desktop Page Header - Centered like AccountPage */}
-        <div className="hidden lg:block text-center mb-6">
+        <div className="hidden lg:block text-center mb-8">
           <h1
             className="inline-block font-display font-bold text-3xl text-white border-3 border-black px-6 py-3 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]"
             style={{ backgroundColor: '#1D3354' }}
           >
-            CREE TA VIDEO
+            CRÉE TA VIDÉO
           </h1>
           <p className="text-sm text-black/60 font-body mt-3">
-            Selectionne tes articles, personnalise et genere en 1 clic
+            Sélectionne tes articles, personnalise et génère en 1 clic
           </p>
         </div>
 
@@ -274,11 +274,13 @@ export function ResultatPage() {
                 template={template}
                 customText={customText}
                 hasWatermark={hasWatermark}
+                aspectRatio={aspectRatio}
                 plan={plan}
                 onMusicChange={setMusicTrack}
                 onTemplateChange={setTemplate}
                 onCustomTextChange={setCustomText}
                 onWatermarkChange={setHasWatermark}
+                onAspectRatioChange={setAspectRatio}
                 creditsRemaining={totalCreditsRemaining}
                 onGenerate={handleGenerateVideo}
                 loading={videoLoading}
